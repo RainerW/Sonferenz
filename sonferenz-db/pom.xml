@@ -11,24 +11,24 @@
 
 	<build>
 		<plugins>
-		<!-- 
 			<plugin>
 				<groupId>org.liquibase</groupId>
 				<artifactId>liquibase-maven-plugin</artifactId>
 				<version>2.0.3</version>
+				<!-- 
 				<executions>
 					<execution>
 						<phase>process-resources</phase>
-						<configuration>
-							<propertyFile>src/main/resources/liquibase.properties</propertyFile>
-						</configuration>
 						<goals>
 							<goal>update</goal>
 						</goals>
 					</execution>
 				</executions>
+				 -->
+				<configuration>
+					<propertyFile>src/main/resources/liquibase.properties</propertyFile>
+				</configuration>
 			</plugin>
-			 -->
 		</plugins>
 	</build>
 
@@ -79,6 +79,12 @@
 		<dependency>
 			<groupId>org.jasypt</groupId>
 			<artifactId>jasypt</artifactId>
+		</dependency>
+		
+		<!-- Database -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
 
 		<!-- Testing dependencies -->

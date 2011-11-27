@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+	<changeSet author="rainerw" id="2" context="sample-data">
+		<!-- Default Admin User -->
+		<insert tableName="usermodel">
+			<column name="id">1</column>
+			<column name="email">admin@example.com</column>
+			<column name="name">admin</column>
+		</insert>
+		<insert tableName="usermodel_userrole">
+			<column name="UserModel_id">1</column>
+			<column name="roles_id">1</column>
+		</insert>
+		<insert tableName="usermodel_userrole">
+			<column name="UserModel_id">1</column>
+			<column name="roles_id">2</column>
+		</insert>
+		<insert tableName="localusermodel">
+			<column name="id">1</column>
+			<column name="name">admin</column>
+			<column name="password">dLOZcyJSFDUezRiw0xBYvf8f/A+Mb43KV7z0Mw==</column>
+		</insert>
+		<insert tableName="authmapping">
+			<column name="id">1</column>
+			<column name="authId">admin</column>
+			<column name="authType">plainDB</column>
+			<column name="user_id">1</column>
+		</insert>
+	</changeSet>
+</databaseChangeLog>

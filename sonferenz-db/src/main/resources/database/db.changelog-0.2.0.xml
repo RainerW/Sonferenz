@@ -1,9 +1,165 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+	<changeSet author="rainerw" id="1" context="production,test">
+		<createTable tableName="authmapping">
+			<column autoIncrement="true" name="id" type="INT">
+				<constraints nullable="false" primaryKey="true" />
+			</column>
+			<column name="authId" type="VARCHAR(255)" />
+			<column name="authType" type="VARCHAR(255)" />
+			<column name="user_id" type="INT" />
+		</createTable>
+		<createTable tableName="conferencemodel">
+			<column autoIncrement="true" name="id" type="INT">
+				<constraints nullable="false" primaryKey="true" />
+			</column>
+			<column name="active" type="BIT" />
+			<column name="description" type="VARCHAR(255)" />
+			<column name="shortName" type="VARCHAR(255)" />
+			<column name="state" type="VARCHAR(255)" />
+			<column name="title" type="VARCHAR(255)" />
+			<column name="votesPerUser" type="INT" />
+		</createTable>
+		<createTable tableName="likemodel">
+			<column autoIncrement="true" name="id" type="INT">
+				<constraints nullable="false" primaryKey="true" />
+			</column>
+			<column name="likes" type="INT" />
+			<column name="user_id" type="INT" />
+			<column name="whish_id" type="INT" />
+		</createTable>
+		<createTable tableName="localusermodel">
+			<column autoIncrement="true" name="id" type="INT">
+				<constraints nullable="false" primaryKey="true" />
+			</column>
+			<column name="name" type="VARCHAR(255)" />
+			<column name="password" type="VARCHAR(255)" />
+		</createTable>
+		<createTable tableName="staticcontentmodel">
+			<column autoIncrement="true" name="id" type="INT">
+				<constraints nullable="false" primaryKey="true" />
+			</column>
+			<column name="html" type="VARCHAR(2048)" />
+			<column name="name" type="VARCHAR(255)" />
+		</createTable>
+		<createTable tableName="talkmodel">
+			<column autoIncrement="true" name="id" type="INT">
+				<constraints nullable="false" primaryKey="true" />
+			</column>
+			<column name="author" type="VARCHAR(255)" />
+			<column name="description" type="VARCHAR(2048)" />
+			<column name="title" type="VARCHAR(255)" />
+			<column name="conference_id" type="INT" />
+			<column name="owner_id" type="INT" />
+		</createTable>
+		<createTable tableName="usermodel">
+			<column autoIncrement="true" name="id" type="INT">
+				<constraints nullable="false" primaryKey="true" />
+			</column>
+			<column name="email" type="VARCHAR(255)" />
+			<column name="name" type="VARCHAR(255)" />
+		</createTable>
+		<createTable tableName="usermodel_userrole">
+			<column name="UserModel_id" type="INT">
+				<constraints nullable="false" />
+			</column>
+			<column name="roles_id" type="INT">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<createTable tableName="userrole">
+			<column autoIncrement="true" name="id" type="INT">
+				<constraints nullable="false" primaryKey="true" />
+			</column>
+			<column name="name" type="VARCHAR(255)" />
+		</createTable>
+		<createTable tableName="votemodel">
+			<column autoIncrement="true" name="id" type="INT">
+				<constraints nullable="false" primaryKey="true" />
+			</column>
+			<column name="rateing" type="INT" />
+			<column name="talk_id" type="INT" />
+			<column name="user_id" type="INT" />
+		</createTable>
+		<createTable tableName="whishmodel">
+			<column autoIncrement="true" name="id" type="INT">
+				<constraints nullable="false" primaryKey="true" />
+			</column>
+			<column name="description" type="VARCHAR(2048)" />
+			<column name="likes" type="INT" />
+			<column name="title" type="VARCHAR(255)" />
+			<column name="owner_id" type="INT" />
+		</createTable>
+		<addPrimaryKey columnNames="UserModel_id, roles_id"
+			tableName="usermodel_userrole" />
+		<addForeignKeyConstraint baseColumnNames="user_id"
+			constraintName="constraint_authmapping_userid" baseTableName="authmapping"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="usermodel"
+			referencesUniqueColumn="false" />
+		<addForeignKeyConstraint baseColumnNames="user_id"
+			constraintName="constraint_likemodel_userid" baseTableName="likemodel"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="usermodel"
+			referencesUniqueColumn="false" />
+		<addForeignKeyConstraint baseColumnNames="whish_id"
+			constraintName="constraint_likemodel_whish_id" baseTableName="likemodel"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="whishmodel"
+			referencesUniqueColumn="false" />
+		<addForeignKeyConstraint baseColumnNames="conference_id"
+			constraintName="constraint_talkmodel_conference_id" baseTableName="talkmodel"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="conferencemodel"
+			referencesUniqueColumn="false" />
+		<addForeignKeyConstraint baseColumnNames="owner_id"
+			constraintName="constraint_talkmodel_owner_id" baseTableName="talkmodel"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="usermodel"
+			referencesUniqueColumn="false" />
+		<addForeignKeyConstraint baseColumnNames="roles_id"
+			constraintName="constraint_usermodel_userrole_roles_id"
+			baseTableName="usermodel_userrole" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="id" referencedTableName="userrole"
+			referencesUniqueColumn="false" />
+		<addForeignKeyConstraint baseColumnNames="UserModel_id"
+			constraintName="constraint_usermodel_userrole_UserModel_id"
+			baseTableName="usermodel_userrole" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="id" referencedTableName="usermodel"
+			referencesUniqueColumn="false" />
+		<addForeignKeyConstraint baseColumnNames="talk_id"
+			constraintName="constraint_votemodel_talk_id" baseTableName="votemodel"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="talkmodel"
+			referencesUniqueColumn="false" />
+		<addForeignKeyConstraint baseColumnNames="user_id"
+			constraintName="constraint_votemodel_user_id" baseTableName="votemodel"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="usermodel"
+			referencesUniqueColumn="false" />
+		<addForeignKeyConstraint baseColumnNames="owner_id"
+			constraintName="constraint_whishmodel_owner_id" baseTableName="whishmodel"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="usermodel"
+			referencesUniqueColumn="false" />
+		<createIndex indexName="authType" tableName="authmapping"
+			unique="true">
+			<column name="authType" />
+			<column name="authId" />
+		</createIndex>
+		<!-- Insert default roles -->
+		<insert tableName="userrole">
+			<column name="id">1</column>
+			<column name="name">ADMIN</column>
+		</insert>
+		<insert tableName="userrole">
+			<column name="id">2</column>
+			<column name="name">USER</column>
+		</insert>
 
-	<changeSet id="1" author="RainerW">
 	</changeSet>
 </databaseChangeLog>
