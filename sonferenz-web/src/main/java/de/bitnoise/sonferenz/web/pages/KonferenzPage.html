@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Konferenz Home Page</title>
+<!--
+<link rel="stylesheet" href="style.css" type="text/css" media="screen" title="Stylesheet" charset="utf-8" />
+-->
+<link wicket:id="stylesheet" />
+</head>
+<body>
+<div id="background">
+<div id="rahmen">
+<div id="kopf">
+ <div id="logo-links"><img src="./images/logo.gif"/></div>
+ <div id="logo-rechts"><img src="./images/maennchen.png"/></div>
+</div>
+<div id="topnavigation">
+  <div id="navi-schatten-links">
+  <div id="navi-schatten-rechts">
+  <div id="navi-button-links"><wicket:container wicket:id="currentConference"/></div>
+  <div id="navi-button-rechts"><wicket:container wicket:id="currentUser"/></div>
+  </div></div>
+</div>
+<div id="menuAndContent">
+  <div id="menu"> <wicket:container	wicket:id="nav"/>  </div>
+  <div id="inhalt"><wicket:container wicket:id="pageContent"/></div>
+</div>
+<div id="footer">
+  <div class="text"><span wicket:id="footerText"></span></div>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net http://dozer.sourceforge.net/schema/beanmapping.xsd">
+	<mapping>
+		<class-a>de.bitnoise.sonferenz.model.UserModel</class-a>
+		<class-b>de.bitnoise.sonferenz.model.LocalUserModel</class-b>
+		<field>
+			<a>name</a>
+			<b>name</b>
+		</field>
+		<field-exclude>
+			<a>id</a>
+			<b>id</b>
+		</field-exclude>
+	</mapping>
+</mappings>
