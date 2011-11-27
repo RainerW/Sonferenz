@@ -71,16 +71,43 @@ encoding/<project>=UTF-8]]>
 			</activation>
 			<modules>
 				<module>sonferenz-db</module>
+				<module>sonferenz-service</module>
+				<module>sonferenz-web</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>intern</id>
+			<modules>
+				<module>sonferenz-sb-intern</module>
 			</modules>
 		</profile>
 	</profiles>
 
 	<dependencyManagement>
 		<dependencies>
+			<!-- myself -->
+			<dependency>
+				<groupId>de.bitnoise.sonferenz</groupId>
+				<artifactId>sonferenz-db</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>de.bitnoise.sonferenz</groupId>
+				<artifactId>sonferenz-service</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
 			<dependency>
 				<groupId>org.liquibase</groupId>
 				<artifactId>liquibase-core</artifactId>
 				<version>2.0.3</version>
+			</dependency>
+
+			<!-- database -->
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>5.1.6</version>
 			</dependency>
 
 			<!-- Persistence via Hibernate -->
@@ -111,6 +138,16 @@ encoding/<project>=UTF-8]]>
 				<version>3.0.5.RELEASE</version>
 			</dependency>
 			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-core</artifactId>
+				<version>3.0.5.RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-ldap</artifactId>
+				<version>3.0.5.RELEASE</version>
+			</dependency>
+			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-orm</artifactId>
 				<version>3.0.5.RELEASE</version>
@@ -124,6 +161,22 @@ encoding/<project>=UTF-8]]>
 				<groupId>org.springframework.data</groupId>
 				<artifactId>spring-data-jpa</artifactId>
 				<version>1.0.1.RELEASE</version>
+			</dependency>
+			<!-- other -->
+			<dependency>
+				<groupId>org.aspectj</groupId>
+				<artifactId>aspectjrt</artifactId>
+				<version>1.6.11</version>
+			</dependency>
+			<dependency>
+				<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+				<version>1.2.14</version>
+			</dependency>
+			<dependency>
+				<artifactId>commons-io</artifactId>
+				<groupId>commons-io</groupId>
+				<version>1.4</version>
 			</dependency>
 			<dependency>
 				<groupId>org.slf4j</groupId>
@@ -171,6 +224,18 @@ encoding/<project>=UTF-8]]>
 				<groupId>commons-dbcp</groupId>
 				<artifactId>commons-dbcp</artifactId>
 				<version>1.2.2</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.easymock</groupId>
+				<artifactId>easymock</artifactId>
+				<version>3.0</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-core</artifactId>
+				<version>1.9.0-rc1</version>
 				<scope>test</scope>
 			</dependency>
 		</dependencies>
