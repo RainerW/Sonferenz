@@ -252,6 +252,18 @@ public class UiFacadeImpl implements UiFacade
   {
     return _talks.getVotableTalks(request);
   }
+
+  @Override
+  public Page<ConferenceModel> getAllConferences(Pageable pageable)
+  {
+    return _conference.getConferences(pageable);
+  }
+
+  @Override
+  public ConferenceModel getConference(int id)
+  {
+    return _conference.getConference(id);
+  }
  
 
 }

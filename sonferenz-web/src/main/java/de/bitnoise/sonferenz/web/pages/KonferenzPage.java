@@ -33,7 +33,7 @@ public class KonferenzPage extends WebPage
     };
     add(new NavPanel("nav", callbackModel));
     add(new CurrentUserPanel("currentUser"));
-    add(new Label("footerText","0.2.x"));
+    add(new Label("footerText",de.bitnoise.sonferenz.Version.VERSION));
     add(new CurrentConferencePanel("currentConference"));
     add(getPageContent("pageContent"));
   }

@@ -102,4 +102,10 @@ public class ConferenceService2Impl implements ConferenceService2
     return (int) conferenceRepo.count();
   }
 
+  @Override
+  public ConferenceModel getConference(int id)
+  {
+    return conferenceRepo.findOne(id);
+  }
+
 }

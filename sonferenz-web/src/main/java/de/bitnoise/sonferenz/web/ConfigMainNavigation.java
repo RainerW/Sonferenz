@@ -17,16 +17,14 @@ import de.bitnoise.sonferenz.web.component.navigation.AbstractNavCallback;
 import de.bitnoise.sonferenz.web.component.navigation.NavCallbackInterface;
 import de.bitnoise.sonferenz.web.component.navigation.PageNavCallback;
 import de.bitnoise.sonferenz.web.component.state.AllwaysVisible;
+import de.bitnoise.sonferenz.web.component.state.IsActiveConference;
 import de.bitnoise.sonferenz.web.component.state.OnStateVoting;
 import de.bitnoise.sonferenz.web.component.state.VisibleOnRights;
 import de.bitnoise.sonferenz.web.pages.HomePage;
-import de.bitnoise.sonferenz.web.pages.auth.LoginPage;
-import de.bitnoise.sonferenz.web.pages.auth.LogoutPage;
 import de.bitnoise.sonferenz.web.pages.calculate.CalculateOverviewPage;
 import de.bitnoise.sonferenz.web.pages.conference.ConferenceOverviewPage;
 import de.bitnoise.sonferenz.web.pages.talks.TalksOverviewPage;
 import de.bitnoise.sonferenz.web.pages.timetable.TimeTablePage;
-import de.bitnoise.sonferenz.web.pages.timetable.TimeTablePanel;
 import de.bitnoise.sonferenz.web.pages.users.UserOverviewPage;
 import de.bitnoise.sonferenz.web.pages.voting.VotingOverviewPage;
 import de.bitnoise.sonferenz.web.pages.whish.WhishOverviewPage;
@@ -42,13 +40,22 @@ public class ConfigMainNavigation
     ret.add(new PageNavCallback(ConferenceOverviewPage.class, "Conference",
         new VisibleOnRights(Right.Conference.List)));
     ret.add(new PageNavCallback(WhishOverviewPage.class, "Whishes",
-        new VisibleOnRights(Right.Whish.List)));
+        new VisibleOnRights(Right.Whish.List)
+    ));
     ret.add(new PageNavCallback(TalksOverviewPage.class, "Talks",
-        new VisibleOnRights(Right.Talk.List)));
+        new VisibleOnRights(Right.Talk.List),
+        new IsActiveConference()
+    ));
     ret.add(new PageNavCallback(VotingOverviewPage.class, "Voting",
-        new VisibleOnRights(Right.Vote.canVote), new OnStateVoting()));
+        new VisibleOnRights(Right.Vote.canVote),
+        new IsActiveConference(),
+        new OnStateVoting()
+    ));
     ret.add(new PageNavCallback(CalculateOverviewPage.class, "Calculate",
-        new VisibleOnRights(Right.Admin.ViewCalculation), new OnStateVoting()));
+        new VisibleOnRights(Right.Admin.ViewCalculation), 
+        new IsActiveConference(),
+        new OnStateVoting()
+    ));
     ret.add(new PageNavCallback(TimeTablePage.class, "Timetable"));
     return ret;
   }

@@ -19,7 +19,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.sun.mail.handlers.image_gif;
 
+import de.bitnoise.sonferenz.facade.UiFacade;
+import de.bitnoise.sonferenz.model.ConferenceModel;
 import de.bitnoise.sonferenz.model.UserModel;
 import de.bitnoise.sonferenz.model.UserRole;
 import de.bitnoise.sonferenz.model.UserRoles;
@@ -31,11 +34,18 @@ public class KonferenzSession extends WebSession
 
   private static List<String> adminRoles = new ArrayList<String>();
 
+  private static ConferenceModel _conference;
+
   @SpringBean
   AuthenticationService2 authService;
 
+  @SpringBean
+  UiFacade facade;
+
   @SpringBean(name = "springAuthManager")
   AuthenticationManager authenticationManager;
+
+  private ConferenceModel _currentConference;
 
   public KonferenzSession(Request request)
   {
@@ -187,5 +197,33 @@ public class KonferenzSession extends WebSession
       }
     }
     return false;
+  }
+
+  public void setCurrentConference(ConferenceModel cModel)
+  {
+    _currentConference = cModel;
+  }
+
+  public ConferenceModel getCurrentConference()
+  {
+    if (_currentConference == null)
+    {
+      return facade.getActiveConference();
+    }
+    return _currentConference;
+  }
+
+  public boolean activeIsCurrent()
+  {
+    if (_currentConference == null)
+    {
+      return true;
+    }
+    ConferenceModel active = facade.getActiveConference();
+    if (active == null)
+    {
+      return false;
+    }
+    return active.getId().equals(_currentConference.getId());
   }
 }

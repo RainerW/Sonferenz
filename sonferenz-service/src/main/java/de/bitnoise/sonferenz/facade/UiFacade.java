@@ -84,4 +84,8 @@ public interface UiFacade
 
   Page<TalkModel> getVotableTalks(PageRequest request);
 
+  Page<ConferenceModel> getAllConferences(Pageable pageable);
+
+  ConferenceModel getConference(int id);
+
 }

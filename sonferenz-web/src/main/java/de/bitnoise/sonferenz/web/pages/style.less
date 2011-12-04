@@ -72,6 +72,28 @@ html{
 	height:100%;
 }
 
+ul.conferenceList {
+	margin: 0px;
+	padding:  0px;
+}
+
+.conferenceList {
+  li {
+    display:inline;
+    list-style: none;
+    margin-left: 1em;
+  }
+  a {
+     color: white;
+     text-decoration:  none;
+  }
+  .active {
+  }
+  .current {
+    text-decoration:  underline;
+  }
+}
+
 .likePanel {
 }
 
@@ -199,17 +221,14 @@ a   .likePanel {border: none; }
 	margin: 20px 40px 20px 20px;
 }
 #navi-button-links {
-	color: #FFFFFF;
     display: block;
     font-size: 0.95em;
     font-weight: bold;
-    text-decoration: none;
     margin: 20px 20px 22px 40px;
     float: left;
 }
 #navi-button-links a {
-    color: #FFFFFF;
-    text-decoration: none;
+     
 }
 #menuAndContent {
 	margin: 10px;

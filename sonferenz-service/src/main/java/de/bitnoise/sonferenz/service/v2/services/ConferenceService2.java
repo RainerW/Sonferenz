@@ -31,4 +31,6 @@ public interface ConferenceService2
       throws GeneralConferenceException;
 
   public int getCount();
+
+  public ConferenceModel getConference(int id);
 }

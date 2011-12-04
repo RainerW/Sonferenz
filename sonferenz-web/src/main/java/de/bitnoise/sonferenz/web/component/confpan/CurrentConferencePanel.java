@@ -7,43 +7,54 @@ Autor: Michael Mosmann
  *****************************************/
 package de.bitnoise.sonferenz.web.component.confpan;
 
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.wicket.PageParameters;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.RefreshingView;
+import org.apache.wicket.markup.repeater.util.ModelIteratorAdapter;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
-
+import de.bitnoise.sonferenz.KonferenzSession;
 import de.bitnoise.sonferenz.facade.UiFacade;
 import de.bitnoise.sonferenz.model.ConferenceModel;
 import de.bitnoise.sonferenz.service.v2.exceptions.GeneralConferenceException;
 import de.bitnoise.sonferenz.web.pages.HomePage;
+import de.bitnoise.sonferenz.web.pages.conference.action.EditConference;
+import de.bitnoise.sonferenz.web.pages.talks.EditTalkPanel;
+import de.bitnoise.sonferenz.web.utils.WicketTools;
 
 public class CurrentConferencePanel extends Panel
 {
   public CurrentConferencePanel(String id)
   {
     super(id);
-    initPanel();
+    initPanel(); 
   }
 
   @SpringBean
   UiFacade facade;
-  
+
   protected void initPanel()
   {
     try
     {
-      ConferenceModel conf = facade.getActiveConference();
-      if (conf != null)
-      {
-        createContent(conf.getShortName(), HomePage.class);
-      }
-      else
-      {
-        createContent(" ", HomePage.class);
-      }
+      Page<ConferenceModel> clist = facade.getAllConferences(new PageRequest(0, 5));
+      createContent(clist.getContent());
     }
     catch (GeneralConferenceException e)
     {
@@ -51,12 +62,28 @@ public class CurrentConferencePanel extends Panel
     }
   }
 
-  private void createContent(String linkText,
-      Class<? extends WebPage> linkTarget)
+  private void createContent(final List<ConferenceModel> clist)
   {
-    BookmarkablePageLink<WebPage> link = new BookmarkablePageLink<WebPage>(
-        "link", linkTarget);
-    add(link);
-    link.add(new Label("name", Model.of(linkText)));
+    final ConferenceModel current = KonferenzSession.get().getCurrentConference();
+    add(new ListView<ConferenceModel>("confList", clist) {
+      @Override
+      protected void populateItem(ListItem<ConferenceModel> item)
+      {
+        ConferenceModel iModel = item.getModelObject();
+        BookmarkablePageLink<WebPage> link = new BookmarkablePageLink<WebPage>(
+            "link", HomePage.class , HomePage.createParameters(iModel));
+        item.add(link);
+        Label label = new Label("name", Model.of(iModel.getShortName()));
+        link.add(label);
+        if ( iModel.getActive() ) {
+          WicketTools.addCssClass( link , "active");
+        }
+        if(current!=null && current.getId().equals(iModel.getId())) {
+          WicketTools.addCssClass( link , "current");
+        }
+      }
+    });
+
   }
+
 }
