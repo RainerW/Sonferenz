@@ -59,6 +59,7 @@ public class KonferenzSession extends WebSession
     adminRoles.add(Right.Conference.Edit);
     adminRoles.add(Right.Admin.ViewCalculation);
     adminRoles.add(Right.Admin.StartCalculation);
+    adminRoles.add(Right.Admin.Configure);
 
     userRoles.add(Right.Talk.List);
     userRoles.add(Right.Talk.Create);

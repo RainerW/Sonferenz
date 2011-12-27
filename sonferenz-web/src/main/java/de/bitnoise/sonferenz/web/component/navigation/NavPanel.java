@@ -1,9 +1,8 @@
 /*****************************************
-Quelltexte zum Buch: Praxisbuch Wicket
-(http://www.hanser.de/978-3-446-41909-4)
-
-Autor: Michael Mosmann
-(michael@mosmann.de)
+ * Quelltexte zum Buch: Praxisbuch Wicket
+ * (http://www.hanser.de/978-3-446-41909-4)
+ * 
+ * Autor: Michael Mosmann (michael@mosmann.de)
  *****************************************/
 package de.bitnoise.sonferenz.web.component.navigation;
 
@@ -49,7 +48,8 @@ public class NavPanel extends Panel
     final IModel<String> nameModel = createTitle(callbackModel);
 
     CascadingLoadableDetachableModel<String, NavCallbackInterface> classModel = new CascadingLoadableDetachableModel<String, NavCallbackInterface>(
-        callbackModel) {
+        callbackModel)
+    {
       @Override
       protected String load(NavCallbackInterface p)
       {
@@ -58,7 +58,8 @@ public class NavPanel extends Panel
     };
 
     Link<NavCallbackInterface> link = new Link<NavCallbackInterface>("link",
-        callbackModel) {
+        callbackModel)
+    {
       @Override
       public void onClick()
       {
@@ -86,7 +87,8 @@ public class NavPanel extends Panel
     add(link);
 
     CascadingLoadableDetachableModel<List<NavCallbackInterface>, NavCallbackInterface> childModel = new CascadingLoadableDetachableModel<List<NavCallbackInterface>, NavCallbackInterface>(
-        callbackModel) {
+        callbackModel)
+    {
       @Override
       protected List<NavCallbackInterface> load(NavCallbackInterface p)
       {
@@ -94,7 +96,8 @@ public class NavPanel extends Panel
       }
     };
 
-    add(new ListView<NavCallbackInterface>("childs", childModel) {
+    add(new ListView<NavCallbackInterface>("childs", childModel)
+    {
       @Override
       protected void populateItem(ListItem<NavCallbackInterface> item)
       {

@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 
 import de.bitnoise.sonferenz.model.LocalUserModel;
 import de.bitnoise.sonferenz.model.UserModel;
+import de.bitnoise.sonferenz.model.UserRole;
 import de.bitnoise.sonferenz.model.UserRoles;
 
 public interface UserService2
@@ -35,4 +36,6 @@ public interface UserService2
   void updateUser(UserModel user, String newName);
 
   boolean checkMailNotExists(String mail);
+
+  Page<UserRole> getAllRoles(PageRequest request);
 }

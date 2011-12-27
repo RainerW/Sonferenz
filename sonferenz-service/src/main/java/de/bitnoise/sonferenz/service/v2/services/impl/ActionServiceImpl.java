@@ -7,12 +7,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.annotation.PostConstruct;
+
 import org.jasypt.digest.StringDigester;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +37,8 @@ import de.bitnoise.sonferenz.service.actions.Aktion;
 import de.bitnoise.sonferenz.service.actions.IncrementUseCountOnToken;
 import de.bitnoise.sonferenz.service.v2.exceptions.ValidationException;
 import de.bitnoise.sonferenz.service.v2.services.ActionService;
+import de.bitnoise.sonferenz.service.v2.services.ConfigurationService;
+import de.bitnoise.sonferenz.service.v2.services.StaticContentService2;
 import de.bitnoise.sonferenz.service.v2.services.UserService2;
 
 @Service
@@ -55,10 +60,26 @@ public class ActionServiceImpl implements ActionService
   LocalUserRepository localUserRepo;
 
   @Autowired
-  MailSender sender;
+  ConfigurationService config;
 
   @Autowired
+  StaticContentService2 texte;
+
+  MailSender sender;
+
   SimpleMailMessage template;
+
+  @PostConstruct
+  public void initMail()
+  {
+    JavaMailSenderImpl tmp = new JavaMailSenderImpl();
+    tmp.setUsername(config.getStringValue("smtp.host"));
+    sender = tmp;
+
+    template = new SimpleMailMessage();
+    template.setFrom(config.getStringValue("mail.create.from"));
+    template.setSubject(texte.text("mail.subject", "Your new useraccound"));
+  }
 
   @Autowired
   StringDigester digester;

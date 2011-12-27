@@ -23,14 +23,26 @@ public class DatabaseLoader implements IStringResourceLoader
   public String loadStringResource(Class<?> clazz, String key, Locale locale,
       String style)
   {
-    String result = content2.text("res." + key);
-    return result;
+    // String result = content2.text("res." + key);
+    // return result;
+    return readKey(key);
   }
 
   public String loadStringResource(Component component, String key)
   {
-    String result = content2.text("res." + key);
+    return readKey(key);
+  }
+
+  private String readKey(String key)
+  {
+    String result = content2.text(key);
+    if (result == null)
+    {
+      content2.storeText(key, null);
+      return key;
+    }
     return result;
+
   }
 
 }

@@ -1,8 +1,10 @@
 package de.bitnoise.sonferenz.service.v2.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 
 import de.bitnoise.sonferenz.model.StaticContentModel;
 import de.bitnoise.sonferenz.repo.StaticContentRepository;
@@ -57,9 +59,9 @@ public class StaticContentService2Impl implements StaticContentService2
   }
 
   @Override
-  public void storeText(  String key, String text)
+  public void storeText(String key, String text)
   {
-//    Authorize.has(roles, UserRights.Admin.StaticContent.ANY);
+    // Authorize.has(roles, UserRights.Admin.StaticContent.ANY);
     try
     {
       doStoreText(key, text);
@@ -80,6 +82,13 @@ public class StaticContentService2Impl implements StaticContentService2
     }
     item.setHtml(text);
     repo.saveAndFlush(item);
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public Page<StaticContentModel> getAll(PageRequest request)
+  {
+    return repo.findAll(request);
   }
 
 }

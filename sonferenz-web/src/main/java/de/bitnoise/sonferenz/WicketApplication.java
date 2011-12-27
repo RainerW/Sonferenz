@@ -3,9 +3,13 @@ package de.bitnoise.sonferenz;
 import org.apache.wicket.Request;
 import org.apache.wicket.Response;
 import org.apache.wicket.Session;
+import org.apache.wicket.injection.ConfigurableInjector;
+import org.apache.wicket.injection.web.InjectorHolder;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.spring.injection.annot.AnnotSpringInjector;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
+import org.springframework.context.ApplicationContext;
 
 import com.jquery.JQueryResourceReference;
 import com.visural.wicket.aturl.AtAnnotation;
@@ -40,7 +44,7 @@ public class WicketApplication extends WebApplication
     super.init();
     // Activate Spring
     addComponentInstantiationListener(new SpringComponentInjector(this));
-
+    
     // for Selenium debugging
     getDebugSettings().setOutputComponentPath(true);
 

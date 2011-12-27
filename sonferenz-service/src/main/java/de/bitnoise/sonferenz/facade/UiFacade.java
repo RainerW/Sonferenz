@@ -9,8 +9,11 @@ import org.springframework.data.domain.Pageable;
 
 import de.bitnoise.sonferenz.model.ActionModel;
 import de.bitnoise.sonferenz.model.ConferenceModel;
+import de.bitnoise.sonferenz.model.ConfigurationModel;
+import de.bitnoise.sonferenz.model.StaticContentModel;
 import de.bitnoise.sonferenz.model.TalkModel;
 import de.bitnoise.sonferenz.model.UserModel;
+import de.bitnoise.sonferenz.model.UserRole;
 import de.bitnoise.sonferenz.model.UserRoles;
 import de.bitnoise.sonferenz.model.WhishModel;
 import de.bitnoise.sonferenz.service.actions.ActionCreateUser;
@@ -101,5 +104,11 @@ public interface UiFacade
   void executeAction(ActionCreateUser data);
 
   boolean checkMailNotExists(String mail);
+
+  Page<UserRole> getAllRoles(PageRequest request);
+
+  Page<ConfigurationModel> getAllConfigurations(PageRequest request);
+
+  Page<StaticContentModel> getTexte(PageRequest request);
 
 }

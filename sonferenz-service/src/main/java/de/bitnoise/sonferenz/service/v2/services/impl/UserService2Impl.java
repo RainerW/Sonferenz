@@ -248,4 +248,10 @@ public class UserService2Impl implements UserService2
     return result == null;
   }
 
+  @Override
+  public Page<UserRole> getAllRoles(PageRequest request)
+  {
+    return roleRepo.findAll(request);
+  }
+
 }

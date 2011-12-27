@@ -13,8 +13,11 @@ import org.springframework.stereotype.Service;
 import de.bitnoise.sonferenz.facade.UiFacade;
 import de.bitnoise.sonferenz.model.ActionModel;
 import de.bitnoise.sonferenz.model.ConferenceModel;
+import de.bitnoise.sonferenz.model.ConfigurationModel;
+import de.bitnoise.sonferenz.model.StaticContentModel;
 import de.bitnoise.sonferenz.model.TalkModel;
 import de.bitnoise.sonferenz.model.UserModel;
+import de.bitnoise.sonferenz.model.UserRole;
 import de.bitnoise.sonferenz.model.UserRoles;
 import de.bitnoise.sonferenz.model.WhishModel;
 import de.bitnoise.sonferenz.service.actions.ActionCreateUser;
@@ -23,6 +26,7 @@ import de.bitnoise.sonferenz.service.actions.Aktion;
 import de.bitnoise.sonferenz.service.v2.services.ActionService;
 import de.bitnoise.sonferenz.service.v2.services.AuthenticationService2;
 import de.bitnoise.sonferenz.service.v2.services.ConferenceService2;
+import de.bitnoise.sonferenz.service.v2.services.ConfigurationService;
 import de.bitnoise.sonferenz.service.v2.services.StaticContentService2;
 import de.bitnoise.sonferenz.service.v2.services.TalkService2;
 import de.bitnoise.sonferenz.service.v2.services.UserService2;
@@ -34,6 +38,9 @@ public class UiFacadeImpl implements UiFacade
 {
   @Autowired
   ConferenceService2 _conference;
+  
+  @Autowired
+  ConfigurationService _config;
   
   @Autowired
   ActionService _actions;
@@ -301,5 +308,23 @@ public class UiFacadeImpl implements UiFacade
   public boolean checkMailNotExists(String mail)
   {
     return userFacade.checkMailNotExists(mail);
+  }
+
+  @Override
+  public Page<UserRole> getAllRoles(PageRequest request)
+  {
+    return userFacade.getAllRoles(request);
+  }
+
+  @Override
+  public Page<ConfigurationModel> getAllConfigurations(PageRequest request)
+  {
+    return _config.getAllConfigurations(request);
+  }
+
+  @Override
+  public Page<StaticContentModel> getTexte(PageRequest request)
+  {
+    return content.getAll(request);
   }
 }

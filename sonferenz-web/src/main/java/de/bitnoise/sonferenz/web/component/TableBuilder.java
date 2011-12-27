@@ -1,15 +1,19 @@
 package de.bitnoise.sonferenz.web.component;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
@@ -18,11 +22,14 @@ import com.visural.wicket.behavior.beautytips.BeautyTipBehavior;
 import com.visural.wicket.behavior.beautytips.TipPosition;
 
 import de.bitnoise.sonferenz.web.action.IWebAction;
+import de.bitnoise.sonferenz.web.component.TableBuilder.ActionColumn;
+import de.bitnoise.sonferenz.web.component.panels.MultiPanel;
 import de.bitnoise.sonferenz.web.component.table.ClickableTablePropertyColumn;
 
-public class TableBuilder<S>
+public class TableBuilder<S> implements Serializable
 {
   private List<TableBuilder.Column> _columns = new ArrayList<TableBuilder.Column>();
+
   private String _prefix;
 
   public TableBuilder(String resourceTableName)
@@ -30,12 +37,26 @@ public class TableBuilder<S>
     _prefix = resourceTableName;
   }
 
-  protected void addColumn(Column column)
+  public void addColumn(Column column)
   {
     _columns.add(column);
   }
 
-  protected void add(IColumn<S> colModel)
+  public Column addColumn(String columnKeyAndPropertyName)
+  {
+    return addColumn(columnKeyAndPropertyName, columnKeyAndPropertyName);
+  }
+
+  public Column addColumn(String columnKey, String propertyName)
+  {
+    Column c = new Column();
+    c.setTitle(columnKey);
+    c.setModelProperty(propertyName);
+    _columns.add(c);
+    return c;
+  }
+
+  public void add(IColumn<S> colModel)
   {
     _columns.add(new Column(colModel));
   }
@@ -56,8 +77,7 @@ public class TableBuilder<S>
       {
         hintText = createText("hint", column);
       }
-      
-      
+
       if (column._column != null)
       {
         newColumn = column._column;
@@ -147,14 +167,20 @@ public class TableBuilder<S>
         Model.of(_prefix));
   }
 
-  public class Column
+  public class Column implements Serializable
   {
     String _Title;
+
     String _PropKey;
+
     String _PropSort;
+
     IWebAction<?> _action;
+
     IColumn<S> _column;
+
     Boolean _escaping;
+
     private boolean _showHint;
 
     public Column()
@@ -166,39 +192,68 @@ public class TableBuilder<S>
       _column = column;
     }
 
-    protected void setEscaping(boolean escape)
+    public void setEscaping(boolean escape)
     {
       _escaping = escape;
     }
 
-    protected void setTitle(String title)
+    public void setTitle(String title)
     {
       _Title = title;
     }
 
-    protected void setHint(boolean b)
+    public void setHint(boolean b)
     {
       _showHint = b;
     }
 
-    protected void setModelProperty(String propKey)
+    public void setModelProperty(String propKey)
     {
       _PropKey = propKey;
     }
 
-    protected void sortable()
+    public void sortable()
     {
       _PropSort = _PropKey;
     }
 
-    protected void sortable(String propKey)
+    public void sortable(String propKey)
     {
       _PropSort = propKey;
     }
 
-    protected void action(IWebAction<?> action)
+    public void action(IWebAction<?> action)
     {
       _action = action;
     }
+  }
+
+  public void addActions(String displayName, final ActionColumn<S>... actions)
+  {
+    AbstractColumn<S> column = new AbstractColumn<S>(Model.of(displayName))
+    {
+      public void populateItem(Item<ICellPopulator<S>> cellItem,
+          String componentId, final IModel<S> rowModel)
+      {
+        cellItem.add(new MultiPanel(componentId)
+        {
+          @Override
+          protected void onInitPanels(RepeatingView view)
+          {
+            for (ActionColumn<S> action : actions)
+            {
+              Component component = action.populate(view.newChildId(), rowModel.getObject());
+              view.add(component);
+            }
+          }
+        });
+      }
+    };
+    add(column);
+  }
+
+  public abstract static class ActionColumn<T> implements Serializable
+  {
+    abstract public Component populate(String id, T row);
   }
 }
