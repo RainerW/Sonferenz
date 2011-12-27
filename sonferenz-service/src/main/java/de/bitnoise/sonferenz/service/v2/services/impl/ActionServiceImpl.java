@@ -2,12 +2,17 @@ package de.bitnoise.sonferenz.service.v2.services.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.jasypt.digest.StringDigester;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.mail.MailSendException;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,18 +41,24 @@ public class ActionServiceImpl implements ActionService
 {
   @Autowired
   ActionRepository repo;
-  
+
   @Autowired
   UserService2 userService;
 
   @Autowired
   AuthmappingRepository authRepo;
-  
+
   @Autowired
   UserRepository userRepo;
 
   @Autowired
   LocalUserRepository localUserRepo;
+
+  @Autowired
+  MailSender sender;
+
+  @Autowired
+  SimpleMailMessage template;
 
   @Autowired
   StringDigester digester;
@@ -96,7 +107,7 @@ public class ActionServiceImpl implements ActionService
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Throwable.class)
   public void execute(ActionData data)
   {
     if (data instanceof ActionCreateUser)
@@ -151,32 +162,49 @@ public class ActionServiceImpl implements ActionService
       throw new ValidationException("Login Name allready inuse");
     }
 
-    Collection<UserRoles> newRoles=new ArrayList<UserRoles>();
+    Collection<UserRoles> newRoles = new ArrayList<UserRoles>();
     newRoles.add(UserRoles.USER);
-    userService.createNewLocalUser(data.getLoginName(), data.getPassword(), newRoles);
-//    LocalUserModel localUser = new LocalUserModel();
-//    localUser.setName(data.getLoginName());
-//    String encrypted = digester.digest(data.getPassword());
-//    localUser.setPassword(encrypted);
-//
-//    AuthMapping mapping = new AuthMapping();
-//    mapping.setAuthId(data.getUserName());
-//    mapping.setAuthType("plainDB");
-//
-//    UserModel user = new UserModel();
-//    user.setProvider(mapping);
-//    user.setProvider(mapping);
-//    user.setName(data.getUserName());
-//    user.setEmail(data.getEMail());
-//    
-//    user
-//    user.setRoles(roles);
-//
-//    localUserRepo.save(localUser);
-//    authRepo.save(mapping);
-//    userRepo.save(user);
+    UserModel user = userService.createNewLocalUser(data.getLoginName(),
+        data.getPassword(), data.getEMail(), newRoles);
 
-    // newActionVerifyEMail(data.getEMail());
+    newActionVerifyEMail(user);
+  }
+
+  void newActionVerifyEMail(UserModel user)
+  {
+    ActionModel entity = new ActionModel();
+    entity.setAction("verifyMail");
+    String token = createToken();
+    entity.setToken(token);
+    entity.setCreator(user);
+    entity.setExpiry(new Date());
+    entity.setUsed(0);
+    entity.setData("<null/>");
+    repo.save(entity);
+
+    SimpleMailMessage message = new SimpleMailMessage(template);
+    message.setTo(user.getEmail());
+    StringBuffer body = new StringBuffer();
+    body.append("Please confirm your email by open the folling link in your browser:");
+    body.append("\r\n");
+    // body.append(config.baseUrl);
+    body.append("/verifyMail/token/");
+    body.append(token);
+    message.setText(body.toString());
+    try
+    {
+      sender.send(message);
+    }
+    catch (MailSendException t)
+    {
+      t.printStackTrace();
+      throw new ValidationException("eMail invalid :" + t.getMessage());
+    }
+  }
+
+  public String createToken()
+  {
+    return UUID.randomUUID().toString();
   }
 
 }

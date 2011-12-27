@@ -54,7 +54,7 @@ public interface UiFacade
 
   List<UserModel> getAllUsers();
 
-  void createNewLocalUser(String username, String password, Collection<UserRoles> newRoles);
+  void createNewLocalUser(String username, String password, String email,Collection<UserRoles> newRoles);
 
   void saveUser(UserModel user, Collection<UserRoles> newRoles);
 

@@ -114,7 +114,7 @@ public class EditLocalUserPanel extends FormPanel
     Collection<UserRoles> newRoles = modelRoles.getObject();
     _user.setName(valueName);
     String password = modelPassword1.getObject();
-    facade.createNewLocalUser(valueName, password, newRoles);
+    facade.createNewLocalUser(valueName, password, null, newRoles);
 
     setResponsePage(UserOverviewPage.class);
   }

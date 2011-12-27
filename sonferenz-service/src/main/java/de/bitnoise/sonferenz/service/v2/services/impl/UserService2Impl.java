@@ -154,7 +154,7 @@ public class UserService2Impl implements UserService2
 
   @Override
   @Transactional
-  public void createNewLocalUser(String username, String password,
+  public UserModel createNewLocalUser(String username, String password,String email,
       Collection<UserRoles> newRoles)
   {
     LocalUserModel luser = new LocalUserModel();
@@ -171,12 +171,15 @@ public class UserService2Impl implements UserService2
     UserModel user = new UserModel();
     user.setName(username);
     user.setProvider(auth);
+    user.setEmail(email);
     user.setRoles(new HashSet<UserRole>());
     setupRoles(user, newRoles);
     userRepo.save(user);
 
     auth.setUser(user);
     authRepo.save(auth);
+    
+    return user;
   }
 
   private void setupRoles(UserModel user, Collection<UserRoles> newRoles)

@@ -160,9 +160,9 @@ public class UiFacadeImpl implements UiFacade
   }
 
   @Override
-  public void createNewLocalUser(String username, String password, Collection<UserRoles> newRoles)
+  public void createNewLocalUser(String username, String password, String email, Collection<UserRoles> newRoles)
   {
-    userFacade.createNewLocalUser(username,password,newRoles);
+    userFacade.createNewLocalUser(username,password,email,newRoles);
   }
 
   @Override

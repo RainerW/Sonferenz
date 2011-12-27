@@ -37,12 +37,13 @@
 	<context:component-scan base-package="de.bitnoise.sonferenz.service" />
 	<context:component-scan base-package="de.bitnoise.sonferenz.facade" />
 	<context:component-scan base-package="de.bitnoise.sonferenz.web.init" />
-
+<!-- 
 	<bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase"
 		primary="true">
 		<property name="dataSource" ref="dataSource" />
 		<property name="changeLog" value="classpath:database/db-changelog-master.xml" />
 		<property name="contexts" value="production,sample-data" />
 	</bean>
+   -->
 
 </beans>

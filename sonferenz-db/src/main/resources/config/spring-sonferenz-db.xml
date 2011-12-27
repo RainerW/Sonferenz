@@ -19,11 +19,12 @@
 		transaction-manager="transactionManager" />
 
 	<context:annotation-config />
-
+<!-- 
 	<bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">
 		<property name="dataSource" ref="dataSource" />
 		<property name="changeLog" value="classpath:database/db-changelog-master.xml" />
 		<property name="contexts" value="production" />
 	</bean>
+   -->
 
 </beans>
