@@ -34,7 +34,7 @@ public class StaticContentPanel extends Panel
     String html = content2.text(_key);
     if (html == null)
     {
-      html = "";
+      html = "<!-- Empty Page " + _key + " -->";
     }
     add(new Label("text", html).setEscapeModelStrings(false));
     PageParameters parameters = new PageParameters();

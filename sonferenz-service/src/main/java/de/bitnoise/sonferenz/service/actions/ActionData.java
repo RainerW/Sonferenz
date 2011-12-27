@@ -1,6 +1,8 @@
 package de.bitnoise.sonferenz.service.actions;
 
-public interface ActionData
+import java.io.Serializable;
+
+public interface ActionData extends Serializable
 {
 
 }

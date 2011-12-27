@@ -30,7 +30,7 @@ public class UserModel extends ModelBase implements DoInterface<Integer>
   
   @Column
   String email;
-
+  
   @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
   AuthMapping provider;
 

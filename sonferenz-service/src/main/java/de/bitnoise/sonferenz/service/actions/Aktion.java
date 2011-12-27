@@ -3,11 +3,14 @@ package de.bitnoise.sonferenz.service.actions;
 public class Aktion
 {
   String action;
+  String token;
 
-  public Aktion(String action2, ActionData data2)
+  public Aktion(Integer tokenId,String action2, String token,ActionData data2)
   {
     this.action = action2;
     this.data = data2;
+    this.token=token;
+    this.id=tokenId;
   }
 
   public String getAction()
@@ -21,4 +24,16 @@ public class Aktion
   }
 
   ActionData data;
+  
+  Integer id;
+
+  public String getToken()
+  {
+    return token;
+  }
+
+  public Integer getId()
+  {
+    return id;
+  }
 }

@@ -7,4 +7,6 @@ import de.bitnoise.sonferenz.model.UserModel;
 public interface UserRepository extends JpaRepository<UserModel, Integer>
 {
   UserModel findByName(String Name);
+
+  UserModel findByEmail(String mail);
 }

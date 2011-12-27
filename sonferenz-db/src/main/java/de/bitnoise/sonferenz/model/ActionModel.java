@@ -36,11 +36,12 @@ public class ActionModel implements DoInterface<Integer>
   @Column
   String action;
   
-  @Column
+  @OneToOne
   @Nullable
   UserModel creator;
   
   @Column
+  @Nullable
   Integer used;
   
   @Column
@@ -51,6 +52,7 @@ public class ActionModel implements DoInterface<Integer>
   Date expiry;
 
   @Column
+  @Nullable
   @Type(type = "text")
   String data;
 }

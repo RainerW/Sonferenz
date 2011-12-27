@@ -21,7 +21,7 @@ import de.bitnoise.sonferenz.web.pages.UnauthorizedPanel;
 import de.bitnoise.sonferenz.web.pages.conference.EditConferenceWizard;
 import de.bitnoise.sonferenz.web.pages.conference.ListConferencesPanel;
 
-@At(url = "/action", type = URLType.Indexed)
+@At(url = "/action", type = URLType.IndexedStateInURL, urlParameters = "token")
 public class ActionPage extends KonferenzPage
 {
   String action;
@@ -34,27 +34,38 @@ public class ActionPage extends KonferenzPage
   public ActionPage(PageParameters params)
   {
     super(params);
-    if (params.size() == 2)
+    if (params.size() == 3)
     {
-      action = params.getString("0", null);
-      token = params.getString("1", null);
+      if ("token".equalsIgnoreCase(params.getString("1", null)))
+      {
+        action = params.getString("0", null);
+        token = params.getString("2", null);
+      }
     }
   }
 
   @Override
   protected Panel getPageContent(String id)
   {
-    Panel panel = validate(action, token);
+    Panel panel = validate(id, action, token);
     if (panel == null)
     {
       return new UnauthorizedPanel(id);
     }
-    return new EmptyPanel(id);
+    return panel;
   }
 
-  Panel validate(String action, String token)
+  Panel validate(String id, String action, String token)
   {
-    Aktion aktion = facade.validateAction(action,token);
+    Aktion aktion = facade.validateAction(action, token);
+    if (aktion == null)
+    {
+      return null;
+    }
+    if ("subscribe".equals(aktion.getAction()))
+    {
+      return new SubscribeActionPanel(id,aktion);
+    }
     return null;
   }
 }

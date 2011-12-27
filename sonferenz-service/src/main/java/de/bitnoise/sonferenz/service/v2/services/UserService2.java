@@ -33,4 +33,6 @@ public interface UserService2
   void saveUser(UserModel user, Collection<UserRoles> newRoles);
 
   void updateUser(UserModel user, String newName);
+
+  boolean checkMailNotExists(String mail);
 }

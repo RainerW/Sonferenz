@@ -13,7 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import de.bitnoise.sonferenz.model.AuthMapping;
 import de.bitnoise.sonferenz.model.LocalUserModel;
 import de.bitnoise.sonferenz.model.UserModel;
@@ -38,7 +37,7 @@ public class UserService2Impl implements UserService2
 
   @Autowired
   AuthmappingRepository authRepo;
-  
+
   @Autowired
   RoleRepository roleRepo;
 
@@ -145,7 +144,7 @@ public class UserService2Impl implements UserService2
   }
 
   @Override
-  @Transactional(readOnly=true)
+  @Transactional(readOnly = true)
   public List<UserModel> getAllUsers()
   {
     return Detach.detach(userRepo.findAll());
@@ -155,7 +154,8 @@ public class UserService2Impl implements UserService2
 
   @Override
   @Transactional
-  public void createNewLocalUser(String username, String password, Collection<UserRoles> newRoles)
+  public void createNewLocalUser(String username, String password,
+      Collection<UserRoles> newRoles)
   {
     LocalUserModel luser = new LocalUserModel();
     luser.setName(username);
@@ -193,17 +193,17 @@ public class UserService2Impl implements UserService2
       user.getRoles().add(dbRole);
     }
   }
-  
+
   public UserRole getRoleFor(UserRoles role)
   {
-    UserRole dbRole  = roleRepo.findByName(role.toString());
+    UserRole dbRole = roleRepo.findByName(role.toString());
     if (dbRole == null)
     {
       return null;
     }
     return dbRole;
   }
-  
+
   private String sign(String password)
   {
     if (_digester == null)
@@ -221,7 +221,7 @@ public class UserService2Impl implements UserService2
   }
 
   @Override
-  @Transactional 
+  @Transactional
   public void saveUser(UserModel user, Collection<UserRoles> newRoles)
   {
     setupRoles(user, newRoles);
@@ -235,6 +235,14 @@ public class UserService2Impl implements UserService2
     UserModel current = userRepo.findOne(user.getId());
     current.setName(newName);
     userRepo.save(current);
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public boolean checkMailNotExists(String mail)
+  {
+    UserModel result = userRepo.findByEmail(mail);
+    return result == null;
   }
 
 }

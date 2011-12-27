@@ -11,11 +11,13 @@ import org.springframework.stereotype.Service;
 
 
 import de.bitnoise.sonferenz.facade.UiFacade;
+import de.bitnoise.sonferenz.model.ActionModel;
 import de.bitnoise.sonferenz.model.ConferenceModel;
 import de.bitnoise.sonferenz.model.TalkModel;
 import de.bitnoise.sonferenz.model.UserModel;
 import de.bitnoise.sonferenz.model.UserRoles;
 import de.bitnoise.sonferenz.model.WhishModel;
+import de.bitnoise.sonferenz.service.actions.ActionCreateUser;
 import de.bitnoise.sonferenz.service.actions.ActionData;
 import de.bitnoise.sonferenz.service.actions.Aktion;
 import de.bitnoise.sonferenz.service.v2.services.ActionService;
@@ -282,6 +284,22 @@ public class UiFacadeImpl implements UiFacade
   {
     userFacade.updateUser(user,newName);
   }
- 
 
+  @Override
+  public Page<ActionModel> getUserActions(UserModel user)
+  {
+    return _actions.getUserActions(user);
+  }
+
+  @Override
+  public void executeAction(ActionCreateUser data)
+  {
+    _actions.execute(data);
+  }
+
+  @Override
+  public boolean checkMailNotExists(String mail)
+  {
+    return userFacade.checkMailNotExists(mail);
+  }
 }

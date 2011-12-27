@@ -7,11 +7,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import de.bitnoise.sonferenz.model.ActionModel;
 import de.bitnoise.sonferenz.model.ConferenceModel;
 import de.bitnoise.sonferenz.model.TalkModel;
 import de.bitnoise.sonferenz.model.UserModel;
 import de.bitnoise.sonferenz.model.UserRoles;
 import de.bitnoise.sonferenz.model.WhishModel;
+import de.bitnoise.sonferenz.service.actions.ActionCreateUser;
 import de.bitnoise.sonferenz.service.actions.ActionData;
 import de.bitnoise.sonferenz.service.actions.Aktion;
 
@@ -93,5 +95,11 @@ public interface UiFacade
   Aktion validateAction(String action, String token);
 
   void userUpdate(UserModel user, String newName);
+
+  Page<ActionModel> getUserActions(UserModel user);
+
+  void executeAction(ActionCreateUser data);
+
+  boolean checkMailNotExists(String mail);
 
 }
