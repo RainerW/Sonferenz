@@ -3,6 +3,7 @@ package de.bitnoise.sonferenz.web.pages;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -18,13 +19,24 @@ import de.bitnoise.sonferenz.web.component.user.CurrentUserPanel;
 
 public class KonferenzPage extends WebPage
 {
+  public KonferenzPage()
+  {
+    super();
+  }
+
+  public KonferenzPage(PageParameters params)
+  {
+    super(params);
+  }
+
   @Override
   protected void onInitialize()
   {
     super.onInitialize();
     add(new StyleSheetReference("stylesheet", KonferenzPage.class, "style.less"));
 
-    IModel<NavCallbackInterface> callbackModel = new LoadableDetachableModel<NavCallbackInterface>() {
+    IModel<NavCallbackInterface> callbackModel = new LoadableDetachableModel<NavCallbackInterface>()
+    {
       @Override
       protected NavCallbackInterface load()
       {
@@ -33,14 +45,14 @@ public class KonferenzPage extends WebPage
     };
     add(new NavPanel("nav", callbackModel));
     add(new CurrentUserPanel("currentUser"));
-    add(new Label("footerText",de.bitnoise.sonferenz.Version.VERSION));
+    add(new Label("footerText", de.bitnoise.sonferenz.Version.VERSION));
     add(new CurrentConferencePanel("currentConference"));
     add(getPageContent("pageContent"));
   }
 
   protected Panel getPageContent(String id)
   {
-    return new StaticContentPanel(id,"page.default");
+    return new StaticContentPanel(id, "page.default");
   }
 
   public List<NavCallbackInterface> getNavigations()
@@ -52,7 +64,7 @@ public class KonferenzPage extends WebPage
 
   protected void buildNavigation(ArrayList<NavCallbackInterface> navs)
   {
-    
+
   }
 
   public Object getCurrentAction()

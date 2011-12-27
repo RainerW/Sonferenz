@@ -31,4 +31,6 @@ public interface UserService2
   void createNewLocalUser(String username, String password, Collection<UserRoles> newRoles);
 
   void saveUser(UserModel user, Collection<UserRoles> newRoles);
+
+  void updateUser(UserModel user, String newName);
 }

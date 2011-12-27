@@ -1,0 +1,18 @@
+<wicket:panel>
+	<div wicket:id="feedback"></div>
+	<form wicket:id="form">
+		<fieldset class="editProfileFieldset">
+			<legend>Profil bearbeiten</legend>
+			<label class="formItemLeft" id="labelLoginName" for="login">Login Name :</label>
+			<input type="text" readonly="readonly" class="formItemRight formItemExpand" id="login" wicket:id="login" /> 
+			<br />
+			<label class="formItemLeft" id="labelDisplayName" for="display">Display Name :</label> 
+			<input class="formItemRight formItemExpand" id="display" wicket:id="display" /> 
+			<br />
+		</fieldset>
+		<input type="submit" wicket:id="submit" value="Speichern" /> 
+		<input type="submit" wicket:id="cancel" value="Abbrechen" />
+		
+	</form>
+	
+</wicket:panel>

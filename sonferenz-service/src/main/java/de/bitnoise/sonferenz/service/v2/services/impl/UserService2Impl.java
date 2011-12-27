@@ -228,4 +228,13 @@ public class UserService2Impl implements UserService2
     userRepo.save(user);
   }
 
+  @Override
+  @Transactional
+  public void updateUser(UserModel user, String newName)
+  {
+    UserModel current = userRepo.findOne(user.getId());
+    current.setName(newName);
+    userRepo.save(current);
+  }
+
 }

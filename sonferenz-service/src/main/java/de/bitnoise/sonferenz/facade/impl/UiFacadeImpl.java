@@ -16,6 +16,9 @@ import de.bitnoise.sonferenz.model.TalkModel;
 import de.bitnoise.sonferenz.model.UserModel;
 import de.bitnoise.sonferenz.model.UserRoles;
 import de.bitnoise.sonferenz.model.WhishModel;
+import de.bitnoise.sonferenz.service.actions.ActionData;
+import de.bitnoise.sonferenz.service.actions.Aktion;
+import de.bitnoise.sonferenz.service.v2.services.ActionService;
 import de.bitnoise.sonferenz.service.v2.services.AuthenticationService2;
 import de.bitnoise.sonferenz.service.v2.services.ConferenceService2;
 import de.bitnoise.sonferenz.service.v2.services.StaticContentService2;
@@ -29,6 +32,9 @@ public class UiFacadeImpl implements UiFacade
 {
   @Autowired
   ConferenceService2 _conference;
+  
+  @Autowired
+  ActionService _actions;
 
   @Autowired
   StaticContentService2 content;
@@ -263,6 +269,18 @@ public class UiFacadeImpl implements UiFacade
   public ConferenceModel getConference(int id)
   {
     return _conference.getConference(id);
+  }
+
+  @Override
+  public Aktion validateAction(String action, String token)
+  {
+    return _actions.loadAction(action,token);
+  }
+
+  @Override
+  public void userUpdate(UserModel user, String newName)
+  {
+    userFacade.updateUser(user,newName);
   }
  
 

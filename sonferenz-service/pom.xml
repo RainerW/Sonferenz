@@ -13,6 +13,11 @@
 	</build>
 
 	<dependencies>
+        <dependency>
+          <groupId>com.thoughtworks.xstream</groupId>
+          <artifactId>xstream</artifactId>
+          <version>1.4.2</version>
+        </dependency>
 		<dependency>
 			<groupId>de.bitnoise.sonferenz</groupId>
 			<artifactId>sonferenz-db</artifactId>

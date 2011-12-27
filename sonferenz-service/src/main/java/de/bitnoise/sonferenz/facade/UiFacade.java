@@ -12,6 +12,8 @@ import de.bitnoise.sonferenz.model.TalkModel;
 import de.bitnoise.sonferenz.model.UserModel;
 import de.bitnoise.sonferenz.model.UserRoles;
 import de.bitnoise.sonferenz.model.WhishModel;
+import de.bitnoise.sonferenz.service.actions.ActionData;
+import de.bitnoise.sonferenz.service.actions.Aktion;
 
 public interface UiFacade
 {
@@ -87,5 +89,9 @@ public interface UiFacade
   Page<ConferenceModel> getAllConferences(Pageable pageable);
 
   ConferenceModel getConference(int id);
+
+  Aktion validateAction(String action, String token);
+
+  void userUpdate(UserModel user, String newName);
 
 }
