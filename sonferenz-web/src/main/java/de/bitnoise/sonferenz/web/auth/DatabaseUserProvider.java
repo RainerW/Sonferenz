@@ -21,13 +21,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import de.bitnoise.sonferenz.model.LocalUserModel;
 import de.bitnoise.sonferenz.service.v2.security.ProviderType;
-import de.bitnoise.sonferenz.service.v2.services.UserService2;
+import de.bitnoise.sonferenz.service.v2.services.UserService;
 
 public class DatabaseUserProvider extends
     AbstractUserDetailsAuthenticationProvider
 {
   @Autowired
-  UserService2 userService;
+  UserService userService;
 
   
   @Autowired

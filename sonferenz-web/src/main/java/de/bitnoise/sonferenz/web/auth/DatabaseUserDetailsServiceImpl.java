@@ -17,14 +17,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import de.bitnoise.sonferenz.model.LocalUserModel;
 import de.bitnoise.sonferenz.service.v2.security.ProviderType;
-import de.bitnoise.sonferenz.service.v2.services.UserService2;
+import de.bitnoise.sonferenz.service.v2.services.UserService;
 
 public class DatabaseUserDetailsServiceImpl implements UserDetailsService
 {
   public static String PROVIDER_TYPE = "plainDB";
 
   @Autowired
-  UserService2 userService;
+  UserService userService;
   
   @Transactional(readOnly = true)
   public UserDetails loadUserByUsername(String username)

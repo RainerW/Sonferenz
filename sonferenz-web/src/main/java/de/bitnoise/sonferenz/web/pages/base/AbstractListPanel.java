@@ -3,19 +3,20 @@ package de.bitnoise.sonferenz.web.pages.base;
 import java.io.Serializable;
 import java.util.List;
 
+import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DefaultDataTable;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.HeadersToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.NavigationToolbar;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.NoRecordsToolbar;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
-import de.bitnoise.sonferenz.model.UserModel;
 import de.bitnoise.sonferenz.service.v2.services.ConfigurationService;
 import de.bitnoise.sonferenz.web.component.SortableServiceDataProvider;
 import de.bitnoise.sonferenz.web.component.TableBuilder;
-import de.bitnoise.sonferenz.web.pages.users.table.UserListItem;
 
 public abstract class AbstractListPanel<VIEW_MODEL extends Serializable, DB_MODEL>
     extends Panel
@@ -33,9 +34,18 @@ public abstract class AbstractListPanel<VIEW_MODEL extends Serializable, DB_MODE
     Integer maxPageSize = config.getIntegerValue(30,
         "table." + headingId + ".paginationSize", 
         "table.paginationSize");
-    DefaultDataTable<VIEW_MODEL> table = new DefaultDataTable<VIEW_MODEL>(
-        "contentTable", columns, provider, maxPageSize);
+    DataTable<VIEW_MODEL> table = 
+    new DataTable<VIEW_MODEL>("contentTable", columns.toArray(new IColumn[columns.size()]), provider, maxPageSize) ;
+    addToolbars(table,provider);
     add(table);
+  }
+
+  
+  protected void addToolbars(DataTable<VIEW_MODEL> table, SortableServiceDataProvider<DB_MODEL, VIEW_MODEL> provider)
+  {
+    table.addTopToolbar(new NavigationToolbar(table));
+    table.addTopToolbar(new HeadersToolbar(table, provider));
+    table.addBottomToolbar(new NoRecordsToolbar(table));
   }
 
   protected SortableServiceDataProvider<DB_MODEL, VIEW_MODEL> createProvider()

@@ -17,8 +17,8 @@ import org.springframework.security.ldap.userdetails.DefaultLdapAuthoritiesPopul
 
 
 import de.bitnoise.sonferenz.model.UserModel;
-import de.bitnoise.sonferenz.service.v2.services.AuthenticationService2;
-import de.bitnoise.sonferenz.service.v2.services.UserService2;
+import de.bitnoise.sonferenz.service.v2.services.AuthenticationService;
+import de.bitnoise.sonferenz.service.v2.services.UserService;
 
 public class LdapUserDetailsServiceImpl extends DefaultLdapAuthoritiesPopulator
 {
@@ -31,10 +31,10 @@ public class LdapUserDetailsServiceImpl extends DefaultLdapAuthoritiesPopulator
   }
 
   @Autowired
-  AuthenticationService2 authService;
+  AuthenticationService authService;
 
   @Autowired
-  UserService2 userService;
+  UserService userService;
 
   @Override
   protected Set<GrantedAuthority> getAdditionalRoles(DirContextOperations user,

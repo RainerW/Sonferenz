@@ -5,7 +5,7 @@ import java.util.List;
 import de.bitnoise.sonferenz.model.TalkModel;
 import de.bitnoise.sonferenz.model.UserModel;
 
-public interface VoteService2
+public interface VoteService
 {
 
   void removeAllVotestForTalk(List<TalkModel> talks);

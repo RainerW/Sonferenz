@@ -11,7 +11,7 @@ import de.bitnoise.sonferenz.model.UserModel;
 import de.bitnoise.sonferenz.model.UserRole;
 import de.bitnoise.sonferenz.model.UserRoles;
 
-public interface UserService2
+public interface UserService
 {
   LocalUserModel findLocalUser(String username);
 

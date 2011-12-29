@@ -5,4 +5,6 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 	<include relativeToChangelogFile="true" file="db.changelog-0.2.0.xml"/>
 	<include relativeToChangelogFile="true" file="db.changelog-0.2.0-data.xml"/>
+	<!--  <include relativeToChangelogFile="true" file="db.changelog-0.2.4.xml"/>  -->
+	<include relativeToChangelogFile="true" file="db.changelog-0.2.4-data.xml"/>
 </databaseChangeLog>

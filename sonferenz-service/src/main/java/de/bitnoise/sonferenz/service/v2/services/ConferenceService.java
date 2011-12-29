@@ -10,7 +10,7 @@ import de.bitnoise.sonferenz.model.ConferenceModel;
 import de.bitnoise.sonferenz.model.TalkModel;
 import de.bitnoise.sonferenz.service.v2.exceptions.GeneralConferenceException;
 
-public interface ConferenceService2
+public interface ConferenceService
 {
   public ConferenceModel getActiveConference()
       throws GeneralConferenceException;

@@ -12,6 +12,7 @@ import javax.annotation.PostConstruct;
 import org.jasypt.digest.StringDigester;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
@@ -38,8 +39,8 @@ import de.bitnoise.sonferenz.service.actions.IncrementUseCountOnToken;
 import de.bitnoise.sonferenz.service.v2.exceptions.ValidationException;
 import de.bitnoise.sonferenz.service.v2.services.ActionService;
 import de.bitnoise.sonferenz.service.v2.services.ConfigurationService;
-import de.bitnoise.sonferenz.service.v2.services.StaticContentService2;
-import de.bitnoise.sonferenz.service.v2.services.UserService2;
+import de.bitnoise.sonferenz.service.v2.services.StaticContentService;
+import de.bitnoise.sonferenz.service.v2.services.UserService;
 
 @Service
 public class ActionServiceImpl implements ActionService
@@ -48,7 +49,7 @@ public class ActionServiceImpl implements ActionService
   ActionRepository repo;
 
   @Autowired
-  UserService2 userService;
+  UserService userService;
 
   @Autowired
   AuthmappingRepository authRepo;
@@ -63,7 +64,7 @@ public class ActionServiceImpl implements ActionService
   ConfigurationService config;
 
   @Autowired
-  StaticContentService2 texte;
+  StaticContentService texte;
 
   MailSender sender;
 
@@ -73,7 +74,9 @@ public class ActionServiceImpl implements ActionService
   public void initMail()
   {
     JavaMailSenderImpl tmp = new JavaMailSenderImpl();
-    tmp.setUsername(config.getStringValue("smtp.host"));
+    tmp.setHost(config.getStringValue("smtp.host"));
+    tmp.setUsername(config.getStringValue("smtp.username"));
+    tmp.setPassword(config.getStringValue("smtp.password"));
     sender = tmp;
 
     template = new SimpleMailMessage();
@@ -122,9 +125,9 @@ public class ActionServiceImpl implements ActionService
   }
 
   @Override
-  public Page<ActionModel> getUserActions(UserModel user)
+  public Page<ActionModel> getUserActions(PageRequest request,UserModel user)
   {
-    return repo.findByCreator(user);
+    return repo.findByCreator(user,request);
   }
 
   @Override
@@ -226,6 +229,39 @@ public class ActionServiceImpl implements ActionService
   public String createToken()
   {
     return UUID.randomUUID().toString();
+  }
+
+  @Override
+  public void createNewUserToken(String user, String mail)
+  {
+    ActionModel entity = new ActionModel();
+    entity.setAction("subscribe");
+    String token = createToken();
+    entity.setToken(token);
+    // entity.setCreator(user);
+    entity.setExpiry(new Date());
+    entity.setUsed(0);
+    entity.setData("<null/>");
+    repo.save(entity);
+
+    SimpleMailMessage message = new SimpleMailMessage(template);
+    message.setTo(mail);
+    StringBuffer body = new StringBuffer();
+    body.append("You have been invited ... ");
+    body.append("\r\n");
+    // body.append(config.baseUrl);
+    body.append("/verifyMail/token/");
+    body.append(token);
+    message.setText(body.toString());
+    try
+    {
+      sender.send(message);
+    }
+    catch (MailSendException t)
+    {
+      t.printStackTrace();
+      throw new ValidationException("eMail invalid :" + t.getMessage());
+    }
   }
 
 }

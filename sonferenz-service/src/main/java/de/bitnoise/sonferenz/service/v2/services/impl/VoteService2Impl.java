@@ -14,10 +14,10 @@ import de.bitnoise.sonferenz.model.UserModel;
 import de.bitnoise.sonferenz.model.VoteModel;
 import de.bitnoise.sonferenz.repo.TalkRepository;
 import de.bitnoise.sonferenz.repo.VoteRepository;
-import de.bitnoise.sonferenz.service.v2.services.VoteService2;
+import de.bitnoise.sonferenz.service.v2.services.VoteService;
 
 @Service
-public class VoteService2Impl implements VoteService2
+public class VoteService2Impl implements VoteService
 {
   @Autowired
   TalkRepository talkRepo;

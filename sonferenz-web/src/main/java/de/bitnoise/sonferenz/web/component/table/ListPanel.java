@@ -12,7 +12,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import de.bitnoise.sonferenz.service.v2.services.StaticContentService2;
+import de.bitnoise.sonferenz.service.v2.services.StaticContentService;
 
 public abstract class ListPanel<T> extends Panel
 {
@@ -45,7 +45,7 @@ public abstract class ListPanel<T> extends Panel
   }
 
   @SpringBean
-  StaticContentService2 content2;
+  StaticContentService content2;
 
   protected Component createHeaderText(String id)
   {

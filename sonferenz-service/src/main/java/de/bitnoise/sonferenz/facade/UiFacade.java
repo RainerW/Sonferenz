@@ -23,92 +23,94 @@ import de.bitnoise.sonferenz.service.actions.Aktion;
 public interface UiFacade
 {
 
+  void addTalksToConference(ConferenceModel conference, List<TalkModel> asTalks);
+
+  boolean checkMailNotExists(String mail);
+
+  void createNewLocalUser(String username, String password, String email,Collection<UserRoles> newRoles);
+
+  void deleteTalk(TalkModel talk);
+
+  void deleteWhish(WhishModel talk);
+
+  void executeAction(ActionCreateUser data);
+
   ConferenceModel getActiveConference();
 
-  void storeConference(ConferenceModel conference);
+  Page<ConferenceModel> getAllConferences(Pageable pageable);
+
+  int getAllConferencesCount();
+
+  Page<ConfigurationModel> getAllConfigurations(PageRequest request);
+
+  Page<UserRole> getAllRoles(PageRequest request);
+
+  List<TalkModel> getAllTalks();
+
+  int getAllTalksCount();
+
+  List<TalkModel> getAllTalksForConference(ConferenceModel conference);
+
+  List<UserModel> getAllUsers();
+
+  Page<UserModel> getAllUsers(PageRequest request);
+
+  Page<WhishModel> getAllWhishes(PageRequest request);
+
+  ConferenceModel getConference(int id);
 
   Page<ConferenceModel> getConferences(Pageable page);
 
   UserModel getCurrentUser();
 
-  void deleteTalk(TalkModel talk);
-
-  void saveTalk(TalkModel talk);
-
   TalkModel getTalkById(int id);
-
-  String getText(String id);
-
-  void saveText(String id, String neu);
 
   Page<TalkModel> getTalks(PageRequest request);
 
-  int getAllTalksCount();
+  String getText(String id);
 
-  int getAllConferencesCount();
+  Page<StaticContentModel> getTexte(PageRequest request);
 
-  int getWhishesCount();
-
-  Page<WhishModel> getAllWhishes(PageRequest request);
+  Page<ActionModel> getUserActions(PageRequest request, UserModel user);
 
   int getUserCount();
 
-  Page<UserModel> getAllUsers(PageRequest request);
+  Page<TalkModel> getVotableTalks(PageRequest request);
 
-  List<UserModel> getAllUsers();
-
-  void createNewLocalUser(String username, String password, String email,Collection<UserRoles> newRoles);
-
-  void saveUser(UserModel user, Collection<UserRoles> newRoles);
-
-  void unwhish(WhishModel whish);
-
-  void deleteWhish(WhishModel talk);
-
-  void saveWhish(WhishModel talk);
+  long getVotableTalksCount();
 
   WhishModel getWhishById(int id);
 
-  void likeWhish(UserModel user, WhishModel whish);
-
-  void unLikeWhish(UserModel user, WhishModel whish);
+  int getWhishesCount();
 
   Integer getWhishLikeCount(UserModel user, WhishModel whish);
 
-  List<TalkModel> getAllTalks();
-
-  List<TalkModel> getAllTalksForConference(ConferenceModel conference);
+  void likeWhish(UserModel user, WhishModel whish);
 
   void removeAllVotestForTalk(List<TalkModel> asTalks);
 
   void removeTalksFromConference(ConferenceModel conference, List<TalkModel> asTalks);
 
-  void addTalksToConference(ConferenceModel conference, List<TalkModel> asTalks);
+  void saveTalk(TalkModel talk);
 
-  boolean vote(TalkModel talk, UserModel user, int increment);
+  void saveText(String id, String neu);
 
-  long getVotableTalksCount();
+  void saveUser(UserModel user, Collection<UserRoles> newRoles);
 
-  Page<TalkModel> getVotableTalks(PageRequest request);
+  void saveWhish(WhishModel talk);
 
-  Page<ConferenceModel> getAllConferences(Pageable pageable);
+  void storeConference(ConferenceModel conference);
 
-  ConferenceModel getConference(int id);
+  void unLikeWhish(UserModel user, WhishModel whish);
 
-  Aktion validateAction(String action, String token);
+  void unwhish(WhishModel whish);
 
   void userUpdate(UserModel user, String newName);
 
-  Page<ActionModel> getUserActions(UserModel user);
+  Aktion validateAction(String action, String token);
 
-  void executeAction(ActionCreateUser data);
+  boolean vote(TalkModel talk, UserModel user, int increment);
 
-  boolean checkMailNotExists(String mail);
-
-  Page<UserRole> getAllRoles(PageRequest request);
-
-  Page<ConfigurationModel> getAllConfigurations(PageRequest request);
-
-  Page<StaticContentModel> getTexte(PageRequest request);
+  void createToken(String user, String mail);
 
 }

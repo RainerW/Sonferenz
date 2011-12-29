@@ -9,7 +9,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-
 import de.bitnoise.sonferenz.facade.UiFacade;
 import de.bitnoise.sonferenz.model.ActionModel;
 import de.bitnoise.sonferenz.model.ConferenceModel;
@@ -24,44 +23,44 @@ import de.bitnoise.sonferenz.service.actions.ActionCreateUser;
 import de.bitnoise.sonferenz.service.actions.ActionData;
 import de.bitnoise.sonferenz.service.actions.Aktion;
 import de.bitnoise.sonferenz.service.v2.services.ActionService;
-import de.bitnoise.sonferenz.service.v2.services.AuthenticationService2;
-import de.bitnoise.sonferenz.service.v2.services.ConferenceService2;
+import de.bitnoise.sonferenz.service.v2.services.AuthenticationService;
+import de.bitnoise.sonferenz.service.v2.services.ConferenceService;
 import de.bitnoise.sonferenz.service.v2.services.ConfigurationService;
-import de.bitnoise.sonferenz.service.v2.services.StaticContentService2;
-import de.bitnoise.sonferenz.service.v2.services.TalkService2;
-import de.bitnoise.sonferenz.service.v2.services.UserService2;
-import de.bitnoise.sonferenz.service.v2.services.VoteService2;
-import de.bitnoise.sonferenz.service.v2.services.WhishService2;
+import de.bitnoise.sonferenz.service.v2.services.StaticContentService;
+import de.bitnoise.sonferenz.service.v2.services.TalkService;
+import de.bitnoise.sonferenz.service.v2.services.UserService;
+import de.bitnoise.sonferenz.service.v2.services.VoteService;
+import de.bitnoise.sonferenz.service.v2.services.WhishService;
 
 @Service
 public class UiFacadeImpl implements UiFacade
 {
   @Autowired
-  ConferenceService2 _conference;
-  
+  ConferenceService _conference;
+
   @Autowired
   ConfigurationService _config;
-  
+
   @Autowired
   ActionService _actions;
 
   @Autowired
-  StaticContentService2 content;
+  StaticContentService content;
 
   @Autowired
-  TalkService2 _talks;
+  TalkService _talks;
 
   @Autowired
-  UserService2 userFacade;
+  UserService userFacade;
 
   @Autowired
-  AuthenticationService2 authService;
-  
+  AuthenticationService authService;
+
   @Autowired
-  WhishService2 whishService;
-  
+  WhishService whishService;
+
   @Autowired
-  VoteService2 voteService;
+  VoteService voteService;
 
   @Override
   public ConferenceModel getActiveConference()
@@ -169,13 +168,13 @@ public class UiFacadeImpl implements UiFacade
   @Override
   public void createNewLocalUser(String username, String password, String email, Collection<UserRoles> newRoles)
   {
-    userFacade.createNewLocalUser(username,password,email,newRoles);
+    userFacade.createNewLocalUser(username, password, email, newRoles);
   }
 
   @Override
   public void saveUser(UserModel user, Collection<UserRoles> newRoles)
   {
-    userFacade.saveUser(user,newRoles);
+    userFacade.saveUser(user, newRoles);
   }
 
   @Override
@@ -199,31 +198,31 @@ public class UiFacadeImpl implements UiFacade
   @Override
   public WhishModel getWhishById(int id)
   {
-    return  whishService.getWhishById(id);
+    return whishService.getWhishById(id);
   }
 
   @Override
   public void likeWhish(UserModel user, WhishModel whish)
   {
-    whishService.like(user,whish);
+    whishService.like(user, whish);
   }
 
   @Override
   public void unLikeWhish(UserModel user, WhishModel whish)
   {
-    whishService.unLike(user,whish);
+    whishService.unLike(user, whish);
   }
 
   @Override
   public Integer getWhishLikeCount(UserModel user, WhishModel whish)
   {
-    return whishService.getWhishLikeCount(user,whish);
+    return whishService.getWhishLikeCount(user, whish);
   }
 
   @Override
   public List<TalkModel> getAllTalks()
   {
-    return _talks .getAllTalks();
+    return _talks.getAllTalks();
   }
 
   @Override
@@ -253,7 +252,7 @@ public class UiFacadeImpl implements UiFacade
   @Override
   public boolean vote(TalkModel talk, UserModel user, int increment)
   {
-    return voteService.vote(talk,user,increment);
+    return voteService.vote(talk, user, increment);
   }
 
   @Override
@@ -283,19 +282,13 @@ public class UiFacadeImpl implements UiFacade
   @Override
   public Aktion validateAction(String action, String token)
   {
-    return _actions.loadAction(action,token);
+    return _actions.loadAction(action, token);
   }
 
   @Override
   public void userUpdate(UserModel user, String newName)
   {
-    userFacade.updateUser(user,newName);
-  }
-
-  @Override
-  public Page<ActionModel> getUserActions(UserModel user)
-  {
-    return _actions.getUserActions(user);
+    userFacade.updateUser(user, newName);
   }
 
   @Override
@@ -326,5 +319,17 @@ public class UiFacadeImpl implements UiFacade
   public Page<StaticContentModel> getTexte(PageRequest request)
   {
     return content.getAll(request);
+  }
+
+  @Override
+  public Page<ActionModel> getUserActions(PageRequest request, UserModel user)
+  {
+    return _actions.getUserActions(request, user);
+  }
+
+  @Override
+  public void createToken(String user, String mail)
+  {
+    _actions.createNewUserToken(user, mail);
   }
 }

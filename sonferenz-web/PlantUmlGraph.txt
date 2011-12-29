@@ -1,0 +1,14 @@
+UserRole "n" -- "m" UserModel
+UserModel "1" -- "1" AuthMapping
+
+UserModel  "1" -- "1" WhishModel : owner
+WhishModel "1" --> LikeModel
+LikeModel "1" -- "1" UserModel
+
+UserModel "1" --> TalkModel
+TalkModel "1" --> ConferenceModel
+TalkModel "1" -- "n" VoteModel
+VoteModel "1" --> UserModel
+
+LocalUserModel :
+StaticContentModel : 

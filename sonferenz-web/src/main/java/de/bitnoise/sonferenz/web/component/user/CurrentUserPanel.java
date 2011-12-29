@@ -18,7 +18,7 @@ import org.springframework.context.ApplicationContext;
 
 import de.bitnoise.sonferenz.model.UserModel;
 import de.bitnoise.sonferenz.service.v2.exceptions.GeneralConferenceException;
-import de.bitnoise.sonferenz.service.v2.services.AuthenticationService2;
+import de.bitnoise.sonferenz.service.v2.services.AuthenticationService;
 import de.bitnoise.sonferenz.web.pages.auth.LoginPage;
 import de.bitnoise.sonferenz.web.pages.auth.LogoutPage;
 
@@ -32,7 +32,7 @@ public class CurrentUserPanel extends Panel
   }
 
   @SpringBean
-  AuthenticationService2 auth;
+  AuthenticationService auth;
 
   private ApplicationContext ctx;
 

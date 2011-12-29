@@ -26,7 +26,7 @@ import de.bitnoise.sonferenz.model.ConferenceModel;
 import de.bitnoise.sonferenz.model.UserModel;
 import de.bitnoise.sonferenz.model.UserRole;
 import de.bitnoise.sonferenz.model.UserRoles;
-import de.bitnoise.sonferenz.service.v2.services.AuthenticationService2;
+import de.bitnoise.sonferenz.service.v2.services.AuthenticationService;
 
 public class KonferenzSession extends WebSession
 {
@@ -37,7 +37,7 @@ public class KonferenzSession extends WebSession
   private static ConferenceModel _conference;
 
   @SpringBean
-  AuthenticationService2 authService;
+  AuthenticationService authService;
 
   @SpringBean
   UiFacade facade;

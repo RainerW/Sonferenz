@@ -24,11 +24,14 @@ public class HomePage extends KonferenzPage
   public HomePage(PageParameters parameters)
   {
     super();
-    int id = parameters.getInt("conference", -1);
-    if (id != -1)
+    if (parameters != null)
     {
-      ConferenceModel conference = facade.getConference(id);
-      KonferenzSession.get().setCurrentConference(conference);
+      int id = parameters.getInt("conference", -1);
+      if (id != -1)
+      {
+        ConferenceModel conference = facade.getConference(id);
+        KonferenzSession.get().setCurrentConference(conference);
+      }
     }
   }
 

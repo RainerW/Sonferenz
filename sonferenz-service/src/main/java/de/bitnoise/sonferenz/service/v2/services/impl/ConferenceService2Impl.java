@@ -14,10 +14,10 @@ import de.bitnoise.sonferenz.repo.ConferenceRepository;
 import de.bitnoise.sonferenz.repo.TalkRepository;
 import de.bitnoise.sonferenz.service.v2.exceptions.GeneralConferenceException;
 import de.bitnoise.sonferenz.service.v2.exceptions.RepositoryException;
-import de.bitnoise.sonferenz.service.v2.services.ConferenceService2;
+import de.bitnoise.sonferenz.service.v2.services.ConferenceService;
 
 @Service
-public class ConferenceService2Impl implements ConferenceService2
+public class ConferenceService2Impl implements ConferenceService
 {
   @Autowired
   ConferenceRepository conferenceRepo;

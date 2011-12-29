@@ -14,7 +14,7 @@ import de.bitnoise.sonferenz.KonferenzSession;
 import de.bitnoise.sonferenz.facade.UiFacade;
 import de.bitnoise.sonferenz.model.UserModel;
 import de.bitnoise.sonferenz.model.WhishModel;
-import de.bitnoise.sonferenz.service.v2.services.StaticContentService2;
+import de.bitnoise.sonferenz.service.v2.services.StaticContentService;
 import de.bitnoise.sonferenz.web.component.SortableServiceDataProvider;
 import de.bitnoise.sonferenz.web.component.TableBuilder;
 import de.bitnoise.sonferenz.web.pages.talks.ListTalksPanel;
@@ -23,7 +23,7 @@ import de.bitnoise.sonferenz.web.pages.whish.action.EditOrViewWhish;
 public class ListWhishesPanel extends Panel
 {
   @SpringBean
-  StaticContentService2 content2;
+  StaticContentService content2;
   
   @SpringBean
   UiFacade facade;

@@ -10,7 +10,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import de.bitnoise.sonferenz.KonferenzSession;
 import de.bitnoise.sonferenz.Right;
-import de.bitnoise.sonferenz.service.v2.services.StaticContentService2;
+import de.bitnoise.sonferenz.service.v2.services.StaticContentService;
 
 public class StaticContentPanel extends Panel
 {
@@ -25,7 +25,7 @@ public class StaticContentPanel extends Panel
   }
 
   @SpringBean
-  StaticContentService2 content2;
+  StaticContentService content2;
 
   @Override
   protected void onInitialize()

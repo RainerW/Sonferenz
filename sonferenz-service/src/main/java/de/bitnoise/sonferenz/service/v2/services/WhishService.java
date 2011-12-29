@@ -6,7 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import de.bitnoise.sonferenz.model.UserModel;
 import de.bitnoise.sonferenz.model.WhishModel;
 
-public interface WhishService2
+public interface WhishService
 {
 
   int getCount();

@@ -16,9 +16,12 @@ import de.bitnoise.sonferenz.web.component.confpan.CurrentConferencePanel;
 import de.bitnoise.sonferenz.web.component.navigation.NavCallbackInterface;
 import de.bitnoise.sonferenz.web.component.navigation.NavPanel;
 import de.bitnoise.sonferenz.web.component.user.CurrentUserPanel;
+import de.bitnoise.sonferenz.web.forms.KonferenzForm;
 
 public class KonferenzPage extends WebPage
 {
+  private KonferenzForm _form;
+
   public KonferenzPage()
   {
     super();
@@ -27,6 +30,11 @@ public class KonferenzPage extends WebPage
   public KonferenzPage(PageParameters params)
   {
     super(params);
+  }
+
+  public KonferenzPage(KonferenzForm form)
+  {
+    _form = form;
   }
 
   @Override
@@ -52,7 +60,12 @@ public class KonferenzPage extends WebPage
 
   protected Panel getPageContent(String id)
   {
-    return new StaticContentPanel(id, "page.default");
+    if(_form== null) {
+      return new StaticContentPanel(id, "page.default");
+    } else {
+      Panel panel = _form.createPanel(id);
+      return panel;
+    }
   }
 
   public List<NavCallbackInterface> getNavigations()

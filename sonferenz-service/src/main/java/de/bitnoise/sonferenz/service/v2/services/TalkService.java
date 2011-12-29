@@ -7,7 +7,7 @@ import org.springframework.data.domain.PageRequest;
 
 import de.bitnoise.sonferenz.model.TalkModel;
 
-public interface TalkService2
+public interface TalkService
 {
 
   List<TalkModel> getAllTalks();

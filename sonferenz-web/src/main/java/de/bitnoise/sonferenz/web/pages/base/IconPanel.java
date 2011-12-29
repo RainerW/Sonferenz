@@ -8,20 +8,22 @@ import org.apache.wicket.markup.html.panel.Panel;
 
 public abstract class IconPanel extends Panel
 {
-  final ResourceReference refEdit = new ResourceReference(
-      "/images/sun_on.gif");
-
-  final ResourceReference refDelete = new ResourceReference(
-      "/images/sun_off.gif");
-
   public enum Type
   {
     EDIT, DELETE
   }
 
+  final static ResourceReference refEdit = new ResourceReference(
+      "/images/edit.png");
+
+  final static ResourceReference refDelete = new ResourceReference(
+      "/images/trash.png");
+  
   public IconPanel(String id, Type type)
   {
     super(id);
+    
+    
     AjaxFallbackLink<String> link = new AjaxFallbackLink<String>("linkElement")
     {
       @Override

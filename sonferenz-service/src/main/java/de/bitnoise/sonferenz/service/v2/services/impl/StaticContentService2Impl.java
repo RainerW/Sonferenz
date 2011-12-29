@@ -9,10 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 import de.bitnoise.sonferenz.model.StaticContentModel;
 import de.bitnoise.sonferenz.repo.StaticContentRepository;
 import de.bitnoise.sonferenz.service.v2.exceptions.RepositoryException;
-import de.bitnoise.sonferenz.service.v2.services.StaticContentService2;
+import de.bitnoise.sonferenz.service.v2.services.StaticContentService;
 
 @Service
-public class StaticContentService2Impl implements StaticContentService2
+public class StaticContentService2Impl implements StaticContentService
 {
   @Autowired
   StaticContentRepository repo;

@@ -6,7 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import de.bitnoise.sonferenz.model.StaticContentModel;
 
 
-public interface StaticContentService2
+public interface StaticContentService
 {
   String text(String key);
   

@@ -24,10 +24,10 @@ import de.bitnoise.sonferenz.repo.RoleRepository;
 import de.bitnoise.sonferenz.repo.UserRepository;
 import de.bitnoise.sonferenz.service.v2.exceptions.RepositoryException;
 import de.bitnoise.sonferenz.service.v2.impl.Detach;
-import de.bitnoise.sonferenz.service.v2.services.UserService2;
+import de.bitnoise.sonferenz.service.v2.services.UserService;
 
 @Service
-public class UserService2Impl implements UserService2
+public class UserService2Impl implements UserService
 {
   @Autowired
   LocalUserRepository localRepo;

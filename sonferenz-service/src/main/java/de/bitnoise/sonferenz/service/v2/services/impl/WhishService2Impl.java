@@ -12,11 +12,11 @@ import de.bitnoise.sonferenz.model.UserModel;
 import de.bitnoise.sonferenz.model.WhishModel;
 import de.bitnoise.sonferenz.repo.LikeRepository;
 import de.bitnoise.sonferenz.repo.WhishRepository;
-import de.bitnoise.sonferenz.service.v2.services.AuthenticationService2;
-import de.bitnoise.sonferenz.service.v2.services.WhishService2;
+import de.bitnoise.sonferenz.service.v2.services.AuthenticationService;
+import de.bitnoise.sonferenz.service.v2.services.WhishService;
 
 @Service
-public class WhishService2Impl implements WhishService2
+public class WhishService2Impl implements WhishService
 {
 
   @Autowired
@@ -26,7 +26,7 @@ public class WhishService2Impl implements WhishService2
   LikeRepository likeRepo;
 
   @Autowired
-  AuthenticationService2 authService;
+  AuthenticationService authService;
 
   @Override
   @Transactional(readOnly = true)

@@ -7,7 +7,7 @@ import org.apache.wicket.injection.web.InjectorHolder;
 import org.apache.wicket.resource.loader.IStringResourceLoader;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import de.bitnoise.sonferenz.service.v2.services.StaticContentService2;
+import de.bitnoise.sonferenz.service.v2.services.StaticContentService;
 
 public class DatabaseLoader implements IStringResourceLoader
 {
@@ -18,7 +18,7 @@ public class DatabaseLoader implements IStringResourceLoader
   }
 
   @SpringBean
-  StaticContentService2 content2;
+  StaticContentService content2;
 
   public String loadStringResource(Class<?> clazz, String key, Locale locale,
       String style)

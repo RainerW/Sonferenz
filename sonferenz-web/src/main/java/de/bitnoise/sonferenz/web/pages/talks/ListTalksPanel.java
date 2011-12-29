@@ -15,7 +15,7 @@ import org.springframework.data.domain.PageRequest;
 
 import de.bitnoise.sonferenz.facade.UiFacade;
 import de.bitnoise.sonferenz.model.TalkModel;
-import de.bitnoise.sonferenz.service.v2.services.StaticContentService2;
+import de.bitnoise.sonferenz.service.v2.services.StaticContentService;
 import de.bitnoise.sonferenz.web.component.SortableServiceDataProvider;
 import de.bitnoise.sonferenz.web.component.TableBuilder;
 import de.bitnoise.sonferenz.web.pages.talks.action.EditOrViewTalk;
@@ -25,7 +25,7 @@ public class ListTalksPanel extends Panel
   
 
   @SpringBean
-  StaticContentService2 content2;
+  StaticContentService content2;
   
   @SpringBean 
   UiFacade facade;

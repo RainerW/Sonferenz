@@ -1,6 +1,7 @@
 package de.bitnoise.sonferenz.repo;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,5 +18,5 @@ public interface ActionRepository extends JpaRepository<ActionModel, Integer>
 //  @Query("select t from TalkModel t where t.conference is not null")
 //  Page<TalkModel> test(Pageable  request);
 
-  Page<ActionModel> findByCreator(UserModel user);
+  Page<ActionModel> findByCreator(UserModel user, Pageable request);
 }

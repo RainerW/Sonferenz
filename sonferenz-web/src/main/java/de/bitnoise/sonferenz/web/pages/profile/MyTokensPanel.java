@@ -1,7 +1,9 @@
 package de.bitnoise.sonferenz.web.pages.profile;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DefaultDataTable;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.HeadersToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -13,6 +15,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import de.bitnoise.sonferenz.KonferenzSession;
 import de.bitnoise.sonferenz.facade.UiFacade;
 import de.bitnoise.sonferenz.model.ActionModel;
 import de.bitnoise.sonferenz.model.TalkModel;
@@ -22,100 +25,64 @@ import de.bitnoise.sonferenz.web.component.SortableServiceDataProvider;
 import de.bitnoise.sonferenz.web.component.TableBuilder;
 import de.bitnoise.sonferenz.web.component.TableBuilder.Column;
 import de.bitnoise.sonferenz.web.pages.HomePage;
+import de.bitnoise.sonferenz.web.pages.base.AbstractListPanel;
+import de.bitnoise.sonferenz.web.pages.profile.action.TokenCreateUser;
 import de.bitnoise.sonferenz.web.pages.talks.ModelTalkList;
 import de.bitnoise.sonferenz.web.pages.talks.TalksOverviewPage;
 import de.bitnoise.sonferenz.web.pages.talks.action.EditOrViewTalk;
 import de.bitnoise.sonferenz.web.pages.users.FormPanel;
 import de.bitnoise.sonferenz.web.pages.users.UserOverviewPage;
+import de.bitnoise.sonferenz.web.pages.users.action.EditUser;
+import de.bitnoise.sonferenz.web.toolbar.AddToolbarWithButton;
 
-public class MyTokensPanel extends Panel
+public class MyTokensPanel extends AbstractListPanel<TokenListItem, ActionModel>
 {
   @SpringBean
   UiFacade facade;
 
   UserModel user;
 
-  public MyTokensPanel(String id, UserModel user)
+  public MyTokensPanel(String id)
   {
-    super(id);
-    this.user = user;
+    super(id, "tokenTable");
   }
 
   @Override
-  protected void onInitialize()
+  protected void initColumns(TableBuilder<TokenListItem> builder)
   {
-    super.onInitialize();
-
-    TableBuilder<TokenListItem> builder = new TableBuilder<TokenListItem>(
-        "tokens")
-    {
-      {
-        addColumn(new Column()
-        {
-          {
-            setTitle("Aktion");
-            setModelProperty("action");
-            // sortable();
-            // action(new EditOrViewTalk());
-          }
-        });
-        addColumn(new Column()
-        {
-          {
-            setTitle("Token");
-            setModelProperty("token");
-            // sortable();
-            // action(new EditOrViewTalk());
-          }
-        });
-        addColumn(new Column()
-        {
-          {
-            setTitle("url");
-            setModelProperty("url");
-            // sortable();
-            // action(new EditOrViewTalk());
-          }
-        });
-      }
-    };
-
-    ISortableDataProvider<TokenListItem> provider =
-        new SortableServiceDataProvider<ActionModel, TokenListItem>()
-        {
-          @Override
-          protected TokenListItem transferType(ActionModel dbObject)
-          {
-            TokenListItem item = new TokenListItem();
-            item.action = dbObject.getAction();
-            item.token = dbObject.getToken();
-            item.url = "/action/" + item.action + "/token/" + item.token;
-            return item;
-          }
-
-          @Override
-          protected Page<ActionModel> getAllItems(PageRequest request)
-          {
-            return facade.getUserActions(user);
-          }
-
-          @Override
-          public int size()
-          {
-            Long l = facade.getUserActions(user).getTotalElements();
-            return l.intValue();
-          }
-
-        };
-
-    DefaultDataTable<TokenListItem> table = new DefaultDataTable<TokenListItem>(
-        "tokenTable", builder.getColumns(), provider, 30);
-    add(table);
+    builder.addColumn("action");
+    builder.addColumn("token");
+    builder.addColumn("url");
+  }
+  
+  @Override
+  protected void addToolbars(DataTable<TokenListItem> table,
+      SortableServiceDataProvider<ActionModel, TokenListItem> provider)
+  {
+    table.addTopToolbar(new AddToolbarWithButton("inputField", table, new TokenCreateUser()));
+    super.addToolbars(table, provider);
   }
 
   protected void onSubmitForm()
   {
     setResponsePage(HomePage.class);
+  }
+
+  @Override
+  protected TokenListItem transferDbToViewModel(ActionModel dbObject)
+  {
+    TokenListItem item = new TokenListItem();
+    item.action = dbObject.getAction();
+    item.token = dbObject.getToken();
+    item.url = "/action/" + item.action + "/token/" + item.token;
+    return item;
+  }
+
+  @Override
+  protected Page<ActionModel> getItems(PageRequest request)
+  {
+    UserModel user = KonferenzSession.get().getCurrentUser();
+    return facade.getUserActions(request, user);
   }
 
 }

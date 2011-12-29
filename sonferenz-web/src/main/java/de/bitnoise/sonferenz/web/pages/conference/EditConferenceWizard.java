@@ -19,7 +19,6 @@ import org.apache.wicket.model.util.CollectionModel;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-
 import de.bitnoise.sonferenz.facade.UiFacade;
 import de.bitnoise.sonferenz.model.ConferenceModel;
 import de.bitnoise.sonferenz.model.ConferenceState;
@@ -40,7 +39,6 @@ public class EditConferenceWizard extends Wizard
   @SpringBean
   private UiFacade facade;
 
-  
   private ConferenceModel _conference;
 
   protected class Step1 extends DynamicWizardStep
@@ -219,8 +217,9 @@ public class EditConferenceWizard extends Wizard
   @Override
   public void onFinish()
   {
+    ConferenceState newState = modelState.getObject();
+    ConferenceState oldState = _conference.getState();
     String valueTitle = modelTitle.getObject();
-    ConferenceState selected = modelState.getObject();
     Boolean active = modelActive.getObject();
     Integer votesPerUser = Integer.valueOf(modelVotesPerUser.getObject());
     List<TalkToConference> data = modelTalks.getObject();
@@ -228,18 +227,39 @@ public class EditConferenceWizard extends Wizard
     if (liste != null)
     {
       facade.removeAllVotestForTalk(asTalks(liste.getRemovedItems()));
-//      voteService.removeVotesForTalk(asTalks(liste.getRemovedItems()));
       facade.removeTalksFromConference(_conference,
           asTalks(liste.getRemovedItems()));
       facade.addTalksToConference(_conference, asTalks(liste.getAllItems()));
     }
-    _conference.setState(selected);
+    _conference.setState(newState);
     _conference.setShortName(valueTitle);
     _conference.setActive(active);
     _conference.setVotesPerUser(votesPerUser);
     facade.storeConference(_conference);
 
+    doStateActions(_conference,oldState, newState);
     setResponsePage(ConferenceOverviewPage.class);
+  }
+
+  protected void doStateActions(ConferenceModel conference, ConferenceState oldState, ConferenceState newState)
+  {
+    if (oldState == newState)
+    {
+      return;
+    }
+    switch (newState)
+    {
+    case FINISHED:
+      doFinishAction(conference);
+      break;
+    default:
+      break;
+    }
+  }
+
+  private void doFinishAction(ConferenceModel conference)
+  {
+    
   }
 
   private List<TalkModel> asTalks(List<TalkToConference> rawList)

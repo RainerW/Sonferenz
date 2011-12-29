@@ -16,10 +16,10 @@ import de.bitnoise.sonferenz.repo.UserRepository;
 import de.bitnoise.sonferenz.service.v2.exceptions.GeneralConferenceException;
 import de.bitnoise.sonferenz.service.v2.impl.Detach;
 import de.bitnoise.sonferenz.service.v2.security.ProviderType;
-import de.bitnoise.sonferenz.service.v2.services.AuthenticationService2;
+import de.bitnoise.sonferenz.service.v2.services.AuthenticationService;
 
 @Service
-public class AuthenticationServiceImpl implements AuthenticationService2
+public class AuthenticationServiceImpl implements AuthenticationService
 {
 
   @Autowired
