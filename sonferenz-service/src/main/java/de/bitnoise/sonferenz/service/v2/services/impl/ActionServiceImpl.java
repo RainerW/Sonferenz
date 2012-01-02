@@ -70,13 +70,22 @@ public class ActionServiceImpl implements ActionService
 
   SimpleMailMessage template;
 
+  String actionUrl;
+
   @PostConstruct
   public void initMail()
   {
     JavaMailSenderImpl tmp = new JavaMailSenderImpl();
     tmp.setHost(config.getStringValue("smtp.host"));
-    tmp.setUsername(config.getStringValue("smtp.username"));
-    tmp.setPassword(config.getStringValue("smtp.password"));
+    if (config.isAvaiable("smtp.username"))
+    {
+      tmp.setUsername(config.getStringValue("smtp.username"));
+      tmp.setPassword(config.getStringValue("smtp.password"));
+    }
+
+    String baseUrl = config.getStringValue("baseUrl");
+    actionUrl = baseUrl + "/action";
+
     sender = tmp;
 
     template = new SimpleMailMessage();
@@ -125,9 +134,9 @@ public class ActionServiceImpl implements ActionService
   }
 
   @Override
-  public Page<ActionModel> getUserActions(PageRequest request,UserModel user)
+  public Page<ActionModel> getUserActions(PageRequest request, UserModel user)
   {
-    return repo.findByCreator(user,request);
+    return repo.findByCreator(user, request);
   }
 
   @Override
@@ -249,8 +258,8 @@ public class ActionServiceImpl implements ActionService
     StringBuffer body = new StringBuffer();
     body.append("You have been invited ... ");
     body.append("\r\n");
-    // body.append(config.baseUrl);
-    body.append("/verifyMail/token/");
+    body.append(actionUrl);
+    body.append("/subscribe/token/");
     body.append(token);
     message.setText(body.toString());
     try

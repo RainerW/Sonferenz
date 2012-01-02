@@ -23,12 +23,13 @@ public class ConfigurationFromDbImpl implements ConfigurationService
 
   @Override
   @Transactional(readOnly = true)
-  public String getStringValue(String ...keysToSearch)
+  public String getStringValue(String... keysToSearch)
   {
     String value = getNextValue(keysToSearch);
     if (value == null)
     {
-      throw new ConfigurationError("The Config key was not accessible " + Arrays.toString(keysToSearch));
+      throw new ConfigurationError("The Config key was not accessible "
+          + Arrays.toString(keysToSearch));
     }
     return value;
   }
@@ -73,7 +74,7 @@ public class ConfigurationFromDbImpl implements ConfigurationService
           + value);
     }
   }
-  
+
   @Override
   public Integer getIntegerValue(int defaultValue, String... keysToSearch)
   {
@@ -90,6 +91,14 @@ public class ConfigurationFromDbImpl implements ConfigurationService
     {
       return defaultValue;
     }
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public Boolean isAvaiable(String... keysToSearch)
+  {
+    String value = getNextValue(keysToSearch);
+    return value != null;
   }
 
 }

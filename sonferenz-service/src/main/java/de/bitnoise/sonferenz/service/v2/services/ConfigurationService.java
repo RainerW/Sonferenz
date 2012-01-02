@@ -11,6 +11,8 @@ import de.bitnoise.sonferenz.repo.ConfigurationRepository;
 public interface ConfigurationService
 {
   public String getStringValue(String... keysToSearch);
+  
+  public Boolean isAvaiable(String... keysToSearch);
 
   public Page<ConfigurationModel> getAllConfigurations(PageRequest request);
 
