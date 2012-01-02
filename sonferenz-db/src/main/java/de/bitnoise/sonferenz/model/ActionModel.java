@@ -44,6 +44,9 @@ public class ActionModel implements DoInterface<Integer>
   Integer used;
   
   @Column
+  Boolean active;
+  
+  @Column
   String token;
   
   @Column

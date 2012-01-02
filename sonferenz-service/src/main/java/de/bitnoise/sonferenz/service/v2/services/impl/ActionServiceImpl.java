@@ -10,6 +10,11 @@ import java.util.Map.Entry;
 import javax.annotation.PostConstruct;
 
 import org.jasypt.digest.StringDigester;
+import org.joda.time.Chronology;
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
+import org.joda.time.Interval;
+import org.joda.time.Period;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
@@ -26,6 +31,7 @@ import de.bitnoise.sonferenz.service.actions.ActionCreateUser;
 import de.bitnoise.sonferenz.service.actions.ActionData;
 import de.bitnoise.sonferenz.service.actions.Aktion;
 import de.bitnoise.sonferenz.service.actions.IncrementUseCountOnToken;
+import de.bitnoise.sonferenz.service.actions.InvalidateOnSuccess;
 import de.bitnoise.sonferenz.service.actions.KonferenzAction;
 import de.bitnoise.sonferenz.service.actions.impl.ActionResult;
 import de.bitnoise.sonferenz.service.actions.impl.ContentReplacement;
@@ -99,6 +105,15 @@ public class ActionServiceImpl implements ActionService
     {
       return null;
     }
+    if (!row.getActive())
+    {
+      return null;
+    }
+    Date expires = row.getExpiry();
+    if (new Interval(expires).isBeforeNow())
+    {
+      return null;
+    }
 
     return aktion;
   }
@@ -132,22 +147,46 @@ public class ActionServiceImpl implements ActionService
     if (data instanceof IncrementUseCountOnToken)
     {
       List<Integer> tokens = ((IncrementUseCountOnToken) data)
-          .getTokensToIncrementUserCount();
-      if (tokens != null)
+          .getTokensToIncrementUseage();
+      incrementUsage(tokens);
+    }
+    if (data instanceof InvalidateOnSuccess)
+    {
+      List<Integer> tokens = ((InvalidateOnSuccess) data)
+          .getTokensToInvalidate();
+      invalidateToken(tokens);
+    }
+  }
+
+  protected void invalidateToken(List<Integer> tokens)
+  {
+    if (tokens != null)
+    {
+      for (Integer id : tokens)
       {
-        for (Integer id : tokens)
+        ActionModel token = repo.findOne(id);
+        token.setActive(false);
+        repo.save(token);
+      }
+    }
+  }
+
+  protected void incrementUsage(List<Integer> tokens)
+  {
+    if (tokens != null)
+    {
+      for (Integer id : tokens)
+      {
+        ActionModel token = repo.findOne(id);
+        if (token.getUsed() == null)
         {
-          ActionModel token = repo.findOne(id);
-          if (token.getUsed() == null)
-          {
-            token.setUsed(1);
-          }
-          else
-          {
-            token.setUsed(token.getUsed() + 1);
-          }
-          repo.save(token);
+          token.setUsed(1);
         }
+        else
+        {
+          token.setUsed(token.getUsed() + 1);
+        }
+        repo.save(token);
       }
     }
   }
@@ -159,8 +198,11 @@ public class ActionServiceImpl implements ActionService
     entity.setAction(data.getActionName());
     String token = createToken();
     entity.setToken(token);
+    entity.setActive(true);
     entity.setCreator(authService.getCurrentUser());
-    entity.setExpiry(new Date());
+    int maxValidity = 24 * 60; // 24h
+    DateTime result = DateTime.now().plus(Period.minutes(maxValidity));
+    entity.setExpiry(result.toDate());
     entity.setUsed(0);
     XStream xs = getXStream();
     entity.setData(xs.toXML(data));
@@ -182,7 +224,8 @@ public class ActionServiceImpl implements ActionService
         public String process(String input)
         {
           String result = input.replace("${url.base}", baseUrl);
-          result = result.replace("${url.action}", baseUrl + "/action/" + actionName
+          result = result.replace("${url.action}", baseUrl + "/action/"
+              + actionName
               + "/token/" + token);
           return result;
         }

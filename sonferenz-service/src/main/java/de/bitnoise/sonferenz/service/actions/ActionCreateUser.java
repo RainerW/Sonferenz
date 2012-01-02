@@ -81,7 +81,7 @@ public class ActionCreateUser implements ActionData, IncrementUseCountOnToken
   }
 
   @Override
-  public List<Integer> getTokensToIncrementUserCount()
+  public List<Integer> getTokensToIncrementUseage()
   {
     return Arrays.asList(tokenId);
   }

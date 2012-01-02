@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface IncrementUseCountOnToken
 {
-  List<Integer> getTokensToIncrementUserCount();
+  List<Integer> getTokensToIncrementUseage();
 }

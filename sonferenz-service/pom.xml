@@ -18,6 +18,11 @@
           <artifactId>xstream</artifactId>
           <version>1.4.2</version>
         </dependency>
+        <dependency>
+          <groupId>joda-time</groupId>
+          <artifactId>joda-time</artifactId>
+          <version>2.0</version>
+        </dependency>
 		<dependency>
 			<groupId>de.bitnoise.sonferenz</groupId>
 			<artifactId>sonferenz-db</artifactId>
