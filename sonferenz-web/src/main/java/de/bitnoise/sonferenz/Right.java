@@ -15,6 +15,11 @@ public interface Right
     String ViewCalculation = "admin.calculation.view";
     String StartCalculation = "admin.calculation.start";
     String Configure = "admin.config.global";
+    
+  }
+  
+  interface Actions {
+    String InviteUser = "action.invite.newUser";
   }
 
   interface Conference

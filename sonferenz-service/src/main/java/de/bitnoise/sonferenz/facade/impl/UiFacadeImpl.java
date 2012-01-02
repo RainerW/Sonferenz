@@ -22,6 +22,7 @@ import de.bitnoise.sonferenz.model.WhishModel;
 import de.bitnoise.sonferenz.service.actions.ActionCreateUser;
 import de.bitnoise.sonferenz.service.actions.ActionData;
 import de.bitnoise.sonferenz.service.actions.Aktion;
+import de.bitnoise.sonferenz.service.actions.impl.SubscribeActionImpl;
 import de.bitnoise.sonferenz.service.v2.services.ActionService;
 import de.bitnoise.sonferenz.service.v2.services.AuthenticationService;
 import de.bitnoise.sonferenz.service.v2.services.ConferenceService;
@@ -327,9 +328,12 @@ public class UiFacadeImpl implements UiFacade
     return _actions.getUserActions(request, user);
   }
 
+  @Autowired
+  SubscribeActionImpl _actionSubscribe;
+  
   @Override
   public void createToken(String user, String mail)
   {
-    _actions.createNewUserToken(user, mail);
+    _actionSubscribe.createNewUserToken(user, mail);
   }
 }

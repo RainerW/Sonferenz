@@ -5,9 +5,10 @@ import org.springframework.data.domain.PageRequest;
 
 import de.bitnoise.sonferenz.model.ActionModel;
 import de.bitnoise.sonferenz.model.UserModel;
-import de.bitnoise.sonferenz.service.actions.ActionCreateUser;
 import de.bitnoise.sonferenz.service.actions.ActionData;
 import de.bitnoise.sonferenz.service.actions.Aktion;
+import de.bitnoise.sonferenz.service.actions.KonferenzAction;
+import de.bitnoise.sonferenz.service.actions.impl.ActionResult;
 
 public interface ActionService
 {
@@ -18,6 +19,7 @@ public interface ActionService
 
   void execute(ActionData data);
 
-  void createNewUserToken(String user, String mail);
+  ActionResult createAction(KonferenzAction action, ActionData data);
+
 
 }

@@ -5,7 +5,7 @@ import java.util.List;
 
 public enum UserRoles
 {
-  NONE, ADMIN, USER;
+  NONE, ADMIN, USER, MANAGER;
 
   public static List<? extends UserRoles> asList()
   {

@@ -1,96 +1,76 @@
 package de.bitnoise.sonferenz.service.v2.services.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.UUID;
+import java.util.Map.Entry;
 
 import javax.annotation.PostConstruct;
 
 import org.jasypt.digest.StringDigester;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.mail.MailSendException;
-import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.thoughtworks.xstream.XStream;
 
 import de.bitnoise.sonferenz.model.ActionModel;
-import de.bitnoise.sonferenz.model.AuthMapping;
-import de.bitnoise.sonferenz.model.LocalUserModel;
 import de.bitnoise.sonferenz.model.UserModel;
-import de.bitnoise.sonferenz.model.UserRole;
-import de.bitnoise.sonferenz.model.UserRoles;
 import de.bitnoise.sonferenz.repo.ActionRepository;
-import de.bitnoise.sonferenz.repo.AuthmappingRepository;
-import de.bitnoise.sonferenz.repo.LocalUserRepository;
-import de.bitnoise.sonferenz.repo.UserRepository;
 import de.bitnoise.sonferenz.service.actions.ActionCreateUser;
 import de.bitnoise.sonferenz.service.actions.ActionData;
 import de.bitnoise.sonferenz.service.actions.Aktion;
 import de.bitnoise.sonferenz.service.actions.IncrementUseCountOnToken;
+import de.bitnoise.sonferenz.service.actions.KonferenzAction;
+import de.bitnoise.sonferenz.service.actions.impl.ActionResult;
+import de.bitnoise.sonferenz.service.actions.impl.ContentReplacement;
+import de.bitnoise.sonferenz.service.actions.impl.VerifyMailActionImpl.VerifyMailActionData;
 import de.bitnoise.sonferenz.service.v2.exceptions.ValidationException;
 import de.bitnoise.sonferenz.service.v2.services.ActionService;
+import de.bitnoise.sonferenz.service.v2.services.AuthenticationService;
 import de.bitnoise.sonferenz.service.v2.services.ConfigurationService;
-import de.bitnoise.sonferenz.service.v2.services.StaticContentService;
-import de.bitnoise.sonferenz.service.v2.services.UserService;
 
 @Service
 public class ActionServiceImpl implements ActionService
 {
   @Autowired
-  ActionRepository repo;
-
-  @Autowired
-  UserService userService;
-
-  @Autowired
-  AuthmappingRepository authRepo;
-
-  @Autowired
-  UserRepository userRepo;
-
-  @Autowired
-  LocalUserRepository localUserRepo;
-
-  @Autowired
   ConfigurationService config;
 
   @Autowired
-  StaticContentService texte;
+  ApplicationContext spring;
 
-  MailSender sender;
+  @Autowired
+  AuthenticationService authService;
 
-  SimpleMailMessage template;
+  @Autowired
+  ActionRepository actionRepo;
 
-  String actionUrl;
+  Map<String, KonferenzAction> actionMap;
+
+  String baseUrl;
 
   @PostConstruct
-  public void initMail()
+  public void initActions()
   {
-    JavaMailSenderImpl tmp = new JavaMailSenderImpl();
-    tmp.setHost(config.getStringValue("smtp.host"));
-    if (config.isAvaiable("smtp.username"))
+    baseUrl = config.getStringValue("baseUrl");
+    Map<String, KonferenzAction> allActions = spring
+        .getBeansOfType(KonferenzAction.class);
+    actionMap = new HashMap<String, KonferenzAction>();
+    xs = new XStream();
+    for (Entry<String, KonferenzAction> entry : allActions.entrySet())
     {
-      tmp.setUsername(config.getStringValue("smtp.username"));
-      tmp.setPassword(config.getStringValue("smtp.password"));
+      KonferenzAction bean = entry.getValue();
+      actionMap.put(bean.getActionName(), bean);
+
+      // xs.autodetectAnnotations(true); Not Thread Safe
+      xs.processAnnotations(bean.getModelClasses());
     }
 
-    String baseUrl = config.getStringValue("baseUrl");
-    actionUrl = baseUrl + "/action";
-
-    sender = tmp;
-
-    template = new SimpleMailMessage();
-    template.setFrom(config.getStringValue("mail.create.from"));
-    template.setSubject(texte.text("mail.subject", "Your new useraccound"));
   }
 
   @Autowired
@@ -100,6 +80,11 @@ public class ActionServiceImpl implements ActionService
   @Transactional(readOnly = true)
   public Aktion loadAction(String action, String token)
   {
+    if (actionMap.get(action) == null)
+    {
+      throw new ValidationException("Not a valid action");
+    }
+
     ActionModel row = repo.findByActionAndToken(action, token);
     Aktion aktion = toAktion(row);
     if (aktion == null)
@@ -114,23 +99,8 @@ public class ActionServiceImpl implements ActionService
     {
       return null;
     }
-    return aktion;
-  }
 
-  public Aktion toAktion(ActionModel row)
-  {
-    if (row == null)
-    {
-      return null;
-    }
-    if (row.getExpiry() == null)
-    {
-      return null;
-    }
-    XStream xs = new XStream();
-    ActionData data = (ActionData) xs.fromXML(row.getData());
-    Aktion a = new Aktion(row.getId(), row.getAction(), row.getToken(), data);
-    return a;
+    return aktion;
   }
 
   @Override
@@ -139,19 +109,25 @@ public class ActionServiceImpl implements ActionService
     return repo.findByCreator(user, request);
   }
 
+  @Autowired
+  ActionRepository repo;
+
+  private XStream xs;
+
   @Override
   @Transactional(rollbackFor = Throwable.class)
   public void execute(ActionData data)
   {
-    if (data instanceof ActionCreateUser)
+    KonferenzAction action = actionMap.get(data.getActionName());
+    if (action == null)
     {
-      doExecute((ActionCreateUser) data);
-      processActionTable(data);
+      throw new ValidationException("Unkown Action");
     }
-
+    boolean result = action.execute(data);
+    processActionTable(data, result);
   }
 
-  void processActionTable(ActionData data)
+  void processActionTable(ActionData data, boolean wasSuccessfull)
   {
     if (data instanceof IncrementUseCountOnToken)
     {
@@ -176,62 +152,53 @@ public class ActionServiceImpl implements ActionService
     }
   }
 
-  void doExecute(ActionCreateUser data)
-  {
-    UserModel foundMail = userRepo.findByEmail(data.getEMail());
-    if (foundMail != null)
-    {
-      throw new ValidationException("eMail allready inuse");
-    }
-    UserModel foundName = userRepo.findByName(data.getUserName());
-    if (foundName != null)
-    {
-      throw new ValidationException("Username allready inuse");
-    }
-    AuthMapping foundLogin = authRepo.findByAuthIdAndAuthType(
-        data.getLoginName(), "plainDB");
-    if (foundLogin != null)
-    {
-      throw new ValidationException("Login Name allready inuse");
-    }
-
-    Collection<UserRoles> newRoles = new ArrayList<UserRoles>();
-    newRoles.add(UserRoles.USER);
-    UserModel user = userService.createNewLocalUser(data.getLoginName(),
-        data.getPassword(), data.getEMail(), newRoles);
-
-    newActionVerifyEMail(user);
-  }
-
-  void newActionVerifyEMail(UserModel user)
+  @Override
+  public ActionResult createAction(KonferenzAction action, ActionData data)
   {
     ActionModel entity = new ActionModel();
-    entity.setAction("verifyMail");
+    entity.setAction(data.getActionName());
     String token = createToken();
     entity.setToken(token);
-    entity.setCreator(user);
+    entity.setCreator(authService.getCurrentUser());
     entity.setExpiry(new Date());
     entity.setUsed(0);
-    entity.setData("<null/>");
+    XStream xs = getXStream();
+    entity.setData(xs.toXML(data));
     repo.save(entity);
 
-    SimpleMailMessage message = new SimpleMailMessage(template);
-    message.setTo(user.getEmail());
-    StringBuffer body = new StringBuffer();
-    body.append("Please confirm your email by open the folling link in your browser:");
-    body.append("\r\n");
-    // body.append(config.baseUrl);
-    body.append("/verifyMail/token/");
-    body.append(token);
-    message.setText(body.toString());
-    try
+    return new ActionResultImpl(baseUrl, data.getActionName(), token);
+  }
+
+  public static class ActionResultImpl implements ActionResult
+  {
+    ContentReplacement replacer;
+
+    public ActionResultImpl(final String baseUrl, final String actionName,
+        final String token)
     {
-      sender.send(message);
+      replacer = new ContentReplacement()
+      {
+        @Override
+        public String process(String input)
+        {
+          String result = input.replace("${url.base}", baseUrl);
+          result = result.replace("${url.action}", baseUrl + "/action/" + actionName
+              + "/token/" + token);
+          return result;
+        }
+      };
     }
-    catch (MailSendException t)
+
+    @Override
+    public boolean wasSuccessfull()
     {
-      t.printStackTrace();
-      throw new ValidationException("eMail invalid :" + t.getMessage());
+      return true;
+    }
+
+    @Override
+    public ContentReplacement getContentReplacer()
+    {
+      return replacer;
     }
   }
 
@@ -240,37 +207,30 @@ public class ActionServiceImpl implements ActionService
     return UUID.randomUUID().toString();
   }
 
-  @Override
-  public void createNewUserToken(String user, String mail)
+  public String asString(ActionCreateUser newUser)
   {
-    ActionModel entity = new ActionModel();
-    entity.setAction("subscribe");
-    String token = createToken();
-    entity.setToken(token);
-    // entity.setCreator(user);
-    entity.setExpiry(new Date());
-    entity.setUsed(0);
-    entity.setData("<null/>");
-    repo.save(entity);
-
-    SimpleMailMessage message = new SimpleMailMessage(template);
-    message.setTo(mail);
-    StringBuffer body = new StringBuffer();
-    body.append("You have been invited ... ");
-    body.append("\r\n");
-    body.append(actionUrl);
-    body.append("/subscribe/token/");
-    body.append(token);
-    message.setText(body.toString());
-    try
-    {
-      sender.send(message);
-    }
-    catch (MailSendException t)
-    {
-      t.printStackTrace();
-      throw new ValidationException("eMail invalid :" + t.getMessage());
-    }
+    XStream xs = getXStream();
+    return xs.toXML(newUser);
   }
 
+  protected XStream getXStream()
+  {
+    return xs;
+  }
+
+  public Aktion toAktion(ActionModel row)
+  {
+    if (row == null)
+    {
+      return null;
+    }
+    if (row.getExpiry() == null)
+    {
+      return null;
+    }
+    XStream xs = getXStream();
+    ActionData data = (ActionData) xs.fromXML(row.getData());
+    Aktion a = new Aktion(row.getId(), row.getAction(), row.getToken(), data);
+    return a;
+  }
 }

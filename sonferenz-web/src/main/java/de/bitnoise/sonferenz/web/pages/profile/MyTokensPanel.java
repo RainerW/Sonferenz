@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import de.bitnoise.sonferenz.KonferenzSession;
+import de.bitnoise.sonferenz.Right;
 import de.bitnoise.sonferenz.facade.UiFacade;
 import de.bitnoise.sonferenz.model.ActionModel;
 import de.bitnoise.sonferenz.model.TalkModel;
@@ -59,7 +60,9 @@ public class MyTokensPanel extends AbstractListPanel<TokenListItem, ActionModel>
   protected void addToolbars(DataTable<TokenListItem> table,
       SortableServiceDataProvider<ActionModel, TokenListItem> provider)
   {
-    table.addTopToolbar(new AddToolbarWithButton("inputField", table, new TokenCreateUser()));
+    AddToolbarWithButton invite = new AddToolbarWithButton("inviteUser", table, new TokenCreateUser());
+    invite.setVisible(KonferenzSession.hasRight(Right.Actions.InviteUser));
+    table.addTopToolbar(invite);
     super.addToolbars(table, provider);
   }
 

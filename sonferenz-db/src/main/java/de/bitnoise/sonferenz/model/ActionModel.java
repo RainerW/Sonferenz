@@ -20,7 +20,6 @@ import org.hibernate.annotations.Type;
 
 import com.sun.istack.internal.Nullable;
 
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -55,4 +54,5 @@ public class ActionModel implements DoInterface<Integer>
   @Nullable
   @Type(type = "text")
   String data;
+
 }

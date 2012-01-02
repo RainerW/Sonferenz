@@ -5,4 +5,5 @@ import java.io.Serializable;
 public interface ActionData extends Serializable
 {
 
+  String getActionName();
 }

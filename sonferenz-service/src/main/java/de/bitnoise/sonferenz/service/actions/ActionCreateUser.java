@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
+@XStreamAlias("ActionCreateUser")
 public class ActionCreateUser implements ActionData, IncrementUseCountOnToken
 {
   String loginName;
@@ -81,6 +84,11 @@ public class ActionCreateUser implements ActionData, IncrementUseCountOnToken
   public List<Integer> getTokensToIncrementUserCount()
   {
     return Arrays.asList(tokenId);
+  }
+
+  public String getActionName()
+  {
+    return "subscribe";
   }
 
 }

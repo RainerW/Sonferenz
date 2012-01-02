@@ -32,6 +32,8 @@ public class KonferenzSession extends WebSession
 {
   private static List<String> userRoles = new ArrayList<String>();
 
+  private static List<String> managerRoles = new ArrayList<String>();
+  
   private static List<String> adminRoles = new ArrayList<String>();
 
   private static ConferenceModel _conference;
@@ -51,6 +53,8 @@ public class KonferenzSession extends WebSession
   {
     super(request);
     InjectorHolder.getInjector().inject(this);
+    managerRoles.add(Right.Actions.InviteUser);
+    
     adminRoles.add(Right.User.List);
     adminRoles.add(Right.User.Create);
     adminRoles.add(Right.User.Edit);
@@ -163,6 +167,8 @@ public class KonferenzSession extends WebSession
       return userRoles.contains(requestedRight);
     case ADMIN:
       return adminRoles.contains(requestedRight);
+    case MANAGER:
+      return managerRoles.contains(requestedRight);
     }
     return false;
   }
