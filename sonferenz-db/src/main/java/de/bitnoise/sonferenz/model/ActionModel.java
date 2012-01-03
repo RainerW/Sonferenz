@@ -15,7 +15,6 @@ import lombok.Data;
 
 import org.hibernate.annotations.Type;
 
-import com.sun.istack.internal.Nullable;
 
 @Entity
 @Data
@@ -30,11 +29,9 @@ public class ActionModel implements DoInterface<Integer>
   String action;
   
   @OneToOne
-  @Nullable
   UserModel creator;
   
-  @Column
-  @Nullable
+  @Column(nullable=true)
   Integer used;
   
   @Column
@@ -47,8 +44,7 @@ public class ActionModel implements DoInterface<Integer>
   @Temporal(TemporalType.TIMESTAMP)
   Date expiry;
 
-  @Column
-  @Nullable
+  @Column(nullable=true)
   @Type(type = "text")
   String data;
 
