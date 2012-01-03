@@ -22,8 +22,8 @@ import de.bitnoise.sonferenz.repo.AuthmappingRepository;
 import de.bitnoise.sonferenz.repo.LocalUserRepository;
 import de.bitnoise.sonferenz.repo.RoleRepository;
 import de.bitnoise.sonferenz.repo.UserRepository;
+import de.bitnoise.sonferenz.service.v2.Detach;
 import de.bitnoise.sonferenz.service.v2.exceptions.RepositoryException;
-import de.bitnoise.sonferenz.service.v2.impl.Detach;
 import de.bitnoise.sonferenz.service.v2.services.UserService;
 
 @Service

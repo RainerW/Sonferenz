@@ -1,4 +1,4 @@
-package de.bitnoise.sonferenz.service.actions.impl;
+package de.bitnoise.sonferenz.service.v2.actions;
 
 public interface ContentReplacement
 {

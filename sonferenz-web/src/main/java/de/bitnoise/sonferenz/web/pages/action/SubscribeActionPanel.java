@@ -9,15 +9,14 @@ import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.IValidatable;
-import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.validator.AbstractValidator;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.PatternValidator;
 
 import de.bitnoise.sonferenz.KonferenzDefines;
 import de.bitnoise.sonferenz.facade.UiFacade;
-import de.bitnoise.sonferenz.service.actions.ActionCreateUser;
-import de.bitnoise.sonferenz.service.actions.Aktion;
+import de.bitnoise.sonferenz.service.v2.actions.Aktion;
+import de.bitnoise.sonferenz.service.v2.actions.impl.SubscribeActionImpl.ActionCreateUser;
 import de.bitnoise.sonferenz.service.v2.exceptions.ValidationException;
 import de.bitnoise.sonferenz.web.pages.HomePage;
 import de.bitnoise.sonferenz.web.pages.users.FormPanel;

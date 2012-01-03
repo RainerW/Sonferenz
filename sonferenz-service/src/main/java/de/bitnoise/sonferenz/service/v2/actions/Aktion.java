@@ -1,19 +1,19 @@
-package de.bitnoise.sonferenz.service.actions;
+package de.bitnoise.sonferenz.service.v2.actions;
 
-import com.thoughtworks.xstream.XStream;
-
-import de.bitnoise.sonferenz.model.ActionModel;
-
+/**
+ * Wrapper around a Action
+ */
 public class Aktion
 {
   String action;
 
   String token;
 
-  public Aktion(Integer tokenId, String action2, String token, ActionData data2)
+  public Aktion(Integer tokenId, String actionName, String token,
+      ActionState state)
   {
-    this.action = action2;
-    this.data = data2;
+    this.action = actionName;
+    this.data = state;
     this.token = token;
     this.id = tokenId;
   }
@@ -23,12 +23,12 @@ public class Aktion
     return action;
   }
 
-  public ActionData getData()
+  public ActionState getData()
   {
     return data;
   }
 
-  ActionData data;
+  ActionState data;
 
   Integer id;
 

@@ -5,10 +5,10 @@ import org.springframework.data.domain.PageRequest;
 
 import de.bitnoise.sonferenz.model.ActionModel;
 import de.bitnoise.sonferenz.model.UserModel;
-import de.bitnoise.sonferenz.service.actions.ActionData;
-import de.bitnoise.sonferenz.service.actions.Aktion;
-import de.bitnoise.sonferenz.service.actions.KonferenzAction;
-import de.bitnoise.sonferenz.service.actions.impl.ActionResult;
+import de.bitnoise.sonferenz.service.v2.actions.ActionResult;
+import de.bitnoise.sonferenz.service.v2.actions.ActionState;
+import de.bitnoise.sonferenz.service.v2.actions.Aktion;
+import de.bitnoise.sonferenz.service.v2.actions.KonferenzAction;
 
 public interface ActionService
 {
@@ -17,9 +17,9 @@ public interface ActionService
 
   Page<ActionModel> getUserActions(PageRequest request, UserModel user);
 
-  void execute(ActionData data);
+  void execute(ActionState data);
 
-  ActionResult createAction(KonferenzAction action, ActionData data);
+  ActionResult createAction(KonferenzAction action, ActionState data);
 
 
 }

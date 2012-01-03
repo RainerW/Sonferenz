@@ -1,8 +1,10 @@
-package de.bitnoise.sonferenz.service.actions.impl;
+package de.bitnoise.sonferenz.service.v2.actions.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
@@ -11,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 import de.bitnoise.sonferenz.model.ActionModel;
 import de.bitnoise.sonferenz.model.AuthMapping;
 import de.bitnoise.sonferenz.model.UserModel;
@@ -18,10 +22,11 @@ import de.bitnoise.sonferenz.model.UserRoles;
 import de.bitnoise.sonferenz.repo.ActionRepository;
 import de.bitnoise.sonferenz.repo.AuthmappingRepository;
 import de.bitnoise.sonferenz.repo.UserRepository;
-import de.bitnoise.sonferenz.service.actions.ActionCreateUser;
-import de.bitnoise.sonferenz.service.actions.ActionData;
-import de.bitnoise.sonferenz.service.actions.Aktion;
-import de.bitnoise.sonferenz.service.actions.KonferenzAction;
+import de.bitnoise.sonferenz.service.v2.actions.ActionResult;
+import de.bitnoise.sonferenz.service.v2.actions.ActionState;
+import de.bitnoise.sonferenz.service.v2.actions.Aktion;
+import de.bitnoise.sonferenz.service.v2.actions.IncrementUseageCount;
+import de.bitnoise.sonferenz.service.v2.actions.KonferenzAction;
 import de.bitnoise.sonferenz.service.v2.exceptions.ValidationException;
 import de.bitnoise.sonferenz.service.v2.services.ActionService;
 import de.bitnoise.sonferenz.service.v2.services.AuthenticationService;
@@ -54,7 +59,7 @@ public class SubscribeActionImpl implements KonferenzAction
   }
 
   @Override
-  public boolean execute(ActionData data)
+  public boolean execute(ActionState data)
   {
     if (data instanceof ActionCreateUser)
     {
@@ -168,4 +173,93 @@ public class SubscribeActionImpl implements KonferenzAction
   {
     return new Class[] {ActionCreateUser.class};
   }
+
+  @XStreamAlias("ActionCreateUser")
+  public static class ActionCreateUser implements ActionState,
+      IncrementUseageCount
+  {
+    String loginName;
+
+    public String getLoginName()
+    {
+      return loginName;
+    }
+
+    public String getUserName()
+    {
+      return userName;
+    }
+
+    public String getPassword()
+    {
+      return password;
+    }
+
+    String userName;
+
+    String password;
+
+    List<String> groups;
+
+    String mail;
+
+    public void setUserName(String userName)
+    {
+      this.userName = userName;
+    }
+
+    public void setMail(String mail)
+    {
+      this.mail = mail;
+    }
+
+    public void setTokenId(Integer tokenId)
+    {
+      this.tokenId = tokenId;
+    }
+
+    Integer tokenId;
+
+    public void setLoginName(String value)
+    {
+      loginName = value;
+    }
+
+    public void setPassword(String value)
+    {
+      password = value;
+    }
+
+    public void addGroupo(String groupName)
+    {
+      getGroups().add(groupName);
+    }
+
+    public List<String> getGroups()
+    {
+      if (groups == null)
+      {
+        groups = new ArrayList<String>();
+      }
+      return groups;
+    }
+
+    public String getEMail()
+    {
+      return mail;
+    }
+
+    @Override
+    public List<Integer> getTokensToIncrementUseage()
+    {
+      return Arrays.asList(tokenId);
+    }
+
+    public String getActionName()
+    {
+      return "subscribe";
+    }
+
+  }
+
 }

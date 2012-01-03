@@ -1,4 +1,4 @@
-package de.bitnoise.sonferenz.service.actions.impl;
+package de.bitnoise.sonferenz.service.v2.actions.impl;
 
 import java.util.Date;
 import java.util.UUID;
@@ -12,9 +12,10 @@ import org.springframework.stereotype.Service;
 import de.bitnoise.sonferenz.model.ActionModel;
 import de.bitnoise.sonferenz.model.UserModel;
 import de.bitnoise.sonferenz.repo.ActionRepository;
-import de.bitnoise.sonferenz.service.actions.ActionData;
-import de.bitnoise.sonferenz.service.actions.KonferenzAction;
-import de.bitnoise.sonferenz.service.actions.impl.VerifyMailActionImpl.VerifyMailActionData;
+import de.bitnoise.sonferenz.service.v2.actions.ActionResult;
+import de.bitnoise.sonferenz.service.v2.actions.ActionState;
+import de.bitnoise.sonferenz.service.v2.actions.KonferenzAction;
+import de.bitnoise.sonferenz.service.v2.actions.impl.VerifyMailActionImpl.VerifyMailActionData;
 import de.bitnoise.sonferenz.service.v2.services.ActionService;
 import de.bitnoise.sonferenz.service.v2.services.MailService;
 import de.bitnoise.sonferenz.service.v2.services.StaticContentService;
@@ -22,7 +23,7 @@ import de.bitnoise.sonferenz.service.v2.services.StaticContentService;
 @Service
 public class VerifyMailActionImpl implements KonferenzAction
 {
-  public static class VerifyMailActionData implements ActionData
+  public static class VerifyMailActionData implements ActionState
   {
 
     public static final String ACTION_ID = "verifyMail";
@@ -56,7 +57,7 @@ public class VerifyMailActionImpl implements KonferenzAction
   ActionService actionService;
 
   @Override
-  public boolean execute(ActionData data)
+  public boolean execute(ActionState data)
   {
     return false;
   }

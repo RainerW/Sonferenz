@@ -1,4 +1,4 @@
-package de.bitnoise.sonferenz.service.v2.impl;
+package de.bitnoise.sonferenz.service.v2;
 
 import java.util.List;
 

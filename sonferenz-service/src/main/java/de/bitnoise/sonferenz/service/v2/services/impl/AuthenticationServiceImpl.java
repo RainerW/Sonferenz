@@ -13,8 +13,8 @@ import de.bitnoise.sonferenz.model.AuthMapping;
 import de.bitnoise.sonferenz.model.UserModel;
 import de.bitnoise.sonferenz.repo.AuthmappingRepository;
 import de.bitnoise.sonferenz.repo.UserRepository;
+import de.bitnoise.sonferenz.service.v2.Detach;
 import de.bitnoise.sonferenz.service.v2.exceptions.GeneralConferenceException;
-import de.bitnoise.sonferenz.service.v2.impl.Detach;
 import de.bitnoise.sonferenz.service.v2.security.ProviderType;
 import de.bitnoise.sonferenz.service.v2.services.AuthenticationService;
 

@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import de.bitnoise.sonferenz.model.TalkModel;
 import de.bitnoise.sonferenz.repo.TalkRepository;
-import de.bitnoise.sonferenz.service.v2.impl.Detach;
+import de.bitnoise.sonferenz.service.v2.Detach;
 import de.bitnoise.sonferenz.service.v2.services.TalkService;
 
 @Service

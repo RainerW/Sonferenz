@@ -2,7 +2,7 @@ package de.bitnoise.sonferenz.service.v2.services;
 
 import org.springframework.mail.SimpleMailMessage;
 
-import de.bitnoise.sonferenz.service.actions.impl.ContentReplacement;
+import de.bitnoise.sonferenz.service.v2.actions.ContentReplacement;
 
 public interface MailService
 {

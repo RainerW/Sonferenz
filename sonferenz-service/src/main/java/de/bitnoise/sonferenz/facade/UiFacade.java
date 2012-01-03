@@ -16,9 +16,8 @@ import de.bitnoise.sonferenz.model.UserModel;
 import de.bitnoise.sonferenz.model.UserRole;
 import de.bitnoise.sonferenz.model.UserRoles;
 import de.bitnoise.sonferenz.model.WhishModel;
-import de.bitnoise.sonferenz.service.actions.ActionCreateUser;
-import de.bitnoise.sonferenz.service.actions.ActionData;
-import de.bitnoise.sonferenz.service.actions.Aktion;
+import de.bitnoise.sonferenz.service.v2.actions.Aktion;
+import de.bitnoise.sonferenz.service.v2.actions.impl.SubscribeActionImpl.ActionCreateUser;
 
 public interface UiFacade
 {

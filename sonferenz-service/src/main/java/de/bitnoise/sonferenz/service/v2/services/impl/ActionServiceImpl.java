@@ -4,15 +4,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.Map.Entry;
+import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 
 import org.jasypt.digest.StringDigester;
-import org.joda.time.Chronology;
 import org.joda.time.DateTime;
-import org.joda.time.Duration;
 import org.joda.time.Interval;
 import org.joda.time.Period;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,15 +25,14 @@ import com.thoughtworks.xstream.XStream;
 import de.bitnoise.sonferenz.model.ActionModel;
 import de.bitnoise.sonferenz.model.UserModel;
 import de.bitnoise.sonferenz.repo.ActionRepository;
-import de.bitnoise.sonferenz.service.actions.ActionCreateUser;
-import de.bitnoise.sonferenz.service.actions.ActionData;
-import de.bitnoise.sonferenz.service.actions.Aktion;
-import de.bitnoise.sonferenz.service.actions.IncrementUseCountOnToken;
-import de.bitnoise.sonferenz.service.actions.InvalidateOnSuccess;
-import de.bitnoise.sonferenz.service.actions.KonferenzAction;
-import de.bitnoise.sonferenz.service.actions.impl.ActionResult;
-import de.bitnoise.sonferenz.service.actions.impl.ContentReplacement;
-import de.bitnoise.sonferenz.service.actions.impl.VerifyMailActionImpl.VerifyMailActionData;
+import de.bitnoise.sonferenz.service.v2.actions.ActionResult;
+import de.bitnoise.sonferenz.service.v2.actions.ActionState;
+import de.bitnoise.sonferenz.service.v2.actions.Aktion;
+import de.bitnoise.sonferenz.service.v2.actions.ContentReplacement;
+import de.bitnoise.sonferenz.service.v2.actions.IncrementUseageCount;
+import de.bitnoise.sonferenz.service.v2.actions.InvalidateOnSuccess;
+import de.bitnoise.sonferenz.service.v2.actions.KonferenzAction;
+import de.bitnoise.sonferenz.service.v2.actions.impl.SubscribeActionImpl.ActionCreateUser;
 import de.bitnoise.sonferenz.service.v2.exceptions.ValidationException;
 import de.bitnoise.sonferenz.service.v2.services.ActionService;
 import de.bitnoise.sonferenz.service.v2.services.AuthenticationService;
@@ -131,7 +128,7 @@ public class ActionServiceImpl implements ActionService
 
   @Override
   @Transactional(rollbackFor = Throwable.class)
-  public void execute(ActionData data)
+  public void execute(ActionState data)
   {
     KonferenzAction action = actionMap.get(data.getActionName());
     if (action == null)
@@ -142,11 +139,11 @@ public class ActionServiceImpl implements ActionService
     processActionTable(data, result);
   }
 
-  void processActionTable(ActionData data, boolean wasSuccessfull)
+  void processActionTable(ActionState data, boolean wasSuccessfull)
   {
-    if (data instanceof IncrementUseCountOnToken)
+    if (data instanceof IncrementUseageCount)
     {
-      List<Integer> tokens = ((IncrementUseCountOnToken) data)
+      List<Integer> tokens = ((IncrementUseageCount) data)
           .getTokensToIncrementUseage();
       incrementUsage(tokens);
     }
@@ -192,7 +189,7 @@ public class ActionServiceImpl implements ActionService
   }
 
   @Override
-  public ActionResult createAction(KonferenzAction action, ActionData data)
+  public ActionResult createAction(KonferenzAction action, ActionState data)
   {
     ActionModel entity = new ActionModel();
     entity.setAction(data.getActionName());
@@ -272,7 +269,7 @@ public class ActionServiceImpl implements ActionService
       return null;
     }
     XStream xs = getXStream();
-    ActionData data = (ActionData) xs.fromXML(row.getData());
+    ActionState data = (ActionState) xs.fromXML(row.getData());
     Aktion a = new Aktion(row.getId(), row.getAction(), row.getToken(), data);
     return a;
   }

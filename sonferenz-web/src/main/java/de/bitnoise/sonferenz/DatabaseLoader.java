@@ -33,7 +33,7 @@ public class DatabaseLoader implements IStringResourceLoader
     return readKey(key);
   }
 
-  private String readKey(String key)
+  protected String readKey(String key)
   {
     String result = content2.text(key);
     if (result == null)
