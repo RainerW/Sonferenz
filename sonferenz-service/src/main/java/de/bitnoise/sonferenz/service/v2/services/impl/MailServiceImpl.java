@@ -1,7 +1,5 @@
 package de.bitnoise.sonferenz.service.v2.services.impl;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
@@ -27,9 +25,14 @@ public class MailServiceImpl implements MailService
 
   String from;
 
-  @PostConstruct
+  boolean initialized;
+
   public void initMail()
   {
+    if (initialized)
+    {
+      return;
+    }
     JavaMailSenderImpl tmp = new JavaMailSenderImpl();
     tmp.setHost(config.getStringValue("smtp.host"));
     if (config.isAvaiable("smtp.username"))
@@ -46,7 +49,8 @@ public class MailServiceImpl implements MailService
 
   @Override
   public void sendMessage(ContentReplacement params, SimpleMailMessage msgToSend)
-    {
+  {
+    initMail();
     SimpleMailMessage msg = new SimpleMailMessage(msgToSend);
     String body = msg.getText();
     body = body.replace("${url.base}", baseUrl);
