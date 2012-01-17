@@ -132,6 +132,11 @@ encoding/<project>=UTF-8]]>
 				<artifactId>javassist</artifactId>
 				<version>3.4.GA</version>
 			</dependency>
+            <dependency>
+              <groupId>org.springframework</groupId>
+              <artifactId>spring-web</artifactId>
+              <version>3.0.5.RELEASE</version>
+            </dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-context</artifactId>
@@ -188,6 +193,14 @@ encoding/<project>=UTF-8]]>
 				<groupId>commons-io</groupId>
 				<version>1.4</version>
 			</dependency>
+      
+      
+      <dependency>
+  <groupId>commons-httpclient</groupId>
+  <artifactId>commons-httpclient</artifactId>
+  <version>3.1</version>
+</dependency>
+      
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
