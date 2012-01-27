@@ -55,12 +55,18 @@ public class ActionServiceImpl implements ActionService
 
   Map<String, KonferenzAction> actionMap;
 
-  String baseUrl;
+  String baseUrl2;
+  
+  String getBaseUrl() {
+    if(baseUrl2==null) {
+      baseUrl2 = config.getStringValue("baseUrl");
+    }
+    return baseUrl2;
+  }
 
   @PostConstruct
   public void initActions()
   {
-    baseUrl = config.getStringValue("baseUrl");
     Map<String, KonferenzAction> allActions = spring
         .getBeansOfType(KonferenzAction.class);
     actionMap = new HashMap<String, KonferenzAction>();
@@ -205,7 +211,7 @@ public class ActionServiceImpl implements ActionService
     entity.setData(xs.toXML(data));
     repo.save(entity);
 
-    return new ActionResultImpl(baseUrl, data.getActionName(), token);
+    return new ActionResultImpl(getBaseUrl(), data.getActionName(), token);
   }
 
   public static class ActionResultImpl implements ActionResult

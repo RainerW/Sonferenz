@@ -50,8 +50,6 @@ public class SubscribeActionImpl implements KonferenzAction
   @Autowired
   ConfigurationService config;
 
-  private String baseUrl;
-
   @Override
   public String getActionName()
   {
@@ -76,7 +74,6 @@ public class SubscribeActionImpl implements KonferenzAction
     template.setSubject(
         texte.text("action.subscribe.mail.subject",
             "Details for your new user account"));
-    baseUrl = config.getStringValue("baseUrl");
   }
 
   @Autowired

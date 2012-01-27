@@ -101,4 +101,28 @@ public class ConfigurationFromDbImpl implements ConfigurationService
     return value != null;
   }
 
+  @Override
+  public void initValue(String key, Integer value)
+  {
+    doInitValue(key, value);
+  }
+  
+  @Override
+  public void initValue(String key, String value)
+  {
+    doInitValue(key, value);
+  }
+
+  private void doInitValue(String key, Object value)
+  {
+    if (repo.findByName(key) == null)
+    {
+      ConfigurationModel config = new ConfigurationModel();
+      config.setDataType(value.getClass().getSimpleName());
+      config.setName(key);
+      config.setValueString(value.toString());
+      repo.save(config);
+    }
+  }
+
 }

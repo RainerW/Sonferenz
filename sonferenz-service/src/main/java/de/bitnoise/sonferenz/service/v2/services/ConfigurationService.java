@@ -19,4 +19,8 @@ public interface ConfigurationService
   public Integer getIntegerValue(String... keysToSearch);
 
   Integer getIntegerValue(int defaultValue, String... keysToSearch);
+
+  public void initValue(String key, Integer value);
+
+  public void initValue(String key, String value);
 }
