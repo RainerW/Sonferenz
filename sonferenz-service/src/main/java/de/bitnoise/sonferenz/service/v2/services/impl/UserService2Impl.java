@@ -157,12 +157,14 @@ public class UserService2Impl implements UserService
   public UserModel createNewLocalUser(String username, String password,String email,
       Collection<UserRoles> newRoles)
   {
+    // Old Start
     LocalUserModel luser = new LocalUserModel();
     luser.setName(username);
     String pwd = sign(password);
     luser.setPassword(pwd);
     localRepo.save(luser);
-
+    // Old End
+    
     AuthMapping auth = new AuthMapping();
     auth.setAuthId(username);
     auth.setAuthType("plainDB");
