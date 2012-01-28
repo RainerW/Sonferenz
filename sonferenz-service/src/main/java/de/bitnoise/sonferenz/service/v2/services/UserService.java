@@ -10,14 +10,14 @@ import de.bitnoise.sonferenz.model.LocalUserModel;
 import de.bitnoise.sonferenz.model.UserModel;
 import de.bitnoise.sonferenz.model.UserRole;
 import de.bitnoise.sonferenz.model.UserRoles;
+import de.bitnoise.sonferenz.service.v2.services.idp.Identity;
 
 public interface UserService
 {
-  LocalUserModel findLocalUser(String username);
+  UserModel createIdentity(String provider, String username, String password,String email,
+      Collection<UserRoles> newRoles);
 
   List<String> getAllUserRoles(String username, String providerType);
-
-  void updateLocalUser(LocalUserModel localUser);
 
   UserModel getUser(String username, String providerType);
 
@@ -28,8 +28,6 @@ public interface UserService
   Page<UserModel> getAllUsers(PageRequest request);
 
   List<UserModel> getAllUsers();
-
-  UserModel createNewLocalUser(String username, String password, String email, Collection<UserRoles> newRoles);
 
   void saveUser(UserModel user, Collection<UserRoles> newRoles);
 

@@ -17,11 +17,15 @@ import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import de.bitnoise.sonferenz.model.LocalUserModel;
+import de.bitnoise.sonferenz.repo.LocalUserRepository;
+import de.bitnoise.sonferenz.service.v2.exceptions.RepositoryException;
 import de.bitnoise.sonferenz.service.v2.security.ProviderType;
 import de.bitnoise.sonferenz.service.v2.services.UserService;
+import de.bitnoise.sonferenz.service.v2.services.idp.provider.local.LocalIdp;
 
 public class DatabaseUserProvider extends
     AbstractUserDetailsAuthenticationProvider
@@ -29,9 +33,11 @@ public class DatabaseUserProvider extends
   @Autowired
   UserService userService;
 
-  
   @Autowired
   StandardStringDigester pwdCrypt;
+  
+  @Autowired
+  LocalUserRepository localRepo;
 
   private PasswordEncoder passwordEncoder = new PlaintextPasswordEncoder();
 
@@ -72,11 +78,21 @@ public class DatabaseUserProvider extends
   }
 
   @Override
+  @Transactional(readOnly = true)
   protected UserDetails retrieveUser(String username,
       UsernamePasswordAuthenticationToken authentication)
       throws AuthenticationException
   {
-    LocalUserModel localUser = userService.findLocalUser(username);
+    LocalUserModel localUser = null;
+    try
+    {
+      localUser = localRepo.findByName(username);
+    }
+    catch (Throwable t)
+    {
+      throw new RepositoryException(t);
+    }
+    
     if (localUser == null)
     {
       throw new UsernameNotFoundException("user not found");
@@ -84,8 +100,6 @@ public class DatabaseUserProvider extends
     User user = buildUserFromUserEntity(localUser);
     return user;
   }
-
-  public static String PROVIDER_TYPE = "plainDB";
 
   User buildUserFromUserEntity(LocalUserModel userEntity)
   {
@@ -99,7 +113,7 @@ public class DatabaseUserProvider extends
 
     Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 
-    List<String> roles = userService.getAllUserRoles(username, PROVIDER_TYPE);
+    List<String> roles = userService.getAllUserRoles(username, LocalIdp.IDP_NAME);
 //    List<String> roles = userService
 //        .getAllRolesForUser(username, PROVIDER_TYPE);
     for (String role : roles)
@@ -128,7 +142,7 @@ public class DatabaseUserProvider extends
 
     public String getProviderType()
     {
-      return PROVIDER_TYPE;
+      return LocalIdp.IDP_NAME;
     }
 
   }

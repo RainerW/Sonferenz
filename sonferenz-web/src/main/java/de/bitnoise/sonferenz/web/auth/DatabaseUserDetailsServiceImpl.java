@@ -16,21 +16,34 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import de.bitnoise.sonferenz.model.LocalUserModel;
+import de.bitnoise.sonferenz.repo.LocalUserRepository;
+import de.bitnoise.sonferenz.service.v2.exceptions.RepositoryException;
 import de.bitnoise.sonferenz.service.v2.security.ProviderType;
 import de.bitnoise.sonferenz.service.v2.services.UserService;
+import de.bitnoise.sonferenz.service.v2.services.idp.provider.local.LocalIdp;
 
 public class DatabaseUserDetailsServiceImpl implements UserDetailsService
 {
-  public static String PROVIDER_TYPE = "plainDB";
-
   @Autowired
   UserService userService;
+  
+  @Autowired
+  LocalUserRepository localRepo;
   
   @Transactional(readOnly = true)
   public UserDetails loadUserByUsername(String username)
       throws UsernameNotFoundException, DataAccessException
   {
-    LocalUserModel localUser = userService.findLocalUser(username);
+    LocalUserModel localUser = null;
+    try
+    {
+      localUser = localRepo.findByName(username);
+    }
+    catch (Throwable t)
+    {
+      throw new RepositoryException(t);
+    }
+    
     if (localUser == null)
     {
       throw new UsernameNotFoundException("user not found");
@@ -49,7 +62,7 @@ public class DatabaseUserDetailsServiceImpl implements UserDetailsService
 
     Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 
-    List<String> roles = userService.getAllUserRoles(username, PROVIDER_TYPE);
+    List<String> roles = userService.getAllUserRoles(username, LocalIdp.IDP_NAME);
 //    List<String> roles = userService
 //        .getAllRolesForUser(username, PROVIDER_TYPE);
     for (String role : roles)
@@ -78,7 +91,7 @@ public class DatabaseUserDetailsServiceImpl implements UserDetailsService
 
     public String getProviderType()
     {
-      return DatabaseUserDetailsServiceImpl.PROVIDER_TYPE;
+      return LocalIdp.IDP_NAME;
     }
 
   }

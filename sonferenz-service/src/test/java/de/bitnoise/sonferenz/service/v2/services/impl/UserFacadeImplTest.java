@@ -37,65 +37,65 @@ public class UserFacadeImplTest extends BaseTest
     }
   };
 
-  @Test
-  public void testFindLocalUser_Null()
-  {
-    // prepare
-    when(localMock.findByName(anyString()))
-        .thenThrow(NullPointerException.class);
-
-    // verify
-    expectException.expect(RepositoryException.class);
-
-    // execute
-    sut.findLocalUser(null);
-  }
-
-
-  @Test
-  @Ignore("2 implement")
-  public void testFindLocalUser_WithNameAndFound()
-  {
-    // prepare
-    LocalUserModel model = mock(LocalUserModel.class);
-    when(localMock.findByName(eq("rainer"))).thenReturn(model);
-
-    // execute
-    LocalUserModel result = sut.findLocalUser("rainer");
-
-    // verify
-    assertThat(result).isSameAs(model);
-    
-    verify(localMock.findByName(eq("rainer")));
-    verifyNoMoreInteractions(localMock);
-  }
-
-  @Test
-  public void testFindLocalUser_WithNameAndNotFound()
-  {
-    // prepare
-    when(localMock.findByName(eq("rainer"))).thenReturn(null);
-
-    // execute
-    LocalUserModel result = sut.findLocalUser("rainer");
-
-    // verify
-    assertThat(result).isNull();
-  }
-
-  @Test
-  public void testGetAllUserRoles_Null()
-  {
-    // prepare
-    when(localMock.findByName(anyString()))
-        .thenThrow(NullPointerException.class);
-
-    // verify
-    expectException.expect(RepositoryException.class);
-
-    // execute
-    sut.getAllUserRoles(null, null);
-  }
+//  @Test
+//  public void testFindLocalUser_Null()
+//  {
+//    // prepare
+//    when(localMock.findByName(anyString()))
+//        .thenThrow(NullPointerException.class);
+//
+//    // verify
+//    expectException.expect(RepositoryException.class);
+//
+//    // execute
+//    sut.findLocalUser(null);
+//  }
+//
+//
+//  @Test
+//  @Ignore("2 implement")
+//  public void testFindLocalUser_WithNameAndFound()
+//  {
+//    // prepare
+//    LocalUserModel model = mock(LocalUserModel.class);
+//    when(localMock.findByName(eq("rainer"))).thenReturn(model);
+//
+//    // execute
+//    LocalUserModel result = sut.findLocalUser("rainer");
+//
+//    // verify
+//    assertThat(result).isSameAs(model);
+//    
+//    verify(localMock.findByName(eq("rainer")));
+//    verifyNoMoreInteractions(localMock);
+//  }
+//
+//  @Test
+//  public void testFindLocalUser_WithNameAndNotFound()
+//  {
+//    // prepare
+//    when(localMock.findByName(eq("rainer"))).thenReturn(null);
+//
+//    // execute
+//    LocalUserModel result = sut.findLocalUser("rainer");
+//
+//    // verify
+//    assertThat(result).isNull();
+//  }
+//
+//  @Test
+//  public void testGetAllUserRoles_Null()
+//  {
+//    // prepare
+//    when(localMock.findByName(anyString()))
+//        .thenThrow(NullPointerException.class);
+//
+//    // verify
+//    expectException.expect(RepositoryException.class);
+//
+//    // execute
+//    sut.getAllUserRoles(null, null);
+//  }
 
   @Test
   public void testUpdateLocalUser_Null()

@@ -31,6 +31,7 @@ import de.bitnoise.sonferenz.service.v2.services.TalkService;
 import de.bitnoise.sonferenz.service.v2.services.UserService;
 import de.bitnoise.sonferenz.service.v2.services.VoteService;
 import de.bitnoise.sonferenz.service.v2.services.WhishService;
+import de.bitnoise.sonferenz.service.v2.services.idp.IdpService;
 
 @Service
 public class UiFacadeImpl implements UiFacade
@@ -61,6 +62,9 @@ public class UiFacadeImpl implements UiFacade
 
   @Autowired
   VoteService voteService;
+  
+  @Autowired
+  IdpService idpService;
 
   @Override
   public ConferenceModel getActiveConference()
@@ -166,9 +170,9 @@ public class UiFacadeImpl implements UiFacade
   }
 
   @Override
-  public void createNewLocalUser(String username, String password, String email, Collection<UserRoles> newRoles)
+  public void createIdentity(String provider, String username, String password, String email, Collection<UserRoles> newRoles)
   {
-    userFacade.createNewLocalUser(username, password, email, newRoles);
+    userFacade.createIdentity(provider, username, password, email, newRoles);
   }
 
   @Override
@@ -334,5 +338,11 @@ public class UiFacadeImpl implements UiFacade
   public void createToken(String user, String mail)
   {
     _actionSubscribe.createNewUserToken(user, mail);
+  }
+
+  @Override
+  public List<String> availableProviders()
+  {
+    return idpService.getAvailableProviders();
   }
 }

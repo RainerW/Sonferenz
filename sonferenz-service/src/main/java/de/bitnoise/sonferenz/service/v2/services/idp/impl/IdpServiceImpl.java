@@ -1,5 +1,6 @@
 package de.bitnoise.sonferenz.service.v2.services.idp.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,17 @@ public class IdpServiceImpl implements IdpService
       }
     }
     return null;
+  }
+
+  @Override
+  public List<String> getAvailableProviders()
+  {
+    List<String> providersList = new ArrayList<String>();
+    for (Idp idp : idpList)
+    {
+      providersList.add(idp.getProviderName());
+    }
+    return providersList;
   }
 
 }

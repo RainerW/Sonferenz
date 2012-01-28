@@ -1,5 +1,7 @@
 package de.bitnoise.sonferenz.service.v2.services.idp;
 
+import java.util.List;
+
 
 public interface IdpService
 {
@@ -8,5 +10,7 @@ public interface IdpService
   void createIdentity(String provider, String name, String password);
   
   void setPassword(String provider, String name, String password);
+  
+  List<String> getAvailableProviders();
   
 }

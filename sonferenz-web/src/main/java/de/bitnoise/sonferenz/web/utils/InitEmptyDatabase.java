@@ -14,6 +14,7 @@ import de.bitnoise.sonferenz.repo.RoleRepository;
 import de.bitnoise.sonferenz.service.v2.services.ConfigurationService;
 import de.bitnoise.sonferenz.service.v2.services.StaticContentService;
 import de.bitnoise.sonferenz.service.v2.services.UserService;
+import de.bitnoise.sonferenz.service.v2.services.idp.provider.local.LocalIdp;
 
 @Service
 public class InitEmptyDatabase
@@ -85,7 +86,7 @@ public class InitEmptyDatabase
     newRoles.add(UserRoles.USER);
     newRoles.add(UserRoles.MANAGER);
     newRoles.add(UserRoles.ADMIN);
-    user.createNewLocalUser("admin", "admin", "admin@localhost", newRoles);
+    user.createIdentity(LocalIdp.IDP_NAME,"admin", "admin", "admin@localhost", newRoles);
   }
 
   public void createRole(int id, String name)

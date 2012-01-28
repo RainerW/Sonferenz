@@ -25,6 +25,8 @@ import de.bitnoise.sonferenz.repo.UserRepository;
 import de.bitnoise.sonferenz.service.v2.Detach;
 import de.bitnoise.sonferenz.service.v2.exceptions.RepositoryException;
 import de.bitnoise.sonferenz.service.v2.services.UserService;
+import de.bitnoise.sonferenz.service.v2.services.idp.Identity;
+import de.bitnoise.sonferenz.service.v2.services.idp.IdpService;
 
 @Service
 public class UserService2Impl implements UserService
@@ -40,21 +42,9 @@ public class UserService2Impl implements UserService
 
   @Autowired
   RoleRepository roleRepo;
-
-  @Override
-  @Transactional(readOnly = true)
-  public LocalUserModel findLocalUser(String username)
-  {
-    try
-    {
-      LocalUserModel u = localRepo.findByName(username);
-      return u;
-    }
-    catch (Throwable t)
-    {
-      throw new RepositoryException(t);
-    }
-  }
+  
+  @Autowired
+  IdpService idpService;
 
   @Override
   @Transactional(readOnly = true)
@@ -80,21 +70,6 @@ public class UserService2Impl implements UserService
       }
       return result;
     }
-    catch (Throwable t)
-    {
-      throw new RepositoryException(t);
-    }
-  }
-
-  @Override
-  @Transactional
-  public void updateLocalUser(LocalUserModel localUser)
-  {
-    try
-    {
-      localRepo.save(localUser);
-    }
-
     catch (Throwable t)
     {
       throw new RepositoryException(t);
@@ -154,20 +129,14 @@ public class UserService2Impl implements UserService
 
   @Override
   @Transactional
-  public UserModel createNewLocalUser(String username, String password,String email,
+  public UserModel createIdentity(String provider, String username, String password,String email,
       Collection<UserRoles> newRoles)
   {
-    // Old Start
-    LocalUserModel luser = new LocalUserModel();
-    luser.setName(username);
-    String pwd = sign(password);
-    luser.setPassword(pwd);
-    localRepo.save(luser);
-    // Old End
+    idpService.createIdentity(provider, username, password);
     
     AuthMapping auth = new AuthMapping();
     auth.setAuthId(username);
-    auth.setAuthType("plainDB");
+    auth.setAuthType(provider);
     authRepo.save(auth);
 
     UserModel user = new UserModel();

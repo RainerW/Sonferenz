@@ -14,7 +14,7 @@ import de.bitnoise.sonferenz.service.v2.services.idp.provider.Idp;
 public class LocalIdp implements Idp
 {
 
-  private static String IDP_NAME = "plainDB";
+  public static String IDP_NAME = "plainDB";
 
   @Autowired
   LocalUserRepository localRepo;

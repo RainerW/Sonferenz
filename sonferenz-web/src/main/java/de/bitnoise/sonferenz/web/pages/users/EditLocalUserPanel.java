@@ -7,10 +7,12 @@ import java.util.List;
 import org.apache.wicket.injection.web.InjectorHolder;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.ListChoice;
 import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.visural.common.web.HtmlSanitizer;
@@ -30,8 +32,8 @@ public class EditLocalUserPanel extends FormPanel
   final Model<String> modelName = new Model<String>();
   final Model<String> modelPassword1 = new Model<String>();
   final Model<String> modelPassword2 = new Model<String>();
-
   private MyModel modelRoles;
+  private String selectedProvider;
 
   public EditLocalUserPanel(String id)
   {
@@ -78,9 +80,13 @@ public class EditLocalUserPanel extends FormPanel
     ListMultipleChoice<UserRoles> roleSelect = new ListMultipleChoice<UserRoles>(
         "roleSelect", modelRoles, choices);
     form.add(roleSelect);
-
+    
+    List<String> providers = facade.availableProviders();
+    selectedProvider = providers.get(0);
+    ListChoice<String> providerSelect = new ListChoice<String>(
+        "providerSelect", new PropertyModel<String>(this, "selectedProvider"), providers);
+    form.add(providerSelect);
     add(form);
-
   }
 
   class MyModel implements IModel<Collection<UserRoles>>
@@ -114,8 +120,8 @@ public class EditLocalUserPanel extends FormPanel
     Collection<UserRoles> newRoles = modelRoles.getObject();
     _user.setName(valueName);
     String password = modelPassword1.getObject();
-    facade.createNewLocalUser(valueName, password, null, newRoles);
-
+    facade.createIdentity(selectedProvider, valueName, password, null, newRoles);
+    
     setResponsePage(UserOverviewPage.class);
   }
 }

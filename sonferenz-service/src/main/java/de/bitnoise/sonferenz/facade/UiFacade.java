@@ -26,7 +26,7 @@ public interface UiFacade
 
   boolean checkMailNotExists(String mail);
 
-  void createNewLocalUser(String username, String password, String email,Collection<UserRoles> newRoles);
+  void createIdentity(String provider, String username, String password, String email,Collection<UserRoles> newRoles);
 
   void deleteTalk(TalkModel talk);
 
@@ -111,5 +111,7 @@ public interface UiFacade
   boolean vote(TalkModel talk, UserModel user, int increment);
 
   void createToken(String user, String mail);
+  
+  List<String> availableProviders();
 
 }

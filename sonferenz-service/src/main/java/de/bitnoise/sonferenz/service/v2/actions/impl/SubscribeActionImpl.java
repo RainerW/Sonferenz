@@ -34,6 +34,7 @@ import de.bitnoise.sonferenz.service.v2.services.ConfigurationService;
 import de.bitnoise.sonferenz.service.v2.services.MailService;
 import de.bitnoise.sonferenz.service.v2.services.StaticContentService;
 import de.bitnoise.sonferenz.service.v2.services.UserService;
+import de.bitnoise.sonferenz.service.v2.services.idp.provider.local.LocalIdp;
 
 @Service
 public class SubscribeActionImpl implements KonferenzAction
@@ -91,7 +92,7 @@ public class SubscribeActionImpl implements KonferenzAction
     {
       throw new ValidationException("Username allready inuse");
     }
-    AuthMapping foundLogin = authRepo.findByAuthIdAndAuthType(user, "plainDB");
+    AuthMapping foundLogin = authRepo.findByAuthIdAndAuthType(user, LocalIdp.IDP_NAME);
     if (foundLogin != null)
     {
       throw new ValidationException("Login Name allready inuse");
@@ -146,7 +147,7 @@ public class SubscribeActionImpl implements KonferenzAction
       throw new ValidationException("Username allready inuse");
     }
     AuthMapping foundLogin = authRepo.findByAuthIdAndAuthType(
-        data.getLoginName(), "plainDB");
+        data.getLoginName(), LocalIdp.IDP_NAME);
     if (foundLogin != null)
     {
       throw new ValidationException("Login Name allready inuse");
@@ -154,9 +155,10 @@ public class SubscribeActionImpl implements KonferenzAction
 
     Collection<UserRoles> newRoles = new ArrayList<UserRoles>();
     newRoles.add(UserRoles.USER);
-    UserModel user = userService.createNewLocalUser(data.getLoginName(),
+    
+    UserModel user = userService.createIdentity(data.getProvider(), data.getLoginName(),
         data.getPassword(), data.getEMail(), newRoles);
-
+    
     actionVerify.createAction(user, data.getEMail());
   }
 
@@ -175,6 +177,7 @@ public class SubscribeActionImpl implements KonferenzAction
   public static class ActionCreateUser implements ActionState,
       IncrementUseageCount
   {
+    
     String loginName;
 
     public String getLoginName()
@@ -257,6 +260,18 @@ public class SubscribeActionImpl implements KonferenzAction
       return "subscribe";
     }
 
+    private String provider;
+
+    public String getProvider()
+    {
+      return provider;
+    }
+
+    public void setProvider(String provider)
+    {
+      this.provider = provider;
+    }
+    
   }
 
 }
