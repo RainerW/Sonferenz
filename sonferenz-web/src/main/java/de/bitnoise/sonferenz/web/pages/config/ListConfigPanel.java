@@ -18,6 +18,8 @@ import de.bitnoise.sonferenz.web.pages.base.IconPanel.Type;
 
 class ConfigViewModel implements Serializable
 {
+  Integer id;
+
   String name;
 
   String value;
@@ -43,26 +45,28 @@ public class ListConfigPanel extends
     builder.addColumn("value");
   }
 
-  class Edit extends ActionColumn<ConfigViewModel>{
+  class Edit extends ActionColumn<ConfigViewModel>
+  {
     @Override
-    public Component populate(String id, ConfigViewModel row)
+    public Component populate(String id, final ConfigViewModel row)
     {
-      return new IconPanel(id,Type.EDIT)
+      return new IconPanel(id, Type.EDIT)
       {
         @Override
         protected void onClick(AjaxRequestTarget target)
         {
-          System.out.println("Edit ....");
+          setResponsePage(new EditConfigEntry(row.id));
         }
       };
     }
   }
+
   class Delete extends ActionColumn<ConfigViewModel>
   {
     @Override
     public Component populate(String id, ConfigViewModel row)
     {
-      return new IconPanel(id,Type.DELETE)
+      return new IconPanel(id, Type.DELETE)
       {
         @Override
         protected void onClick(AjaxRequestTarget target)
@@ -79,6 +83,7 @@ public class ListConfigPanel extends
     ConfigViewModel view = new ConfigViewModel();
     view.name = dbObject.getName();
     view.value = dbObject.getValueString();
+    view.id = dbObject.getId();
     return view;
   }
 

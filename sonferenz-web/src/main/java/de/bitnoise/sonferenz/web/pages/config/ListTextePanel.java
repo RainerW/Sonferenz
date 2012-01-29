@@ -19,8 +19,7 @@ class TexteViewModel implements Serializable
   String value;
 }
 
-public class ListTextePanel extends
-    AbstractListPanel<TexteViewModel, StaticContentModel>
+public class ListTextePanel extends AbstractListPanel<TexteViewModel, StaticContentModel>
 {
   @SpringBean
   UiFacade facade;

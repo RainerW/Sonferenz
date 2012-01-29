@@ -2,8 +2,6 @@ package de.bitnoise.sonferenz.service.v2.services.impl;
 
 import java.util.Arrays;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -123,6 +121,21 @@ public class ConfigurationFromDbImpl implements ConfigurationService
       config.setValueString(value.toString());
       repo.save(config);
     }
+  }
+
+  @Override
+  public ConfigurationModel getById(Integer id)
+  {
+    ConfigurationModel found = repo.findOne(id);
+    return found;
+  }
+
+  @Override
+  public void saveStringValue(String key, String value)
+  {
+    ConfigurationModel found = repo.findByName(key);
+    found.setValueString(value);
+    repo.save(found);
   }
 
 }

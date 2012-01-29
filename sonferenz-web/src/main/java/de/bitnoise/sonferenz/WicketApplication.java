@@ -15,8 +15,8 @@ import de.bitnoise.sonferenz.web.pages.HomePage;
 import de.bitnoise.sonferenz.web.pages.error.UnauthorisedAccess;
 
 /**
- * Application object for your web application. If you want to run
- * this application without deploying, run the Start class.
+ * Application object for your web application. If you want to run this
+ * application without deploying, run the Start class.
  * 
  * @see de.bitnoise.sonferenz.Start#main(String[])
  */
@@ -60,7 +60,7 @@ public class WicketApplication extends WebApplication
         de.bitnoise.sonferenz.web.pages.error.InternalError.class);
     getApplicationSettings().setPageExpiredErrorPage(UnauthorisedAccess.class);
 
-    getResourceSettings().addStringResourceLoader(0, new DatabaseLoader());
+    getResourceSettings().addStringResourceLoader(0, new DatabaseResourceLoader());
     // Remap URLSs
     try
     {

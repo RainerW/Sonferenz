@@ -9,10 +9,10 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import de.bitnoise.sonferenz.service.v2.services.StaticContentService;
 
-public class DatabaseLoader implements IStringResourceLoader
+public class DatabaseResourceLoader implements IStringResourceLoader
 {
 
-  public DatabaseLoader()
+  public DatabaseResourceLoader()
   {
     InjectorHolder.getInjector().inject(this);
   }
