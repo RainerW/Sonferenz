@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.apache.wicket.Request;
 import org.apache.wicket.Session;
 import org.apache.wicket.injection.web.InjectorHolder;
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ldap.CommunicationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -84,7 +85,7 @@ public class KonferenzSession extends WebSession
 
   public String authenticate(String username, String password)
   {
-    Logger logger = Logger.getLogger(KonferenzSession.class);
+    Logger logger = LoggerFactory.getLogger(KonferenzSession.class);
     try
     {
       logger.info("Start login for " + username);
