@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import de.bitnoise.sonferenz.model.ConfigurationModel;
 import de.bitnoise.sonferenz.model.StaticContentModel;
 import de.bitnoise.sonferenz.repo.StaticContentRepository;
 import de.bitnoise.sonferenz.service.v2.exceptions.RepositoryException;
@@ -95,6 +96,26 @@ public class StaticContentService2Impl implements StaticContentService
   public Page<StaticContentModel> getAll(PageRequest request)
   {
     return repo.findAll(request);
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public StaticContentModel getById(Integer id)
+  {
+    return repo.findOne(id);
+  }
+
+  @Override
+  public void saveText(String key, String textValue)
+  {
+    StaticContentModel found = repo.findByName(key);
+    if (found == null)
+    {
+      found = new StaticContentModel();
+      found.setName(key);
+    }
+    found.setHtml(textValue);
+    repo.save(found);
   }
 
 }
