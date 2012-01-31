@@ -7,14 +7,18 @@ import static org.fest.assertions.Assertions.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.common.eventbus.EventBus;
+
 import de.bitnoise.sonferenz.model.ConfigurationModel;
 import de.bitnoise.sonferenz.repo.ConfigurationRepository;
 import de.bitnoise.sonferenz.service.v2.BaseTest;
+import de.bitnoise.sonferenz.service.v2.services.Eventing;
 
 public class ConfigurationFromDbImplTest extends BaseTest
 {
 
   ConfigurationFromDbImpl sut;
+
   ConfigurationRepository repo;
 
   @Before
@@ -23,6 +27,7 @@ public class ConfigurationFromDbImplTest extends BaseTest
     repo = strictMock(ConfigurationRepository.class);
     sut = new ConfigurationFromDbImpl();
     sut.repo = repo;
+    sut.events = strictMock(Eventing.class);
   }
 
   @Test
