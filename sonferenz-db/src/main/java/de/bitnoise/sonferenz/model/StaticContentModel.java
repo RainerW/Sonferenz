@@ -11,8 +11,6 @@ import lombok.EqualsAndHashCode;
 
 import org.hibernate.annotations.Type;
 
-import com.sun.istack.internal.Nullable;
-
 
 @Entity
 @Data
@@ -29,7 +27,6 @@ public class StaticContentModel implements DoInterface<Integer>
   String name;
   
   @Column
-  @Nullable
   Boolean allowHtml;
 
   @Column
