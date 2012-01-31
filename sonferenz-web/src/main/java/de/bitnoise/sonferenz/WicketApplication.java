@@ -3,14 +3,19 @@ package de.bitnoise.sonferenz;
 import org.apache.wicket.Request;
 import org.apache.wicket.Response;
 import org.apache.wicket.Session;
+import org.apache.wicket.injection.Injector;
+import org.apache.wicket.injection.web.InjectorHolder;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.jquery.JQueryResourceReference;
 import com.visural.wicket.aturl.AtAnnotation;
 import com.visural.wicket.util.lesscss.LessCSSResourceStreamLocator;
 
+import de.bitnoise.sonferenz.service.v2.events.ConfigReload;
+import de.bitnoise.sonferenz.service.v2.services.Eventing;
 import de.bitnoise.sonferenz.web.pages.HomePage;
 import de.bitnoise.sonferenz.web.pages.error.UnauthorisedAccess;
 
@@ -70,8 +75,9 @@ public class WicketApplication extends WebApplication
     {
       throw new RuntimeException(e);
     }
+    
   }
-
+  
   public void activateSpring()
   {
     // Activate Spring

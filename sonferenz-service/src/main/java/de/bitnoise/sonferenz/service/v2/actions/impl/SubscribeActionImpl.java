@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
+import com.google.common.eventbus.Subscribe;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 import de.bitnoise.sonferenz.model.ActionModel;
@@ -27,6 +28,7 @@ import de.bitnoise.sonferenz.service.v2.actions.ActionState;
 import de.bitnoise.sonferenz.service.v2.actions.Aktion;
 import de.bitnoise.sonferenz.service.v2.actions.IncrementUseageCount;
 import de.bitnoise.sonferenz.service.v2.actions.KonferenzAction;
+import de.bitnoise.sonferenz.service.v2.events.ConfigReload;
 import de.bitnoise.sonferenz.service.v2.exceptions.ValidationException;
 import de.bitnoise.sonferenz.service.v2.services.ActionService;
 import de.bitnoise.sonferenz.service.v2.services.AuthenticationService;
@@ -68,8 +70,8 @@ public class SubscribeActionImpl implements KonferenzAction
     return false;
   }
 
-  @PostConstruct
-  public void initMail()
+  @Subscribe
+  public void onConfigReload(ConfigReload event)
   {
     template = new SimpleMailMessage();
     template.setSubject(

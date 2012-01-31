@@ -2,16 +2,24 @@ package de.bitnoise.sonferenz.service.v2.services.impl;
 
 import java.util.Arrays;
 
+import javax.annotation.PostConstruct;
+
+import org.hibernate.annotations.OptimisticLock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.eventbus.Subscribe;
+
 import de.bitnoise.sonferenz.model.ConfigurationModel;
 import de.bitnoise.sonferenz.repo.ConfigurationRepository;
+import de.bitnoise.sonferenz.service.v2.events.ApplicationStarted;
+import de.bitnoise.sonferenz.service.v2.events.ConfigReload;
 import de.bitnoise.sonferenz.service.v2.exceptions.ConfigurationError;
 import de.bitnoise.sonferenz.service.v2.services.ConfigurationService;
+import de.bitnoise.sonferenz.service.v2.services.Eventing;
 
 @Service
 public class ConfigurationFromDbImpl implements ConfigurationService
@@ -31,6 +39,15 @@ public class ConfigurationFromDbImpl implements ConfigurationService
     }
     return value;
   }
+
+  @Subscribe
+  public void onApplicationStarted(ApplicationStarted event)
+  {
+    events.post(new ConfigReload());
+  }
+
+  @Autowired
+  Eventing events;
 
   @Override
   public Page<ConfigurationModel> getAllConfigurations(PageRequest request)
@@ -104,7 +121,7 @@ public class ConfigurationFromDbImpl implements ConfigurationService
   {
     doInitValue(key, value);
   }
-  
+
   @Override
   public void initValue(String key, String value)
   {
@@ -120,6 +137,8 @@ public class ConfigurationFromDbImpl implements ConfigurationService
       config.setName(key);
       config.setValueString(value.toString());
       repo.save(config);
+
+      events.post(new ConfigReload());
     }
   }
 
@@ -136,6 +155,19 @@ public class ConfigurationFromDbImpl implements ConfigurationService
     ConfigurationModel found = repo.findByName(key);
     found.setValueString(value);
     repo.save(found);
+
+    events.post(new ConfigReload());
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public String getStringValueOr(String defaultValue, String key)  {
+    String value = getNextValue(key);
+    if (value == null)
+    {
+      return defaultValue;
+    }
+    return value;
   }
 
 }

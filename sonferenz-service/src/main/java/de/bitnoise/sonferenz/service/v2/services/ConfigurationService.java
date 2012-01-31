@@ -27,4 +27,6 @@ public interface ConfigurationService
   public ConfigurationModel getById(Integer id);
 
   public void saveStringValue(String key, String value);
+
+  public String getStringValueOr(String defaultValue, String key);
 }

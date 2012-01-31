@@ -6,6 +6,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import de.bitnoise.sonferenz.service.v2.events.ConfigReload;
+
 @Ignore
 public class CrowdIdpTest
 {
@@ -16,7 +18,7 @@ public class CrowdIdpTest
   public void setUp() throws Exception
   {
     target = new CrowdIdp();
-    target.init();
+    target.onConfigReload(new ConfigReload());
   }
 
   @Test

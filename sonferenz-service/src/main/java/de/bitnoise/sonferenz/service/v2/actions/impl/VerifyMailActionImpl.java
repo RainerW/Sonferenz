@@ -3,11 +3,11 @@ package de.bitnoise.sonferenz.service.v2.actions.impl;
 import java.util.Date;
 import java.util.UUID;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
+
+import com.google.common.eventbus.Subscribe;
 
 import de.bitnoise.sonferenz.model.ActionModel;
 import de.bitnoise.sonferenz.model.UserModel;
@@ -16,6 +16,7 @@ import de.bitnoise.sonferenz.service.v2.actions.ActionResult;
 import de.bitnoise.sonferenz.service.v2.actions.ActionState;
 import de.bitnoise.sonferenz.service.v2.actions.KonferenzAction;
 import de.bitnoise.sonferenz.service.v2.actions.impl.VerifyMailActionImpl.VerifyMailActionData;
+import de.bitnoise.sonferenz.service.v2.events.ConfigReload;
 import de.bitnoise.sonferenz.service.v2.services.ActionService;
 import de.bitnoise.sonferenz.service.v2.services.MailService;
 import de.bitnoise.sonferenz.service.v2.services.StaticContentService;
@@ -62,8 +63,8 @@ public class VerifyMailActionImpl implements KonferenzAction
     return false;
   }
 
-  @PostConstruct
-  public void initMail()
+  @Subscribe
+  public void onConfigReload(ConfigReload event)
   {
     template = new SimpleMailMessage();
     template.setSubject(

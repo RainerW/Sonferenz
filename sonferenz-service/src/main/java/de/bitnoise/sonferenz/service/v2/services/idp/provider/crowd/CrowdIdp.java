@@ -2,20 +2,25 @@ package de.bitnoise.sonferenz.service.v2.services.idp.provider.crowd;
 
 import java.net.ConnectException;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.client.CommonsClientHttpRequestFactory;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import com.google.common.eventbus.Subscribe;
+
+import de.bitnoise.sonferenz.service.v2.events.ConfigReload;
 import de.bitnoise.sonferenz.service.v2.exceptions.GeneralConferenceException;
+import de.bitnoise.sonferenz.service.v2.services.ConfigurationService;
 import de.bitnoise.sonferenz.service.v2.services.idp.provider.Idp;
 
+@Service
 public class CrowdIdp implements Idp
 {
   private static final Logger logger = LoggerFactory.getLogger(CrowdIdp.class);
@@ -40,6 +45,9 @@ public class CrowdIdp implements Idp
 
   private RestTemplate restTemplate;
 
+  @Autowired
+  ConfigurationService config;
+
   public void setCrowdGroup(String crowdGroup)
   {
     this.crowdGroup = crowdGroup;
@@ -60,16 +68,28 @@ public class CrowdIdp implements Idp
     this.crowdPassword = crowdPassword;
   }
 
-  @PostConstruct
-  public void init()
+  @Subscribe
+  public void onConfigReload(ConfigReload event)
   {
-    HttpClient client = new HttpClient();
-    UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
-        crowdUsername, crowdPassword);
-    client.getState().setCredentials(AuthScope.ANY, credentials);
-    CommonsClientHttpRequestFactory commons = new CommonsClientHttpRequestFactory(
-        client);
-    restTemplate = new RestTemplate(commons);
+    crowdRestService = config.getStringValueOr(null, "idp.crowd.url");
+    crowdUsername = config.getStringValueOr(null, "idp.crowd.user");
+    crowdPassword = config.getStringValueOr(null, "idp.crowd.password");
+    crowdGroup = config.getStringValueOr(null, "idp.crowd.group");
+
+    if (crowdRestService == null || crowdUsername == null)
+    {
+      logger.warn("Missing Crowd Configuration");
+    }
+    else
+    { // init client
+      HttpClient client = new HttpClient();
+      UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
+          crowdUsername, crowdPassword);
+      client.getState().setCredentials(AuthScope.ANY, credentials);
+      CommonsClientHttpRequestFactory commons = new CommonsClientHttpRequestFactory(
+          client);
+      restTemplate = new RestTemplate(commons);
+    }
   }
 
   @Override
