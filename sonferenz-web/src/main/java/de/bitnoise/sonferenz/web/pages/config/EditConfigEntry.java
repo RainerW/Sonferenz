@@ -18,11 +18,12 @@ public class EditConfigEntry extends KonferenzPage
 {
   @SpringBean
   UiFacade facade;
-  
+
   @SpringBean
   ConfigurationService config;
 
   Model<String> keyModel;
+
   Model<String> valueModel;
 
   Integer _id;
@@ -56,9 +57,17 @@ public class EditConfigEntry extends KonferenzPage
     @Override
     protected void initForm(Form<String> form)
     {
-      ConfigurationModel db = config.getById(_id);
-      keyModel = Model.of(db.getName());
-      valueModel = Model.of(db.getValueString());
+      if (_id != null)
+      {
+        ConfigurationModel db = config.getById(_id);
+        keyModel = Model.of(db.getName());
+        valueModel = Model.of(db.getValueString());
+      }
+      else
+      {
+        keyModel = Model.of("");
+        valueModel = Model.of("");
+      }
       addTextInputField("key", keyModel);
       addTextInputField("value", valueModel);
     }
@@ -67,7 +76,7 @@ public class EditConfigEntry extends KonferenzPage
     protected void onSubmitForm()
     {
       String neu = valueModel.getObject();
-      config.saveStringValue(keyModel.getObject(),neu);
+      config.saveStringValue(keyModel.getObject(), neu);
       setResponsePage(EditConfigurationPage.class);
     }
 

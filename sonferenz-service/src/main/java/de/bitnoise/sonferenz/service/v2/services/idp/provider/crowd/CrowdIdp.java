@@ -48,26 +48,6 @@ public class CrowdIdp implements Idp
   @Autowired
   ConfigurationService config;
 
-  public void setCrowdGroup(String crowdGroup)
-  {
-    this.crowdGroup = crowdGroup;
-  }
-
-  public void setCrowdRestService(String crowdRestService)
-  {
-    this.crowdRestService = crowdRestService;
-  }
-
-  public void setCrowdUsername(String crowdUsername)
-  {
-    this.crowdUsername = crowdUsername;
-  }
-
-  public void setCrowdPassword(String crowdPassword)
-  {
-    this.crowdPassword = crowdPassword;
-  }
-
   @Subscribe
   public void onConfigReload(ConfigReload event)
   {

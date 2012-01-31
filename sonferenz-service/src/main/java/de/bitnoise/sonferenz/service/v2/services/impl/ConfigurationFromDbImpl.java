@@ -153,6 +153,11 @@ public class ConfigurationFromDbImpl implements ConfigurationService
   public void saveStringValue(String key, String value)
   {
     ConfigurationModel found = repo.findByName(key);
+    if (found == null)
+    {
+      found = new ConfigurationModel();
+      found.setName(key);
+    }
     found.setValueString(value);
     repo.save(found);
 
@@ -161,7 +166,8 @@ public class ConfigurationFromDbImpl implements ConfigurationService
 
   @Override
   @Transactional(readOnly = true)
-  public String getStringValueOr(String defaultValue, String key)  {
+  public String getStringValueOr(String defaultValue, String key)
+  {
     String value = getNextValue(key);
     if (value == null)
     {

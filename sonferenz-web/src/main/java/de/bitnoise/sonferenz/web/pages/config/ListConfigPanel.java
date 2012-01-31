@@ -4,14 +4,20 @@ import java.io.Serializable;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import de.bitnoise.sonferenz.facade.UiFacade;
 import de.bitnoise.sonferenz.model.ConfigurationModel;
+import de.bitnoise.sonferenz.service.v2.services.StaticContentService;
 import de.bitnoise.sonferenz.web.component.TableBuilder;
 import de.bitnoise.sonferenz.web.component.TableBuilder.ActionColumn;
+import de.bitnoise.sonferenz.web.component.link.AjaxLink;
 import de.bitnoise.sonferenz.web.pages.base.AbstractListPanel;
 import de.bitnoise.sonferenz.web.pages.base.IconPanel;
 import de.bitnoise.sonferenz.web.pages.base.IconPanel.Type;
@@ -28,6 +34,8 @@ class ConfigViewModel implements Serializable
 public class ListConfigPanel extends
     AbstractListPanel<ConfigViewModel, ConfigurationModel>
 {
+  @SpringBean
+  StaticContentService texte;
 
   public ListConfigPanel(String id)
   {
@@ -40,9 +48,23 @@ public class ListConfigPanel extends
   @Override
   protected void initColumns(TableBuilder<ConfigViewModel> builder)
   {
-    builder.addActions("actions", new Edit(), new Delete());
+    builder.addActions("actions", new Edit());
     builder.addColumn("name");
     builder.addColumn("value");
+  }
+
+  @Override
+  protected Component createAbovePanel(String id)
+  {
+    AjaxLink btn = new AjaxLink(id, texte.text("config.values.add","Add new key"))
+    {
+      @Override
+      protected void onClickLink(AjaxRequestTarget target)
+      {
+        setResponsePage(new EditConfigEntry(null));
+      }
+    };
+    return btn;
   }
 
   class Edit extends ActionColumn<ConfigViewModel>
@@ -56,22 +78,6 @@ public class ListConfigPanel extends
         protected void onClick(AjaxRequestTarget target)
         {
           setResponsePage(new EditConfigEntry(row.id));
-        }
-      };
-    }
-  }
-
-  class Delete extends ActionColumn<ConfigViewModel>
-  {
-    @Override
-    public Component populate(String id, ConfigViewModel row)
-    {
-      return new IconPanel(id, Type.DELETE)
-      {
-        @Override
-        protected void onClick(AjaxRequestTarget target)
-        {
-          System.out.println("Delete ....");
         }
       };
     }

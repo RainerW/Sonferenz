@@ -1,5 +1,7 @@
 package de.bitnoise.sonferenz.service.v2.services.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +16,9 @@ import de.bitnoise.sonferenz.service.v2.services.StaticContentService;
 @Service
 public class StaticContentService2Impl implements StaticContentService
 {
+  static final Logger logger = LoggerFactory
+      .getLogger(StaticContentService2Impl.class);
+
   @Autowired
   StaticContentRepository repo;
 
@@ -35,6 +40,7 @@ public class StaticContentService2Impl implements StaticContentService
     StaticContentModel text = repo.findByName(key);
     if (text == null)
     {
+      logger.warn("key not found = '" + key + "'");
       return null;
     }
     return text.getHtml();
