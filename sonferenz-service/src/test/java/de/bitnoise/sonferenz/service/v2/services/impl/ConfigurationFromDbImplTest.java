@@ -11,10 +11,10 @@ import com.google.common.eventbus.EventBus;
 
 import de.bitnoise.sonferenz.model.ConfigurationModel;
 import de.bitnoise.sonferenz.repo.ConfigurationRepository;
-import de.bitnoise.sonferenz.service.v2.BaseTest;
+import de.bitnoise.sonferenz.service.v2.BaseTestClass;
 import de.bitnoise.sonferenz.service.v2.services.Eventing;
 
-public class ConfigurationFromDbImplTest extends BaseTest
+public class ConfigurationFromDbImplTest extends BaseTestClass
 {
 
   ConfigurationFromDbImpl sut;

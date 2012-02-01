@@ -260,6 +260,16 @@ encoding/<project>=UTF-8]]>
         <version>1.9.0-rc1</version>
         <scope>test</scope>
       </dependency>
+      <dependency>
+        <groupId>de.bitnoise.testing</groupId>
+        <artifactId>bn-testing-common</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>de.bitnoise.testing</groupId>
+        <artifactId>bn-testing-db</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 </project>

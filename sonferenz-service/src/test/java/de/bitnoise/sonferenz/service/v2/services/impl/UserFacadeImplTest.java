@@ -16,11 +16,11 @@ import de.bitnoise.sonferenz.model.LocalUserModel;
 import de.bitnoise.sonferenz.repo.AuthmappingRepository;
 import de.bitnoise.sonferenz.repo.LocalUserRepository;
 import de.bitnoise.sonferenz.repo.UserRepository;
-import de.bitnoise.sonferenz.service.v2.BaseTest;
+import de.bitnoise.sonferenz.service.v2.BaseTestClass;
 import de.bitnoise.sonferenz.service.v2.exceptions.RepositoryException;
 import de.bitnoise.sonferenz.service.v2.services.impl.UserService2Impl;
 
-public class UserFacadeImplTest extends BaseTest
+public class UserFacadeImplTest extends BaseTestClass
 {
   LocalUserRepository localMock = strictMock(LocalUserRepository.class);
 
