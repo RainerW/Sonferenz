@@ -23,4 +23,10 @@ public interface ConfigurationService
   public void initValue(String key, Integer value);
 
   public void initValue(String key, String value);
+
+  public ConfigurationModel getById(Integer id);
+
+  public void saveStringValue(String key, String value);
+
+  public String getStringValueOr(String defaultValue, String key);
 }

@@ -3,12 +3,14 @@ package de.bitnoise.sonferenz.web.pages.base;
 import java.io.Serializable;
 import java.util.List;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.HeadersToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.NavigationToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.NoRecordsToolbar;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.data.domain.Page;
@@ -38,9 +40,15 @@ public abstract class AbstractListPanel<VIEW_MODEL extends Serializable, DB_MODE
     new DataTable<VIEW_MODEL>("contentTable", columns.toArray(new IColumn[columns.size()]), provider, maxPageSize) ;
     addToolbars(table,provider);
     add(table);
+    add(createAbovePanel("above"));
   }
 
-  
+  protected Component createAbovePanel(String id)
+  {
+    return new EmptyPanel(id);
+  }
+
+
   protected void addToolbars(DataTable<VIEW_MODEL> table, SortableServiceDataProvider<DB_MODEL, VIEW_MODEL> provider)
   {
     table.addTopToolbar(new NavigationToolbar(table));

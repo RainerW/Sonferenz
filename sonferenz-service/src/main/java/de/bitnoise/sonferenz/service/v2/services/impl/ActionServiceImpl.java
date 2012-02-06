@@ -12,6 +12,8 @@ import javax.annotation.PostConstruct;
 import org.jasypt.digest.StringDigester;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import org.joda.time.Period;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -56,9 +58,11 @@ public class ActionServiceImpl implements ActionService
   Map<String, KonferenzAction> actionMap;
 
   String baseUrl2;
-  
-  String getBaseUrl() {
-    if(baseUrl2==null) {
+
+  String getBaseUrl()
+  {
+    if (baseUrl2 == null)
+    {
       baseUrl2 = config.getStringValue("baseUrl");
     }
     return baseUrl2;
@@ -69,6 +73,12 @@ public class ActionServiceImpl implements ActionService
   {
     Map<String, KonferenzAction> allActions = spring
         .getBeansOfType(KonferenzAction.class);
+    initActions(allActions);
+
+  }
+
+  public void initActions(Map<String, KonferenzAction> allActions)
+  {
     actionMap = new HashMap<String, KonferenzAction>();
     xs = new XStream();
     for (Entry<String, KonferenzAction> entry : allActions.entrySet())
@@ -79,7 +89,6 @@ public class ActionServiceImpl implements ActionService
       // xs.autodetectAnnotations(true); Not Thread Safe
       xs.processAnnotations(bean.getModelClasses());
     }
-
   }
 
   @Autowired
@@ -113,7 +122,7 @@ public class ActionServiceImpl implements ActionService
       return null;
     }
     Date expires = row.getExpiry();
-    if (new Interval(expires).isBeforeNow())
+    if (new LocalDateTime(expires).isBefore(LocalDateTime.now()))
     {
       return null;
     }
@@ -275,7 +284,11 @@ public class ActionServiceImpl implements ActionService
       return null;
     }
     XStream xs = getXStream();
-    ActionState data = (ActionState) xs.fromXML(row.getData());
+    ActionState data = null;
+    if (row.getData() != null)
+    {
+      data = (ActionState) xs.fromXML(row.getData());
+    }
     Aktion a = new Aktion(row.getId(), row.getAction(), row.getToken(), data);
     return a;
   }

@@ -39,44 +39,4 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
   
   <bean id="crowdUserProvider" class="de.bitnoise.sonferenz.web.auth.CrowdUserProvider">
   </bean>
-
-  <bean id="contextSource" class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">
-    <constructor-arg value="ldap://laudanum.seitenbau.net:389/dc=seitenbau,dc=net" />
-    <property name="userDn" value="CN=seitenbau intranet,OU=user,OU=agentur,OU=seitenbau,dc=seitenbau,dc=net" />
-    <property name="password" value="intranet04" />
-    <property name="referral" value="follow" />
-  </bean>
-  
-  <!-- 
-  <bean id="contextSource" class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">
-    <constructor-arg value="ldaps://217.24.206.155:636/dc=seitenbau,dc=net" />
-    <property name="userDn" value="cn=searchuser,dc=seitenbau,dc=net" />
-    <property name="password" value="searchuser" />
-    <property name="referral" value="follow" />
-  </bean>
-  -->
-
-  <bean id="userSearch" class="org.springframework.security.ldap.search.FilterBasedLdapUserSearch">
-    <constructor-arg index="0" value="OU=user,OU=agentur,OU=seitenbau" />
-    <constructor-arg index="1" value="(sAMAccountName={0})" />
-    <constructor-arg index="2" ref="contextSource" />
-  </bean>
-
-  <bean id="ldapAuthProvider" class="org.springframework.security.ldap.authentication.LdapAuthenticationProvider">
-    <constructor-arg>
-      <bean class="org.springframework.security.ldap.authentication.BindAuthenticator">
-        <constructor-arg ref="contextSource" />
-        <property name="userSearch" ref="userSearch" />
-      </bean>
-    </constructor-arg>
-    <constructor-arg>
-      <bean class="de.bitnoise.sonferenz.web.auth.LdapUserDetailsServiceImpl">
-        <constructor-arg ref="contextSource" />
-        <constructor-arg value="OU=group,OU=agentur,OU=seitenbau" />
-        <property name="groupSearchFilter" value="member={0}" />
-        <property name="RolePrefix" value="ROLE_" />
-        <property name="defaultRole" value="ROLE_ANONYMOUS" />
-      </bean>
-    </constructor-arg>
-  </bean>
 </beans>

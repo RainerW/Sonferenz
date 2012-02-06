@@ -10,11 +10,4 @@
   <context:component-scan base-package="de.bitnoise.sonferenz.facade" />
   <context:component-scan base-package="de.bitnoise.sonferenz.service" />
   
-  <bean name="CrowdIdp" class="de.bitnoise.sonferenz.service.v2.services.idp.provider.crowd.CrowdIdp">
-    <property name="crowdRestService" value="${idp.crowd.url}" />
-    <property name="crowdUsername" value="${idp.crowd.user}" />
-    <property name="crowdPassword" value="${idp.crowd.password}" />
-    <property name="crowdGroup" value="${idp.crowd.group}" />
-  </bean>
-  
 </beans>

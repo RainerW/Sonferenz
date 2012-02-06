@@ -12,11 +12,11 @@ import org.mockito.internal.verification.NoMoreInteractions;
 
 import de.bitnoise.sonferenz.model.ConferenceModel;
 import de.bitnoise.sonferenz.repo.ConferenceRepository;
-import de.bitnoise.sonferenz.service.v2.BaseTest;
+import de.bitnoise.sonferenz.service.v2.BaseTestClass;
 import de.bitnoise.sonferenz.service.v2.exceptions.GeneralConferenceException;
 import de.bitnoise.sonferenz.service.v2.services.impl.ConferenceService2Impl;
 
-public class ConferenceFacadeImplTest extends BaseTest
+public class ConferenceFacadeImplTest extends BaseTestClass
 {
   ConferenceRepository conferenceRepoMock = mock(ConferenceRepository.class);
   ConferenceService2Impl sut = new ConferenceService2Impl() {

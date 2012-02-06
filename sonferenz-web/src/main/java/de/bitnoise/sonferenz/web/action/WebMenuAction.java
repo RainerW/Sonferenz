@@ -29,8 +29,11 @@ public abstract class WebMenuAction<T extends IModel<?>> implements
   {
     return null;
   }
-  
-  public boolean isVisible() {return true;}
+
+  public boolean isVisible()
+  {
+    return true;
+  }
 
   public boolean isActive(Page page)
   {

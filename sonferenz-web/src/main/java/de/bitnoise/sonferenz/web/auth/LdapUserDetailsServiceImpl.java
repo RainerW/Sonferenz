@@ -7,7 +7,8 @@ import java.util.Set;
 import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.core.ContextSource;
 import org.springframework.ldap.core.DirContextOperations;
@@ -22,7 +23,7 @@ import de.bitnoise.sonferenz.service.v2.services.UserService;
 
 public class LdapUserDetailsServiceImpl extends DefaultLdapAuthoritiesPopulator
 {
-  Logger logger = Logger.getLogger(LdapUserDetailsServiceImpl.class);
+  Logger logger = LoggerFactory.getLogger(LdapUserDetailsServiceImpl.class);
 
   public LdapUserDetailsServiceImpl(ContextSource contextSource,
       String groupSearchBase)
@@ -117,7 +118,7 @@ public class LdapUserDetailsServiceImpl extends DefaultLdapAuthoritiesPopulator
     }
     catch (NamingException e)
     {
-      Logger.getLogger(LdapUserDetailsServiceImpl.class).error(e);
+      LoggerFactory.getLogger(LdapUserDetailsServiceImpl.class).error("",e);
     }
     return null;
   }

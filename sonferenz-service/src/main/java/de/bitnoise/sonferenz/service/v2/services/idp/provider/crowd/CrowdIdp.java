@@ -1,25 +1,31 @@
 package de.bitnoise.sonferenz.service.v2.services.idp.provider.crowd;
 
-import java.net.URI;
-
-import javax.annotation.PostConstruct;
+import java.net.ConnectException;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.client.CommonsClientHttpRequestFactory;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import com.google.common.eventbus.Subscribe;
+
+import de.bitnoise.sonferenz.service.v2.events.ConfigReload;
+import de.bitnoise.sonferenz.service.v2.exceptions.GeneralConferenceException;
+import de.bitnoise.sonferenz.service.v2.services.ConfigurationService;
 import de.bitnoise.sonferenz.service.v2.services.idp.Identity;
 import de.bitnoise.sonferenz.service.v2.services.idp.provider.Idp;
 
+@Service
 public class CrowdIdp implements Idp
 {
-
-  private static final Logger logger = Logger.getLogger(CrowdIdp.class);
+  private static final Logger logger = LoggerFactory.getLogger(CrowdIdp.class);
 
   public static final String IDP_NAME = "crowd";
 
@@ -43,34 +49,29 @@ public class CrowdIdp implements Idp
 
   private RestTemplate restTemplate;
 
-  public void setCrowdGroup(String crowdGroup)
-  {
-    this.crowdGroup = crowdGroup;
-  }
+  @Autowired
+  ConfigurationService config;
 
-  public void setCrowdRestService(String crowdRestService)
+  @Subscribe
+  public void onConfigReload(ConfigReload event)
   {
-    this.crowdRestService = crowdRestService;
-  }
+    crowdRestService = config.getStringValueOr(null, "idp.crowd.url");
+    crowdUsername = config.getStringValueOr(null, "idp.crowd.user");
+    crowdPassword = config.getStringValueOr(null, "idp.crowd.password");
+    crowdGroup = config.getStringValueOr(null, "idp.crowd.group");
 
-  public void setCrowdUsername(String crowdUsername)
-  {
-    this.crowdUsername = crowdUsername;
-  }
-
-  public void setCrowdPassword(String crowdPassword)
-  {
-    this.crowdPassword = crowdPassword;
-  }
-
-  @PostConstruct
-  public void init()
-  {
-    HttpClient client = new HttpClient();
-    UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(crowdUsername, crowdPassword);
-    client.getState().setCredentials(AuthScope.ANY, credentials);
-    CommonsClientHttpRequestFactory commons = new CommonsClientHttpRequestFactory(client);
-    restTemplate = new RestTemplate(commons);
+    if (crowdRestService == null || crowdUsername == null)
+    {
+      logger.warn("Missing Crowd Configuration");
+    }
+    else
+    { // init client
+      HttpClient client = new HttpClient();
+      UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(crowdUsername, crowdPassword);
+      client.getState().setCredentials(AuthScope.ANY, credentials);
+      CommonsClientHttpRequestFactory commons = new CommonsClientHttpRequestFactory(client);
+      restTemplate = new RestTemplate(commons);
+    }
   }
 
   @Override
@@ -101,25 +102,35 @@ public class CrowdIdp implements Idp
   @Override
   public void createIdentity(String name, String password)
   {
-    CrowdUser crowdUser = new CrowdUser();
-    crowdUser.setName(name);
-    CrowdPassword passwordo = new CrowdPassword();
-    passwordo.setValue(password);
-    crowdUser.setPassword(passwordo);
-    crowdUser.setEmail("dummy@seitenbau.com");
-    crowdUser.setFirstname("firstname");
-    crowdUser.setLastname("lastname");
-    crowdUser.setActive("true");
-    URI postForLocation = restTemplate.postForLocation(crowdRestService + TEMPLATE_USER_CREATE, crowdUser);
+    try
+    {
+      CrowdUser crowdUser = new CrowdUser();
+      crowdUser.setName(name);
+      CrowdPassword passwordo = new CrowdPassword();
+      passwordo.setValue(password);
+      crowdUser.setPassword(passwordo);
+      crowdUser.setEmail("dummy@seitenbau.com");
+      crowdUser.setFirstname("firstname");
+      crowdUser.setLastname("lastname");
+      crowdUser.setActive("true");
 
-    System.out.println(postForLocation);
-    // if (crowdGroup != null)
-    // {
-    // CrowdGroup group = new CrowdGroup();
-    // group.setName(crowdGroup);
-    // restTemplate.postForLocation(crowdRestService + TEMPLATE_GROUP,
-    // group, name);
-    // }
+      restTemplate.postForLocation(crowdRestService + TEMPLATE_USER_CREATE, crowdUser);
+
+      if (crowdGroup != null)
+      {
+        CrowdGroup group = new CrowdGroup();
+        group.setName(crowdGroup);
+        restTemplate.postForLocation(crowdRestService + TEMPLATE_GROUP, group, name);
+      }
+    }
+    catch (RuntimeException ce)
+    {
+      if (ce.getCause() instanceof ConnectException)
+      {
+        throw new GeneralConferenceException("Unable to Connect to IDP Backend");
+      }
+      throw new GeneralConferenceException("Internal Error while connection to IDP Backend");
+    }
   }
 
   @Override
@@ -138,7 +149,8 @@ public class CrowdIdp implements Idp
 
     try
     {
-      CrowdUser user = restTemplate.postForObject(crowdRestService + TEMPLATE_AUTHENTICATION, pwd, CrowdUser.class, name);
+      CrowdUser user = restTemplate.postForObject(crowdRestService + TEMPLATE_AUTHENTICATION, pwd, CrowdUser.class,
+          name);
       if (user.getName().equals(name))
       {
         return true;
@@ -175,6 +187,5 @@ public class CrowdIdp implements Idp
     }
     return res;
   }
-
 
 }

@@ -49,4 +49,5 @@
     <filter-name>wicket.konferenz-webapp</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
+  
 </web-app>

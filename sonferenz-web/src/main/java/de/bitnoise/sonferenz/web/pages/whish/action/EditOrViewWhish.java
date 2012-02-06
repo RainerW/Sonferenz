@@ -7,7 +7,6 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 
-
 import de.bitnoise.sonferenz.KonferenzSession;
 import de.bitnoise.sonferenz.model.WhishModel;
 import de.bitnoise.sonferenz.web.action.ActionBookmark;

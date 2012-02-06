@@ -3,20 +3,25 @@ package de.bitnoise.sonferenz;
 import org.apache.wicket.Request;
 import org.apache.wicket.Response;
 import org.apache.wicket.Session;
+import org.apache.wicket.injection.Injector;
+import org.apache.wicket.injection.web.InjectorHolder;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.jquery.JQueryResourceReference;
 import com.visural.wicket.aturl.AtAnnotation;
 import com.visural.wicket.util.lesscss.LessCSSResourceStreamLocator;
 
+import de.bitnoise.sonferenz.service.v2.events.ConfigReload;
+import de.bitnoise.sonferenz.service.v2.services.Eventing;
 import de.bitnoise.sonferenz.web.pages.HomePage;
 import de.bitnoise.sonferenz.web.pages.error.UnauthorisedAccess;
 
 /**
- * Application object for your web application. If you want to run
- * this application without deploying, run the Start class.
+ * Application object for your web application. If you want to run this
+ * application without deploying, run the Start class.
  * 
  * @see de.bitnoise.sonferenz.Start#main(String[])
  */
@@ -60,7 +65,7 @@ public class WicketApplication extends WebApplication
         de.bitnoise.sonferenz.web.pages.error.InternalError.class);
     getApplicationSettings().setPageExpiredErrorPage(UnauthorisedAccess.class);
 
-    getResourceSettings().addStringResourceLoader(0, new DatabaseLoader());
+    getResourceSettings().addStringResourceLoader(0, new DatabaseResourceLoader());
     // Remap URLSs
     try
     {
@@ -70,8 +75,9 @@ public class WicketApplication extends WebApplication
     {
       throw new RuntimeException(e);
     }
+    
   }
-
+  
   public void activateSpring()
   {
     // Activate Spring
