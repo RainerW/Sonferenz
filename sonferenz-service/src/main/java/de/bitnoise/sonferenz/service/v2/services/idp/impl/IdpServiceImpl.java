@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import de.bitnoise.sonferenz.service.v2.services.idp.Identity;
 import de.bitnoise.sonferenz.service.v2.services.idp.IdpService;
 import de.bitnoise.sonferenz.service.v2.services.idp.provider.Idp;
 
@@ -70,6 +71,27 @@ public class IdpServiceImpl implements IdpService
       providersList.add(idp.getProviderName());
     }
     return providersList;
+  }
+
+  @Override
+  public boolean authenticate(String provider, String name, String password)
+  {
+    Idp idp = getIdp(provider);
+    return idp.authenticate(name, password);
+  }
+
+  @Override
+  public boolean checkIdentity(String provider, String name)
+  {
+    Idp idp = getIdp(provider);
+    return idp.checkIdentityExist(name);
+  }
+
+  @Override
+  public Identity getIdentity(String provider, String name)
+  {
+    Idp idp = getIdp(provider);
+    return idp.getIdentity(name);
   }
 
 }

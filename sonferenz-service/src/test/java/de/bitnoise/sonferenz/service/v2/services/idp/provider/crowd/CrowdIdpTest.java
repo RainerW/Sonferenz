@@ -16,6 +16,10 @@ public class CrowdIdpTest
   public void setUp() throws Exception
   {
     target = new CrowdIdp();
+    target.setCrowdPassword("G1w78Bdr5K");
+//    target.setCrowdRestService("http://crowd-backup.seitenbau.net/crowd/rest/usermanagement/1/");
+    target.setCrowdRestService("http://localhost:8081/crowd/rest/usermanagement/1/");
+    target.setCrowdUsername("sdc");
     target.init();
   }
 
@@ -36,7 +40,7 @@ public class CrowdIdpTest
   @Test
   public void createIdentity()
   {
-    String user = "charly5";
+    String user = "charly7";
     boolean exist1 = target.checkIdentityExist(user);
     Assert.assertFalse(exist1);
     target.createIdentity(user, "pwd");
@@ -49,6 +53,22 @@ public class CrowdIdpTest
   {
     String user = "charly3";
     target.setPassword(user, "newpwd");
+  }
+  
+  @Test
+  public void authenticateTrue()
+  {
+    String user = "charly7";
+    boolean a = target.authenticate(user, "pwd");
+    Assert.assertEquals(true, a);
+  }
+  
+  @Test
+  public void authenticateFalse()
+  {
+    String user = "charly7";
+    boolean a = target.authenticate(user, "bad");
+    Assert.assertEquals(true, a);
   }
   
 }

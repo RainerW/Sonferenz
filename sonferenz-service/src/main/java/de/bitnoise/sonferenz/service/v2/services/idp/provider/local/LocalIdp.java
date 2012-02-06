@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import de.bitnoise.sonferenz.model.LocalUserModel;
 import de.bitnoise.sonferenz.repo.LocalUserRepository;
 import de.bitnoise.sonferenz.service.v2.exceptions.RepositoryException;
+import de.bitnoise.sonferenz.service.v2.services.idp.Identity;
 import de.bitnoise.sonferenz.service.v2.services.idp.provider.Idp;
 
 @Component
@@ -93,5 +94,20 @@ public class LocalIdp implements Idp
       throw new RepositoryException(t);
     }
   }
+
+  @Override
+  public boolean authenticate(String name, String password)
+  {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  @Override
+  public Identity getIdentity(String name)
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
 
 }

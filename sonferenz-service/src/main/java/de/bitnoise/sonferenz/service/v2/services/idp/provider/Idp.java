@@ -1,5 +1,7 @@
 package de.bitnoise.sonferenz.service.v2.services.idp.provider;
 
+import de.bitnoise.sonferenz.service.v2.services.idp.Identity;
+
 
 public interface Idp
 {
@@ -10,4 +12,8 @@ public interface Idp
   void setPassword(String name, String password);
   
   String getProviderName();
+  
+  Identity getIdentity(String name);
+
+  boolean authenticate(String name, String password);
 }

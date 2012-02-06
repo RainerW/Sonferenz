@@ -8,7 +8,6 @@ import org.springframework.security.ldap.userdetails.LdapUserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import de.bitnoise.sonferenz.model.AuthMapping;
 import de.bitnoise.sonferenz.model.UserModel;
 import de.bitnoise.sonferenz.repo.AuthmappingRepository;
@@ -16,6 +15,7 @@ import de.bitnoise.sonferenz.repo.UserRepository;
 import de.bitnoise.sonferenz.service.v2.Detach;
 import de.bitnoise.sonferenz.service.v2.exceptions.GeneralConferenceException;
 import de.bitnoise.sonferenz.service.v2.security.ProviderType;
+import de.bitnoise.sonferenz.service.v2.security.ProvidesEmail;
 import de.bitnoise.sonferenz.service.v2.services.AuthenticationService;
 
 @Service
@@ -57,7 +57,8 @@ public class AuthenticationServiceImpl implements AuthenticationService
     }
     String providerId = authentication.getName();
     String providerType = null;
-    if (authentication.getPrincipal() instanceof LdapUserDetails)
+    Object principal = authentication.getPrincipal();
+    if (principal instanceof LdapUserDetails)
     {
       providerType = "ldap";
     }
@@ -65,9 +66,9 @@ public class AuthenticationServiceImpl implements AuthenticationService
     {
       providerType = ((ProviderType) authentication).getProviderType();
     }
-    if (authentication.getPrincipal() instanceof ProviderType)
+    if (principal instanceof ProviderType)
     {
-      providerType = ((ProviderType) authentication.getPrincipal())
+      providerType = ((ProviderType) principal)
           .getProviderType();
     }
     if (providerType == null)
@@ -78,7 +79,13 @@ public class AuthenticationServiceImpl implements AuthenticationService
         providerType);
     if (mapping == null)
     {
-      UserModel neuerUser = neuenNutzerAnlegen(providerId);
+      String email = null;
+      if (principal instanceof ProvidesEmail)
+      {
+        ProvidesEmail  user = (ProvidesEmail) principal;
+        email = user.getEmail();
+      }
+      UserModel neuerUser = neuenNutzerAnlegen(providerId, email);
       neuesAuthMappingAnlegen(neuerUser, providerId, providerType);
       return neuerUser;
     }
@@ -95,10 +102,12 @@ public class AuthenticationServiceImpl implements AuthenticationService
     authRepo.save(neuesMapping);
   }
 
-  private UserModel neuenNutzerAnlegen(String providerId)
+  private UserModel neuenNutzerAnlegen(String providerId, String email)
   {
     UserModel neuerUser = new UserModel();
     neuerUser.setName(providerId);
+    neuerUser.setEmail(email);
+    // TODO: Add default role
     userRepo.save(neuerUser);
     return neuerUser;
   }

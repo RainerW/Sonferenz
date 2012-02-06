@@ -17,8 +17,10 @@ public class CrowdUser
   private String displayname;
 
   private String email;
-  
-  private CrowdPassword password; 
+
+  private String active;
+
+  private CrowdPassword password;
 
   @XmlAttribute
   public String getName()
@@ -75,7 +77,18 @@ public class CrowdUser
     this.email = email;
   }
 
-  @XmlElement(name="password", type=CrowdPassword.class)
+  @XmlElement
+  public String getActive()
+  {
+    return active;
+  }
+
+  public void setActive(String active)
+  {
+    this.active = active;
+  }
+
+  @XmlElement(name = "password", type = CrowdPassword.class)
   public CrowdPassword getPassword()
   {
     return password;
@@ -85,4 +98,5 @@ public class CrowdUser
   {
     this.password = password;
   }
+
 }

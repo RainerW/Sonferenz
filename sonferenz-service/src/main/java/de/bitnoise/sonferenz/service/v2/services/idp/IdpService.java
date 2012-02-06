@@ -11,6 +11,12 @@ public interface IdpService
   
   void setPassword(String provider, String name, String password);
   
+  boolean checkIdentity(String provider, String name);
+  
+  boolean authenticate(String provider, String name, String password);
+  
   List<String> getAvailableProviders();
+  
+  Identity getIdentity(String provider, String name);
   
 }
