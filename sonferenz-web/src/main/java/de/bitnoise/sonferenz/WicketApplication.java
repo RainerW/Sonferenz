@@ -18,6 +18,8 @@ import de.bitnoise.sonferenz.service.v2.events.ConfigReload;
 import de.bitnoise.sonferenz.service.v2.services.Eventing;
 import de.bitnoise.sonferenz.web.pages.HomePage;
 import de.bitnoise.sonferenz.web.pages.error.UnauthorisedAccess;
+import de.bitnoise.sonferenz.web.v2.page.root.BasePage;
+import de.bitnoise.sonferenz.web.v2.page.root.KonferenzPage;
 
 /**
  * Application object for your web application. If you want to run this
@@ -31,9 +33,10 @@ public class WicketApplication extends WebApplication
    * @see org.apache.wicket.Application#getHomePage()
    */
   @Override
-  public Class<HomePage> getHomePage()
+  public Class<KonferenzPage> getHomePage()
   {
-    return HomePage.class;
+//    return HomePage.class;
+    return KonferenzPage.class;
   }
 
   /**

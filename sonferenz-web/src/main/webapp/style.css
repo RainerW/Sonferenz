@@ -1,1 +1,77 @@
-body { margin-top : 0; padding-top : 0;}
+body {
+	margin-top: 0;
+	padding-top: 0;
+}
+
+#containment {
+	margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+#sonferenz-body {
+	
+}
+
+#page-area {
+	left: 0em;
+	position: absolute;
+	top: 10em;
+	width: 10em;
+}
+
+#navigation-area {
+	left: 10em;
+	position: absolute;
+	top: 10em;
+	width: 10em;
+}
+
+#page-header {
+	
+}
+
+#page-content {
+	left: 20em;
+	position: absolute;
+	top: 10em;
+	width: 10em;
+}
+
+#page-footer {
+	left: 0em;
+	position: absolute;
+	top: 10em;
+	width: 10em;
+}
+
+#navigation-header {
+	
+}
+
+#navigation-content {
+	
+}
+
+#navigation-footer {
+	margin-bottom: 30px;
+	text-align: center;
+	width: 558px;
+}
+
+#second-area {
+	
+}
+
+#second-header {
+	
+}
+
+#second-content {
+	
+}
+
+#second-footer {
+	
+}
+

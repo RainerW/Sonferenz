@@ -1,0 +1,107 @@
+/* ============================== */
+/* ! Layout for desktop version   */
+/* ============================== */
+body {
+	
+}
+.headerbreak {
+    background: url("../img/header-background.png") repeat-x scroll center center transparent;
+    height: 8px;
+    background-color: #FFFFFF;
+}
+.head {
+	background-color: #7092be;
+}
+.foot {
+	background-color: #EEEEFF;
+}
+.footer {
+    font-size: 80%;
+    text-align: center;
+}
+/* ** Top Navigation */
+ul#Navigation {
+	margin: 0;
+	padding: 0;
+	margin-top: 1 rem;
+	width: 100%;
+}
+
+ul#Navigation li {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+ul#Navigation a {
+	list-style: none;
+	color: black;
+	text-decoration:none;
+	margin: 0;
+	padding: 0;
+}
+
+/* ** Top Navigation */
+ul#NavigationTop {
+	font-size: 80%;
+	margin: 0;
+	padding: 0;
+	padding-right: 1pem;
+	text-align: right;
+}
+
+ul#NavigationTop li {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: inline;
+}
+
+ul#NavigationTop a {
+	list-style: none;
+	color: black;
+	text-decoration:none;
+	margin: 0;
+	padding: 0;
+}
+
+/* ** Top Navigation */
+ul#NavigationMenu {
+	margin: 2;
+	padding: 0;
+	padding-right: 1pem;
+	text-align: left;
+}
+
+ul#NavigationMenu li {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: inline;
+}
+
+ul#NavigationMenu a {
+	list-style: none;
+	color: black;
+	text-decoration:none;
+	margin: 0;
+	padding: 0;
+}
+
+/* ============================= */
+/* ! Layout for mobile version   */
+/* ============================= */
+@media handheld , only screen and (max-width: 767px) {
+	body {
+		
+	}
+}
+
+/* ========================================== */
+/* ! Provide higher res assets for iPhone 4   */
+/* ========================================== */
+@media only screen and (-webkit-min-device-pixel-ratio: 2) { /*	.logo {
+		background: url(logo2x.jpg) no-repeat;
+		background-size: 212px 303px;
+	}*/
+}
