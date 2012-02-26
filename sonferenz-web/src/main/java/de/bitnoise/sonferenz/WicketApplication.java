@@ -90,7 +90,7 @@ public class WicketApplication extends WebApplication implements ApplicationCont
   public void setApplicationContext(ApplicationContext applicationContext)
       throws BeansException
   {
-    injector = new SpringComponentInjector(this, applicationContext,false);
+    injector = new SpringComponentInjector(this, applicationContext,true);
     addComponentInstantiationListener(injector);
   }
 

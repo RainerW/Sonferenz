@@ -32,10 +32,12 @@ public class KonferenzSession extends WebSession
   private static List<String> userRoles = new ArrayList<String>();
 
   private static List<String> managerRoles = new ArrayList<String>();
-  
+
   private static List<String> adminRoles = new ArrayList<String>();
 
   private static ConferenceModel _conference;
+
+  private static KonferenzSession _session;
 
   @SpringBean
   AuthenticationService authService;
@@ -53,7 +55,7 @@ public class KonferenzSession extends WebSession
     super(request);
     InjectorHolder.getInjector().inject(this);
     managerRoles.add(Right.Actions.InviteUser);
-    
+
     adminRoles.add(Right.User.List);
     adminRoles.add(Right.User.Create);
     adminRoles.add(Right.User.Edit);
@@ -75,6 +77,10 @@ public class KonferenzSession extends WebSession
 
   public static KonferenzSession get()
   {
+    if (_session != null)
+    {
+      return _session;
+    }
     return (KonferenzSession) Session.get();
   }
 
@@ -231,5 +237,10 @@ public class KonferenzSession extends WebSession
       return false;
     }
     return active.getId().equals(_currentConference.getId());
+  }
+
+  public static void setMock(KonferenzSession session)
+  {
+    _session = session;
   }
 }

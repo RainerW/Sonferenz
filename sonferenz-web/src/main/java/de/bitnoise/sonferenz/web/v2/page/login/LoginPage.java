@@ -53,7 +53,7 @@ public class LoginPage extends BasePage
     }
     else
     {
-      feedback.warn("Login failed : " + errorMessage);
+      feedback.error("Login failed : " + errorMessage);
     }
   }
 
