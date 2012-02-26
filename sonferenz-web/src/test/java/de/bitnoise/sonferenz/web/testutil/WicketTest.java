@@ -1,4 +1,4 @@
-package de.bitnoise.sonferenz.web.util;
+package de.bitnoise.sonferenz.web.testutil;
 
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Before;
@@ -17,6 +17,9 @@ import de.bitnoise.sonferenz.WicketApplication;
       "classpath:/config/spring-context.xml",
       "classpath:/config/test-context.xml"
 })
+/**
+ * Create a WicketTester instance and a spring context
+ */
 public class WicketTest
 {
   protected WicketTester tester;
