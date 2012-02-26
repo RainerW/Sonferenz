@@ -34,6 +34,7 @@ public class MenuNavigationPanel extends Panel
 
     // add
     add(new ListView<Panel>("list", _texte) {
+      private static final long serialVersionUID = 1L;
       @Override
       protected void populateItem(ListItem<Panel> item)
       {

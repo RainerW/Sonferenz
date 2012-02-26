@@ -3,13 +3,9 @@ package de.bitnoise.sonferenz.web.v2.panels.navigation;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.Model;
 
 import de.bitnoise.sonferenz.KonferenzSession;
 import de.bitnoise.sonferenz.web.pages.HomePage;
@@ -20,7 +16,6 @@ import de.bitnoise.sonferenz.web.v2.panels.general.BookmarkableLinkPanel;
 public class TopNavigationPanel extends Panel
 {
   private static final long serialVersionUID = 100L;
-  private Panel ai;
 
   public TopNavigationPanel(String id)
   {
@@ -44,6 +39,8 @@ public class TopNavigationPanel extends Panel
 
     // add
     add(new ListView<Panel>("list", _texte) {
+      private static final long serialVersionUID = 1L;
+
       @Override
       protected void populateItem(ListItem<Panel> item)
       {

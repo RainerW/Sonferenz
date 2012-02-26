@@ -32,7 +32,7 @@ public class AuthinfoPanel extends Panel
     _username = Model.of("");
     Label username = new Label("username", _username);
     _logout = new BookmarkablePageLink<WebPage>("logout", LogoutPage.class);
-    _login = new BookmarkablePageLink<WebPage>("login", LoginPage.class);
+    _login = new BookmarkablePageLink<WebPage>("login", de.bitnoise.sonferenz.web.v2.page.login.LoginPage.class);
 
     add(username);
     add(_login);

@@ -6,8 +6,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.Panel;
 
-import de.bitnoise.sonferenz.web.v2.panels.general.BookmarkableLinkPanel.Parameter;
-
 public class BookmarkableLinkPanel extends Panel
 {
   private static final long serialVersionUID = 100L;
