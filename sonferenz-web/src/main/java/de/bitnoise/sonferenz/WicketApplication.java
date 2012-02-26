@@ -8,7 +8,10 @@ import org.apache.wicket.injection.web.InjectorHolder;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 import com.jquery.JQueryResourceReference;
 import com.visural.wicket.aturl.AtAnnotation;
@@ -27,15 +30,17 @@ import de.bitnoise.sonferenz.web.v2.page.root.KonferenzPage;
  * 
  * @see de.bitnoise.sonferenz.Start#main(String[])
  */
-public class WicketApplication extends WebApplication
+public class WicketApplication extends WebApplication implements ApplicationContextAware
 {
+  private SpringComponentInjector injector;
+
   /**
    * @see org.apache.wicket.Application#getHomePage()
    */
   @Override
   public Class<KonferenzPage> getHomePage()
   {
-//    return HomePage.class;
+    // return HomePage.class;
     return KonferenzPage.class;
   }
 
@@ -78,13 +83,21 @@ public class WicketApplication extends WebApplication
     {
       throw new RuntimeException(e);
     }
-    
+
   }
-  
+
+  public void setApplicationContext(ApplicationContext applicationContext)
+      throws BeansException
+  {
+    injector = new SpringComponentInjector(this, applicationContext,false);
+    addComponentInstantiationListener(injector);
+  }
+
   public void activateSpring()
   {
     // Activate Spring
-    addComponentInstantiationListener(new SpringComponentInjector(this));
+    injector = new SpringComponentInjector(this);
+    addComponentInstantiationListener(injector);
   }
 
   @Override

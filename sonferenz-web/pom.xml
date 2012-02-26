@@ -77,6 +77,12 @@
 
     <dependency>
       <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>3.0.5.RELEASE</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
       <version>3.0.5.RELEASE</version>
     </dependency>
@@ -162,6 +168,10 @@
       </resource>
     </resources>
     <testResources>
+      <testResource>
+        <filtering>false</filtering>
+        <directory>src/test/resources</directory>
+      </testResource>
       <testResource>
         <filtering>false</filtering>
         <directory>src/test/java</directory>
