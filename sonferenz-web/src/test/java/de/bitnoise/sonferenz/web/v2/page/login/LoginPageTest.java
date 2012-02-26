@@ -4,6 +4,7 @@ import org.apache.wicket.util.tester.FormTester;
 import org.junit.Before;
 import org.junit.Test;
 import static org.mockito.Mockito.*;
+import de.bitnoise.sonferenz.web.util.FastWicketTester;
 import de.bitnoise.sonferenz.web.v2.page.root.BasePage;
 
 public class LoginPageTest extends FastWicketTester

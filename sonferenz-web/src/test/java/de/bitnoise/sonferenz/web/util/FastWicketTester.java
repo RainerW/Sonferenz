@@ -1,4 +1,4 @@
-package de.bitnoise.sonferenz.web.v2.page.login;
+package de.bitnoise.sonferenz.web.util;
 
 import static org.mockito.Mockito.when;
 

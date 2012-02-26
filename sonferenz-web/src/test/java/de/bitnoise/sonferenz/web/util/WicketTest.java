@@ -1,4 +1,4 @@
-package de.bitnoise.sonferenz.web.v2.page.root;
+package de.bitnoise.sonferenz.web.util;
 
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Before;
