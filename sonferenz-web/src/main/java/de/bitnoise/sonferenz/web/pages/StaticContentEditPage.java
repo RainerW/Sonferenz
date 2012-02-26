@@ -15,11 +15,12 @@ import wicket.contrib.tinymce.settings.TinyMCESettings.Location;
 import wicket.contrib.tinymce.settings.TinyMCESettings.Theme;
 
 import de.bitnoise.sonferenz.facade.UiFacade;
+import de.bitnoise.sonferenz.service.v2.services.StaticContentService;
 
 public class StaticContentEditPage extends KonferenzPage
 {
   @SpringBean
-  UiFacade facade;
+  StaticContentService facade;
 
   private String _id;
 
@@ -47,7 +48,7 @@ public class StaticContentEditPage extends KonferenzPage
   {
     if (_id != null)
     {
-      String html = facade.getText(_id);
+      String html = facade.text(_id);
       if (html == null)
       {
         html = "";

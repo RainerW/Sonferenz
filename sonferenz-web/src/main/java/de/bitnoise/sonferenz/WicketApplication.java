@@ -78,6 +78,7 @@ public class WicketApplication extends WebApplication implements ApplicationCont
     try
     {
       AtAnnotation.mount(this, "de.bitnoise.sonferenz.web.pages");
+      AtAnnotation.mount(this, "de.bitnoise.sonferenz.web.v2.page");
     }
     catch (ClassNotFoundException e)
     {
