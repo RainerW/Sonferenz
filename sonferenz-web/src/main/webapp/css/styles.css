@@ -19,6 +19,12 @@ body {
     font-size: 80%;
     text-align: center;
 }
+
+/* ** general Navigation */
+li:last-child span.Navigation_Spacer {
+	visibility: hidden;
+}
+
 /* ** Top Navigation */
 ul#Navigation {
 	margin: 0;

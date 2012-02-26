@@ -1,13 +1,21 @@
 package de.bitnoise.sonferenz.web.v2.panels.navigation;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import org.apache.wicket.markup.html.list.Loop;
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.Model;
 
+import de.bitnoise.sonferenz.KonferenzSession;
+import de.bitnoise.sonferenz.web.pages.HomePage;
+import de.bitnoise.sonferenz.web.pages.profile.MyProfilePage;
 import de.bitnoise.sonferenz.web.v2.panels.authinfo.AuthinfoPanel;
+import de.bitnoise.sonferenz.web.v2.panels.general.BookmarkableLinkPanel;
 
 public class TopNavigationPanel extends Panel
 {
@@ -19,25 +27,38 @@ public class TopNavigationPanel extends Panel
     super(id);
   }
 
+  List<Panel> _texte = new ArrayList<Panel>();
+  BookmarkableLinkPanel _profileLink;
+
   @Override
   protected void onInitialize()
   {
     super.onInitialize();
-    
-    List<Panel> panels = new ArrayList<Panel>();
-    panels.add(new AuthinfoPanel("panel"));
-    ai=new AuthinfoPanel("panel");
-    panels.add(ai);
-    panels.add(new AuthinfoPanel("panel"));
-    final Iterator<Panel> iter = panels.iterator();
-    Loop loop = new Loop("list",panels.size()) {
+
+    // create
+    _profileLink = new BookmarkableLinkPanel("listItem", MyProfilePage.class, "profile");
+
+    _texte.add(new BookmarkableLinkPanel("listItem", HomePage.class, "home"));
+    _texte.add(_profileLink);
+    _texte.add(new AuthinfoPanel("listItem"));
+
+    // add
+    add(new ListView<Panel>("list", _texte) {
       @Override
-      protected void populateItem(LoopItem item)
+      protected void populateItem(ListItem<Panel> item)
       {
-        item.add(iter.next());
+        Panel panel = item.getModelObject();
+        item.add(panel);
+        item.setVisible(panel.isVisible());
       }
-    };
-    add(loop);
-    ai.setVisible(false);
+    });
+
+  }
+
+  @Override
+  protected void onConfigure()
+  {
+    super.onConfigure();
+    _profileLink.setVisible(!KonferenzSession.noUserLoggedIn());
   }
 }

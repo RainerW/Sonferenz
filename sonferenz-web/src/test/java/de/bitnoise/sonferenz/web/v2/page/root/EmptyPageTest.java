@@ -9,4 +9,5 @@ public class EmptyPageTest extends WicketTest
   {
     tester.startPage(EmptyPage.class);
   }
+ 
 }
