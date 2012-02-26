@@ -1,11 +1,9 @@
 package de.bitnoise.sonferenz.web.v2.page.root;
 
 import org.apache.wicket.PageParameters;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -18,10 +16,7 @@ import wicket.contrib.tinymce.settings.TinyMCESettings.Theme;
 
 import com.visural.wicket.aturl.At;
 
-import de.bitnoise.sonferenz.KonferenzSession;
-import de.bitnoise.sonferenz.Right;
 import de.bitnoise.sonferenz.service.v2.services.StaticContentService;
-import de.bitnoise.sonferenz.web.pages.StaticContentEditPage;
 
 @At(url = "/editnode", urlParameters =
   { "id" })
@@ -54,6 +49,7 @@ public abstract class StaticEditPage extends BasePage
     // create
     _html = Model.of("");
 
+    @SuppressWarnings("serial")
     Form<String> form = new Form<String>("form")
     {
       @Override

@@ -1,7 +1,5 @@
 package de.bitnoise.sonferenz.web.v2.page.root;
 
-import org.apache.wicket.markup.html.basic.Label;
-
 import de.bitnoise.sonferenz.web.v2.panels.footer.VersionPanel;
 import de.bitnoise.sonferenz.web.v2.panels.navigation.MenuNavigationPanel;
 import de.bitnoise.sonferenz.web.v2.panels.navigation.TopNavigationPanel;

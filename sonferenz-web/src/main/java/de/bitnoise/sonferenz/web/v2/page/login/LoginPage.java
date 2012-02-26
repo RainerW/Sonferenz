@@ -7,9 +7,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 
-import de.bitnoise.sonferenz.KonferenzSession;
 import de.bitnoise.sonferenz.web.component.FocusOnLoadBehavior;
-import de.bitnoise.sonferenz.web.pages.HomePage;
 import de.bitnoise.sonferenz.web.v2.page.root.BasePage;
 
 public class LoginPage extends BasePage
@@ -24,6 +22,7 @@ public class LoginPage extends BasePage
   {
     super.onInitialize();
 
+    @SuppressWarnings("serial")
     Form<String> form = new Form<String>("form")
     {
       @Override
@@ -46,7 +45,7 @@ public class LoginPage extends BasePage
   {
     String username = modelUsername.getObject();
     String password = modelPassword.getObject();
-    String errorMessage = KonferenzSession.get().authenticate(username,
+    String errorMessage = getKonferenzSession().authenticate(username,
         password);
     if (errorMessage == null)
     {

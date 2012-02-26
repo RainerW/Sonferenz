@@ -1,10 +1,8 @@
 package de.bitnoise.sonferenz.web.v2.page.root;
 
-import org.apache.wicket.PageParameters;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 
-import de.bitnoise.sonferenz.web.v2.panels.navigation.TopNavigationPanel;
+import de.bitnoise.sonferenz.KonferenzSession;
 
 /**
  * The "bare metal" empty HTML5 template that is used by all pages in the
@@ -29,12 +27,16 @@ import de.bitnoise.sonferenz.web.v2.panels.navigation.TopNavigationPanel;
  * getBody().add(cssClass(&quot;myClass&quot;));
  * </pre>
  */
-public   class EmptyPage extends WebPage
+public class EmptyPage extends WebPage
 {
   @Override
   protected void onInitialize()
   {
     super.onInitialize();
   }
- 
+
+  protected KonferenzSession getKonferenzSession()
+  {
+    return KonferenzSession.get();
+  }
 }

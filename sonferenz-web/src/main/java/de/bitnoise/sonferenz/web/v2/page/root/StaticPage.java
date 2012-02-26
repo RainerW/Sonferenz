@@ -4,7 +4,6 @@ import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -14,7 +13,6 @@ import com.visural.wicket.aturl.At;
 import de.bitnoise.sonferenz.KonferenzSession;
 import de.bitnoise.sonferenz.Right;
 import de.bitnoise.sonferenz.service.v2.services.StaticContentService;
-import de.bitnoise.sonferenz.web.pages.StaticContentEditPage;
 
 @At(url = "/node", urlParameters =
   { "id" })
@@ -25,7 +23,7 @@ public class StaticPage extends BasePage
   @SpringBean
   StaticContentService content;
 
-  AjaxFallbackLink editLink;
+  AjaxFallbackLink<String> editLink;
 
   IModel<String> _html;
 
@@ -37,6 +35,7 @@ public class StaticPage extends BasePage
   }
 
   @Override
+  @SuppressWarnings("serial")
   protected void onInitialize()
   {
     super.onInitialize();
@@ -46,7 +45,8 @@ public class StaticPage extends BasePage
 
     PageParameters parameters = new PageParameters();
     parameters.add("editId", key);
-    editLink = new AjaxFallbackLink("editLink") {
+    editLink = new AjaxFallbackLink<String>("editLink") {
+
       @Override
       public void onClick(AjaxRequestTarget target)
       {
